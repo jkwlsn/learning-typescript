@@ -6,7 +6,7 @@ interface NewUser {
 
 interface User extends NewUser {
   user_id: number;
-  timestamp: Date;
+  timestamp: string;
 }
 
 interface NewInspection {
@@ -29,27 +29,33 @@ interface NewInspection {
   user_id: number;
 }
 
-interface Inspection extends NewInspection {
+interface Inspection extends Omit<NewInspection, 'timestamp'> {
   inspection_id: number;
+  timestamp: string;
 }
 
 class UserAccount {
   user_id: number;
   email: string;
   password: string;
-  timestamp: Date;
+  timestamp: string;
 
-  constructor(user_id: number, email: string, password: string, date: Date) {
+  constructor(
+    user_id: number,
+    email: string,
+    password: string,
+    timestamp: Date,
+  ) {
     this.user_id = user_id;
     this.email = email;
     this.password = password;
-    this.timestamp = date;
+    this.timestamp = timestamp.toISOString();
   }
 }
 
 class InspectionRecord {
   inspection_id: number;
-  timestamp: Date;
+  timestamp: string;
   apiary_id: number;
   colony_id: number;
   queenright: boolean;
@@ -88,7 +94,7 @@ class InspectionRecord {
     user_id: number,
   ) {
     this.inspection_id = inspection_id;
-    this.timestamp = timestamp;
+    this.timestamp = timestamp.toISOString();
     this.apiary_id = apiary_id;
     this.colony_id = colony_id;
     this.queenright = queenright;
@@ -108,10 +114,12 @@ class InspectionRecord {
   }
 }
 
+const now = new Date();
+
 function addUser(newUser: NewUser): User {
   const user_id: number = Math.floor(Math.random() * 100);
-  const date: Date = new Date();
-  const timestamp = date;
+  const timestamp: Date = now;
+  console.log(timestamp);
   const user: User = new UserAccount(
     user_id,
     newUser.email,
@@ -144,7 +152,6 @@ function addInspectionRecord(newInspection: NewInspection): Inspection {
     newInspection.weather,
     newInspection.user_id,
   );
-  console.log(inspection);
   return inspection;
 }
 
@@ -153,7 +160,7 @@ addUser({ email: 'alice@example.com', password: 'testpassword' });
 addUser({ email: 'bob@example.com', password: 'testpassword' });
 
 const inspection1 = addInspectionRecord({
-  timestamp: new Date(),
+  timestamp: now,
   apiary_id: 1,
   colony_id: 1,
   queenright: true,
@@ -171,3 +178,7 @@ const inspection1 = addInspectionRecord({
   weather: 'fine',
   user_id: user1.user_id,
 });
+
+console.log(user1);
+console.table(user1);
+console.table(inspection1);
