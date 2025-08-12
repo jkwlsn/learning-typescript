@@ -255,6 +255,13 @@ function updateView() {
     userAddInput.reset();
   }
 
+  const userDelInput = document.getElementById(
+    'user_del_form',
+  ) as HTMLFormElement;
+  if (userDelInput) {
+    userDelInput.reset();
+  }
+
   const table = document.getElementById('view_table') as HTMLTableElement;
   const headerRow = document.getElementById(
     'header_row',

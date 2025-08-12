@@ -141,6 +141,10 @@ function updateView() {
     if (userAddInput) {
         userAddInput.reset();
     }
+    const userDelInput = document.getElementById('user_del_form');
+    if (userDelInput) {
+        userDelInput.reset();
+    }
     const table = document.getElementById('view_table');
     const headerRow = document.getElementById('header_row');
     if (table && headerRow) {
