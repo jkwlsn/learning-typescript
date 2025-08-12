@@ -23,7 +23,7 @@ interface NewInspection {
   apiary_id: number;
   colony_id: number;
   queenright: boolean;
-  queen_marked: string;
+  queen_marked: 'white' | 'yellow' | 'red' | 'green' | 'blue';
   queen_clipped: boolean;
   queen_cups: number;
   brood_frames: number;
@@ -73,7 +73,7 @@ class InspectionRecord implements Inspection {
   apiary_id: number;
   colony_id: number;
   queenright: boolean;
-  queen_marked: string;
+  queen_marked: 'white' | 'yellow' | 'red' | 'green' | 'blue';
   queen_clipped: boolean;
   queen_cups: number;
   brood_frames: number;
@@ -93,7 +93,7 @@ class InspectionRecord implements Inspection {
     apiary_id: number,
     colony_id: number,
     queenright: boolean,
-    queen_marked: string,
+    queen_marked: 'white' | 'yellow' | 'red' | 'green' | 'blue',
     queen_clipped: boolean,
     queen_cups: number,
     brood_frames: number,
@@ -188,7 +188,47 @@ const inspection1 = recordsList.addRecord({
   apiary_id: 1,
   colony_id: 1,
   queenright: true,
-  queen_marked: 'Yellow',
+  queen_marked: 'yellow',
+  queen_clipped: true,
+  queen_cups: 2,
+  brood_frames: 5,
+  store_frames: 6,
+  room_frames: 1,
+  health: 'good',
+  varroa: 10,
+  temper: 5,
+  feed: 1,
+  supers: 3,
+  weather: 'fine',
+  user_id: user1.user_id,
+});
+
+const inspection2 = recordsList.addRecord({
+  timestamp: now,
+  apiary_id: 1,
+  colony_id: 2,
+  queenright: true,
+  queen_marked: 'blue',
+  queen_clipped: true,
+  queen_cups: 2,
+  brood_frames: 5,
+  store_frames: 6,
+  room_frames: 1,
+  health: 'good',
+  varroa: 10,
+  temper: 5,
+  feed: 1,
+  supers: 3,
+  weather: 'fine',
+  user_id: user1.user_id,
+});
+
+const inspection3 = recordsList.addRecord({
+  timestamp: now,
+  apiary_id: 2,
+  colony_id: 1,
+  queenright: true,
+  queen_marked: 'red',
   queen_clipped: true,
   queen_cups: 2,
   brood_frames: 5,
