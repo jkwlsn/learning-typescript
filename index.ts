@@ -226,6 +226,29 @@ const formController = {
     return userList.addUser({ email: email, password: password });
   },
 
+  updateUserData() {
+    const indexInput = document.getElementById(
+      'index_update',
+    ) as HTMLInputElement;
+    if (!indexInput) throw new Error('Index input not found');
+    const index = parseInt(indexInput.value);
+
+    const emailInput = document.getElementById(
+      'email_update',
+    ) as HTMLInputElement;
+    if (!emailInput) throw new Error('Email input not found');
+    const email = emailInput.value;
+
+    const passwordInput = document.getElementById(
+      'password_update',
+    ) as HTMLInputElement;
+    if (!passwordInput) throw new Error('password input not found');
+    const password = passwordInput.value;
+
+    if (email) userList.users[index].email = email;
+    if (password) userList.users[index].password = password;
+  },
+
   delUserData() {
     const indexInput = document.getElementById(
       'index_input',
@@ -242,6 +265,11 @@ function add() {
   updateView();
 }
 
+function update() {
+  formController.updateUserData();
+  updateView();
+}
+
 function del() {
   formController.delUserData();
   updateView();
@@ -253,6 +281,13 @@ function updateView() {
   ) as HTMLFormElement;
   if (userAddInput) {
     userAddInput.reset();
+  }
+
+  const userUpdateInput = document.getElementById(
+    'user_update_form',
+  ) as HTMLFormElement;
+  if (userUpdateInput) {
+    userUpdateInput.reset();
   }
 
   const userDelInput = document.getElementById(
@@ -293,6 +328,16 @@ document.addEventListener('DOMContentLoaded', function () {
     userAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       add();
+    });
+  }
+
+  const userUpdateForm = document.getElementById(
+    'user_update_form',
+  ) as HTMLFormElement;
+  if (userUpdateForm) {
+    userUpdateForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      update();
     });
   }
 
