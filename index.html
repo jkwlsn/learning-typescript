@@ -14,6 +14,25 @@
       label {
         display: block;
       }
+      table,
+      th,
+      td {
+        border-collapse: collapse;
+        border: 1px solid;
+      }
+      td {
+        text-align: center;
+      }
+      th,
+      td {
+        padding: 1em;
+      }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      .responsive-table {
+        overflow-x: auto;
+      }
     </style>
   </head>
   <body>
@@ -224,39 +243,43 @@
       </section>
       <section id="users-view">
         <h1>Users</h1>
-        <table id="users-table">
-          <tr id="users-header-row">
-            <th>Index</th>
-            <th>Email</th>
-            <th>Password</th>
-            <th>Created</th>
-          </tr>
-        </table>
+        <div class="responsive-table">
+          <table id="users-table">
+            <tr id="users-header-row">
+              <th>Index</th>
+              <th>Email</th>
+              <th>Password</th>
+              <th>Created</th>
+            </tr>
+          </table>
+        </div>
       </section>
       <section id="records-view">
         <h1>Records</h1>
-        <table id="records-table">
-          <tr id="records-header-row">
-            <th>Index</th>
-            <th>Timestamp</th>
-            <th>Apiary ID</th>
-            <th>Colony id</th>
-            <th>Queenright</th>
-            <th>Queen marked</th>
-            <th>Queen clipped</th>
-            <th>Queen cups</th>
-            <th>Brood frames</th>
-            <th>Store frames</th>
-            <th>Room frames</th>
-            <th>Health</th>
-            <th>Varroa</th>
-            <th>Temper</th>
-            <th>Feed</th>
-            <th>Supers</th>
-            <th>Weather</th>
-            <th>User ID</th>
-          </tr>
-        </table>
+        <div class="responsive-table">
+          <table id="records-table">
+            <tr id="records-header-row">
+              <th>Index</th>
+              <th>Timestamp</th>
+              <th>Apiary ID</th>
+              <th>Colony id</th>
+              <th>Queenright</th>
+              <th>Queen marked</th>
+              <th>Queen clipped</th>
+              <th>Queen cups</th>
+              <th>Brood frames</th>
+              <th>Store frames</th>
+              <th>Room frames</th>
+              <th>Health</th>
+              <th>Varroa</th>
+              <th>Temper</th>
+              <th>Feed</th>
+              <th>Supers</th>
+              <th>Weather</th>
+              <th>User ID</th>
+            </tr>
+          </table>
+        </div>
       </section>
     </main>
     <script src="index.js"></script>
