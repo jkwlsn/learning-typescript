@@ -5,22 +5,17 @@ const now = new Date();
 
 interface UsersList {
   users: User[];
-  addUser(user: User): void;
+  addUser(newUser: NewUser): UserAccount;
 }
 
 interface RecordsList {
   records: InspectionRecord[];
-  addRecord(record: InspectionRecord): void;
+  addRecord(newInspection: NewInspection): InspectionRecord;
 }
 
 interface NewUser {
   email: string;
   password: string;
-}
-
-interface User extends NewUser {
-  user_id: number;
-  timestamp: string;
 }
 
 interface NewInspection {
@@ -41,6 +36,11 @@ interface NewInspection {
   supers: number;
   weather: string;
   user_id: number;
+}
+
+interface User extends NewUser {
+  user_id: number;
+  timestamp: string;
 }
 
 interface Inspection extends Omit<NewInspection, 'timestamp'> {
@@ -128,64 +128,62 @@ class InspectionRecord implements Inspection {
   }
 }
 
-class Records implements RecordsList {
-  records: InspectionRecord[] = [];
-
-  addRecord(record: InspectionRecord): void {
-    this.records.push(record);
-  }
-}
-
 class Users implements UsersList {
   users: User[] = [];
 
-  addUser(user: User): void {
+  addUser(newUser: NewUser): UserAccount {
+    const user_id: number = Math.floor(Math.random() * 100);
+    const timestamp: Date = now;
+    const user: User = new UserAccount(
+      user_id,
+      newUser.email,
+      newUser.password,
+      timestamp,
+    );
     this.users.push(user);
+    return user;
   }
 }
 
-function addUser(newUser: NewUser): User {
-  const user_id: number = Math.floor(Math.random() * 100);
-  const timestamp: Date = now;
-  const user: User = new UserAccount(
-    user_id,
-    newUser.email,
-    newUser.password,
-    timestamp,
-  );
-  return user;
+class Records implements RecordsList {
+  records: InspectionRecord[] = [];
+
+  addRecord(newInspection: NewInspection): InspectionRecord {
+    const inspection_id: number = Math.floor(Math.random() * 100);
+    const inspection: Inspection = new InspectionRecord(
+      inspection_id,
+      newInspection.timestamp,
+      newInspection.apiary_id,
+      newInspection.colony_id,
+      newInspection.queenright,
+      newInspection.queen_marked,
+      newInspection.queen_clipped,
+      newInspection.queen_cups,
+      newInspection.brood_frames,
+      newInspection.store_frames,
+      newInspection.room_frames,
+      newInspection.health,
+      newInspection.varroa,
+      newInspection.temper,
+      newInspection.feed,
+      newInspection.supers,
+      newInspection.weather,
+      newInspection.user_id,
+    );
+    this.records.push(inspection);
+    return inspection;
+  }
 }
 
-function addInspectionRecord(newInspection: NewInspection): Inspection {
-  const inspection_id: number = Math.floor(Math.random() * 100);
-  const inspection: Inspection = new InspectionRecord(
-    inspection_id,
-    newInspection.timestamp,
-    newInspection.apiary_id,
-    newInspection.colony_id,
-    newInspection.queenright,
-    newInspection.queen_marked,
-    newInspection.queen_clipped,
-    newInspection.queen_cups,
-    newInspection.brood_frames,
-    newInspection.store_frames,
-    newInspection.room_frames,
-    newInspection.health,
-    newInspection.varroa,
-    newInspection.temper,
-    newInspection.feed,
-    newInspection.supers,
-    newInspection.weather,
-    newInspection.user_id,
-  );
-  return inspection;
-}
+const userList = new Users();
+const recordsList = new Records();
 
-const user1 = addUser({ email: 'jake@example.com', password: 'testpassword' });
-const user2 = addUser({ email: 'alice@example.com', password: 'testpassword' });
-const user3 = addUser({ email: 'bob@example.com', password: 'testpassword' });
+const user1 = userList.addUser({
+  email: 'jake@example.com',
+  password: 'testpassword',
+});
 
-const inspection1 = addInspectionRecord({
+const inspection1 = recordsList.addRecord({
   timestamp: now,
   apiary_id: 1,
   colony_id: 1,
@@ -204,57 +202,6 @@ const inspection1 = addInspectionRecord({
   weather: 'fine',
   user_id: user1.user_id,
 });
-
-const inspection2 = addInspectionRecord({
-  timestamp: now,
-  apiary_id: 1,
-  colony_id: 1,
-  queenright: true,
-  queen_marked: 'Yellow',
-  queen_clipped: true,
-  queen_cups: 2,
-  brood_frames: 5,
-  store_frames: 6,
-  room_frames: 1,
-  health: 'good',
-  varroa: 10,
-  temper: 5,
-  feed: 1,
-  supers: 3,
-  weather: 'fine',
-  user_id: user2.user_id,
-});
-
-const inspection3 = addInspectionRecord({
-  timestamp: now,
-  apiary_id: 1,
-  colony_id: 1,
-  queenright: true,
-  queen_marked: 'Yellow',
-  queen_clipped: true,
-  queen_cups: 2,
-  brood_frames: 5,
-  store_frames: 6,
-  room_frames: 1,
-  health: 'good',
-  varroa: 10,
-  temper: 5,
-  feed: 1,
-  supers: 3,
-  weather: 'fine',
-  user_id: user3.user_id,
-});
-
-const userList = new Users();
-const recordsList = new Records();
-
-userList.addUser(user1);
-userList.addUser(user2);
-userList.addUser(user3);
-
-recordsList.addRecord(inspection1);
-recordsList.addRecord(inspection2);
-recordsList.addRecord(inspection3);
 
 console.table(userList.users);
 console.table(recordsList.records);

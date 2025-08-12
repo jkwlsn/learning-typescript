@@ -32,39 +32,38 @@ var InspectionRecord = /** @class */ (function () {
     }
     return InspectionRecord;
 }());
-var Records = /** @class */ (function () {
-    function Records() {
-        this.records = [];
-    }
-    Records.prototype.addRecord = function (record) {
-        this.records.push(record);
-    };
-    return Records;
-}());
 var Users = /** @class */ (function () {
     function Users() {
         this.users = [];
     }
-    Users.prototype.addUser = function (user) {
+    Users.prototype.addUser = function (newUser) {
+        var user_id = Math.floor(Math.random() * 100);
+        var timestamp = now;
+        var user = new UserAccount(user_id, newUser.email, newUser.password, timestamp);
         this.users.push(user);
+        return user;
     };
     return Users;
 }());
-function addUser(newUser) {
-    var user_id = Math.floor(Math.random() * 100);
-    var timestamp = now;
-    var user = new UserAccount(user_id, newUser.email, newUser.password, timestamp);
-    return user;
-}
-function addInspectionRecord(newInspection) {
-    var inspection_id = Math.floor(Math.random() * 100);
-    var inspection = new InspectionRecord(inspection_id, newInspection.timestamp, newInspection.apiary_id, newInspection.colony_id, newInspection.queenright, newInspection.queen_marked, newInspection.queen_clipped, newInspection.queen_cups, newInspection.brood_frames, newInspection.store_frames, newInspection.room_frames, newInspection.health, newInspection.varroa, newInspection.temper, newInspection.feed, newInspection.supers, newInspection.weather, newInspection.user_id);
-    return inspection;
-}
-var user1 = addUser({ email: 'jake@example.com', password: 'testpassword' });
-var user2 = addUser({ email: 'alice@example.com', password: 'testpassword' });
-var user3 = addUser({ email: 'bob@example.com', password: 'testpassword' });
-var inspection1 = addInspectionRecord({
+var Records = /** @class */ (function () {
+    function Records() {
+        this.records = [];
+    }
+    Records.prototype.addRecord = function (newInspection) {
+        var inspection_id = Math.floor(Math.random() * 100);
+        var inspection = new InspectionRecord(inspection_id, newInspection.timestamp, newInspection.apiary_id, newInspection.colony_id, newInspection.queenright, newInspection.queen_marked, newInspection.queen_clipped, newInspection.queen_cups, newInspection.brood_frames, newInspection.store_frames, newInspection.room_frames, newInspection.health, newInspection.varroa, newInspection.temper, newInspection.feed, newInspection.supers, newInspection.weather, newInspection.user_id);
+        this.records.push(inspection);
+        return inspection;
+    };
+    return Records;
+}());
+var userList = new Users();
+var recordsList = new Records();
+var user1 = userList.addUser({
+    email: 'jake@example.com',
+    password: 'testpassword',
+});
+var inspection1 = recordsList.addRecord({
     timestamp: now,
     apiary_id: 1,
     colony_id: 1,
@@ -83,51 +82,5 @@ var inspection1 = addInspectionRecord({
     weather: 'fine',
     user_id: user1.user_id,
 });
-var inspection2 = addInspectionRecord({
-    timestamp: now,
-    apiary_id: 1,
-    colony_id: 1,
-    queenright: true,
-    queen_marked: 'Yellow',
-    queen_clipped: true,
-    queen_cups: 2,
-    brood_frames: 5,
-    store_frames: 6,
-    room_frames: 1,
-    health: 'good',
-    varroa: 10,
-    temper: 5,
-    feed: 1,
-    supers: 3,
-    weather: 'fine',
-    user_id: user2.user_id,
-});
-var inspection3 = addInspectionRecord({
-    timestamp: now,
-    apiary_id: 1,
-    colony_id: 1,
-    queenright: true,
-    queen_marked: 'Yellow',
-    queen_clipped: true,
-    queen_cups: 2,
-    brood_frames: 5,
-    store_frames: 6,
-    room_frames: 1,
-    health: 'good',
-    varroa: 10,
-    temper: 5,
-    feed: 1,
-    supers: 3,
-    weather: 'fine',
-    user_id: user3.user_id,
-});
-var userList = new Users();
-var recordsList = new Records();
-userList.addUser(user1);
-userList.addUser(user2);
-userList.addUser(user3);
-recordsList.addRecord(inspection1);
-recordsList.addRecord(inspection2);
-recordsList.addRecord(inspection3);
 console.table(userList.users);
 console.table(recordsList.records);
