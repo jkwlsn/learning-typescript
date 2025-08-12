@@ -262,20 +262,20 @@ const formController = {
 // Controller
 function add() {
   formController.getUserData();
-  updateView();
+  updateUserView();
 }
 
 function update() {
   formController.updateUserData();
-  updateView();
+  updateUserView();
 }
 
 function del() {
   formController.delUserData();
-  updateView();
+  updateUserView();
 }
 
-function updateView() {
+function updateUserView() {
   const userAddInput = document.getElementById(
     'user_add_form',
   ) as HTMLFormElement;
@@ -297,9 +297,9 @@ function updateView() {
     userDelInput.reset();
   }
 
-  const table = document.getElementById('view_table') as HTMLTableElement;
+  const table = document.getElementById('users-table') as HTMLTableElement;
   const headerRow = document.getElementById(
-    'header_row',
+    'users-header-row',
   ) as HTMLTableRowElement;
   if (table && headerRow) {
     table.innerHTML = '';
