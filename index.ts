@@ -226,11 +226,24 @@ const formController = {
     return userList.addUser({ email: email, password: password });
   },
 
+  delUserData() {
+    const indexInput = document.getElementById(
+      'index_input',
+    ) as HTMLInputElement;
+    if (!indexInput) throw new Error('Index input not found');
+    const index = parseInt(indexInput.value);
+    return userList.users.splice(index, 1);
+  },
 };
 
 // Controller
 function add() {
   formController.getUserData();
+  updateView();
+}
+
+function del() {
+  formController.delUserData();
   updateView();
 }
 
@@ -273,6 +286,16 @@ document.addEventListener('DOMContentLoaded', function () {
     userAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       add();
+    });
+  }
+
+  const userDelForm = document.getElementById(
+    'user_del_form',
+  ) as HTMLFormElement;
+  if (userDelForm) {
+    userDelForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      del();
     });
   }
 });
