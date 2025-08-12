@@ -84,6 +84,29 @@ class InspectionRecord {
         this.weather = weather;
         this.user_id = user_id;
     }
+    toObject(index) {
+        return {
+            index,
+            inspection_id: this.inspection_id,
+            timestamp: this.timestamp,
+            apiary_id: this.apiary_id,
+            colony_id: this.colony_id,
+            queenright: this.queenright,
+            queen_marked: this.queen_marked,
+            queen_clipped: this.queen_clipped,
+            queen_cups: this.queen_cups,
+            brood_frames: this.brood_frames,
+            store_frames: this.store_frames,
+            room_frames: this.room_frames,
+            health: this.health,
+            varroa: this.varroa,
+            temper: this.temper,
+            feed: this.feed,
+            supers: this.supers,
+            weather: this.weather,
+            user_id: this.user_id,
+        };
+    }
 }
 class Users {
     users = [];
@@ -144,21 +167,114 @@ const formController = {
         const index = parseInt(indexInput.value);
         return userList.users.splice(index, 1);
     },
+    addRecordData() {
+        const timestampInput = document.getElementById('timestamp_input');
+        if (!timestampInput)
+            throw new Error('timestamp input not found');
+        const timestamp = new Date(timestampInput.value);
+        const apiary_idInput = document.getElementById('apiary_id_input');
+        if (!apiary_idInput)
+            throw new Error('apiary_id input not found');
+        const apiary_id = parseInt(apiary_idInput.value);
+        const colony_idInput = document.getElementById('colony_id_input');
+        if (!colony_idInput)
+            throw new Error('colony_id input not found');
+        const colony_id = parseInt(colony_idInput.value);
+        const queenrightInput = document.getElementById('queenright_input');
+        if (!queenrightInput)
+            throw new Error('queenright input not found');
+        const queenright = queenrightInput.checked;
+        const queen_markedInput = document.getElementById('queen_marked_input');
+        if (!queen_markedInput)
+            throw new Error('queen_marked input not found');
+        const queen_marked = queen_markedInput.value;
+        const queen_clippedInput = document.getElementById('queen_clipped_input');
+        if (!queen_clippedInput)
+            throw new Error('queen_clipped input not found');
+        const queen_clipped = queen_clippedInput.checked;
+        const queen_cupsInput = document.getElementById('queen_cups_input');
+        if (!queen_cupsInput)
+            throw new Error('queen_cups input not found');
+        const queen_cups = parseInt(queen_cupsInput.value);
+        const brood_framesInput = document.getElementById('brood_frames_input');
+        if (!brood_framesInput)
+            throw new Error('brood_frames input not found');
+        const brood_frames = parseInt(brood_framesInput.value);
+        const store_framesInput = document.getElementById('store_frames_input');
+        if (!store_framesInput)
+            throw new Error('store_frames input not found');
+        const store_frames = parseInt(store_framesInput.value);
+        const room_framesInput = document.getElementById('room_frames_input');
+        if (!room_framesInput)
+            throw new Error('room_frames input not found');
+        const room_frames = parseInt(room_framesInput.value);
+        const healthInput = document.getElementById('health_input');
+        if (!healthInput)
+            throw new Error('health input not found');
+        const health = healthInput.value;
+        const varroaInput = document.getElementById('varroa_input');
+        if (!varroaInput)
+            throw new Error('varroa input not found');
+        const varroa = parseInt(varroaInput.value);
+        const temperInput = document.getElementById('temper_input');
+        if (!temperInput)
+            throw new Error('temper input not found');
+        const temper = parseInt(temperInput.value);
+        const feedInput = document.getElementById('feed_input');
+        if (!feedInput)
+            throw new Error('feed input not found');
+        const feed = parseInt(feedInput.value);
+        const supersInput = document.getElementById('supers_input');
+        if (!supersInput)
+            throw new Error('supers input not found');
+        const supers = parseInt(supersInput.value);
+        const weatherInput = document.getElementById('weather_input');
+        if (!weatherInput)
+            throw new Error('weather input not found');
+        const weather = weatherInput.value;
+        const user_idInput = document.getElementById('user_id_input');
+        if (!user_idInput)
+            throw new Error('user_id input not found');
+        const user_id = parseInt(user_idInput.value);
+        return recordsList.addRecord({
+            timestamp,
+            apiary_id,
+            colony_id,
+            queenright,
+            queen_marked,
+            queen_clipped,
+            queen_cups,
+            brood_frames,
+            store_frames,
+            room_frames,
+            health,
+            varroa,
+            temper,
+            feed,
+            supers,
+            weather,
+            user_id,
+        });
+    },
 };
 // Controller
+function addRecord() {
+    formController.addRecordData();
+    updateRecordView();
+}
 function add() {
     formController.getUserData();
-    updateView();
+    updateUserView();
 }
 function update() {
     formController.updateUserData();
-    updateView();
+    updateUserView();
 }
 function del() {
     formController.delUserData();
-    updateView();
+    updateUserView();
 }
-function updateView() {
+function updateUserView() {
     const userAddInput = document.getElementById('user_add_form');
     if (userAddInput) {
         userAddInput.reset();
@@ -171,8 +287,8 @@ function updateView() {
     if (userDelInput) {
         userDelInput.reset();
     }
-    const table = document.getElementById('view_table');
-    const headerRow = document.getElementById('header_row');
+    const table = document.getElementById('users-table');
+    const headerRow = document.getElementById('users-header-row');
     if (table && headerRow) {
         table.innerHTML = '';
         table.appendChild(headerRow);
@@ -185,6 +301,43 @@ function updateView() {
         <td>${obj.email}</td>
         <td>${obj.password}</td>
         <td>${obj.timestamp}</td>
+      `;
+        table.appendChild(row);
+    });
+}
+function updateRecordView() {
+    const userAddInput = document.getElementById('user_add_form');
+    if (userAddInput) {
+        userAddInput.reset();
+    }
+    const table = document.getElementById('records-table');
+    const headerRow = document.getElementById('records-header-row');
+    if (table && headerRow) {
+        table.innerHTML = '';
+        table.appendChild(headerRow);
+    }
+    recordsList.records.forEach((entry, index) => {
+        const row = document.createElement('tr');
+        const obj = entry.toObject(index);
+        row.innerHTML = `
+        <td>${obj.index}</td>
+        <td>${obj.timestamp}</td>
+        <td>${obj.apiary_id}</td>
+        <td>${obj.colony_id}</td>
+        <td>${obj.queenright}</td>
+        <td>${obj.queen_marked}</td>
+        <td>${obj.queen_clipped}</td>
+        <td>${obj.queen_cups}</td>
+        <td>${obj.brood_frames}</td>
+        <td>${obj.store_frames}</td>
+        <td>${obj.room_frames}</td>
+        <td>${obj.health}</td>
+        <td>${obj.varroa}</td>
+        <td>${obj.temper}</td>
+        <td>${obj.feed}</td>
+        <td>${obj.supers}</td>
+        <td>${obj.weather}</td>
+        <td>${obj.user_id}</td>
       `;
         table.appendChild(row);
     });
@@ -210,6 +363,14 @@ document.addEventListener('DOMContentLoaded', function () {
         userDelForm.addEventListener('submit', (event) => {
             event.preventDefault();
             del();
+        });
+    }
+    // RECORDS
+    const recordAddForm = document.getElementById('record_add_form');
+    if (recordAddForm) {
+        recordAddForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            addRecord();
         });
     }
 });

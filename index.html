@@ -54,6 +54,159 @@
           <input type="submit" value="submit" id="del_entry" />
         </form>
       </section>
+      <section id="records">
+        <h2>Records</h2>
+        <form method="post" id="record_add_form">
+          <h2>Add</h2>
+          <label for="timestamp_input">Timestamp</label>
+          <input
+            type="datetime-local"
+            id="timestamp_input"
+            name="timestamp_input"
+            required
+          />
+          <label for="apiary_id_input">apiary_id</label>
+          <input
+            type="number"
+            required
+            min="0"
+            id="apiary_id_input"
+            name="apiary_id_input"
+            value="0"
+          />
+
+          <label for="colony_id_input">colony_id</label>
+          <input
+            type="number"
+            required
+            min="0"
+            id="colony_id_input"
+            name="colony_id_input"
+            value="0"
+          />
+
+          <label for="queenright_input">queenright</label>
+          <input
+            type="checkbox"
+            id="queenright_input"
+            name="queenright_input"
+          />
+
+          <label for="queen_marked_input">queen_marked</label>
+          <select name="queen_marked_input" id="queen_marked_input">
+            <option value="white">White</option>
+            <option value="yellow">Yellow</option>
+            <option value="red">Red</option>
+            <option value="green">Green</option>
+            <option value="blue">Blue</option>
+          </select>
+
+          <label for="queen_clipped_input">queen_clipped</label>
+          <input
+            type="checkbox"
+            id="queen_clipped_input"
+            name="queen_clipped_input"
+          />
+
+          <label for="queen_cups_input">queen_cups</label>
+          <input
+            type="range"
+            min="0"
+            max="10"
+            id="queen_cups_input"
+            name="queen_cups_input"
+            value="0"
+          />
+
+          <label for="brood_frames_input">brood_frames</label>
+          <input
+            type="range"
+            min="0"
+            max="10"
+            id="brood_frames_input"
+            name="brood_frames_input"
+            value="0"
+          />
+
+          <label for="store_frames_input">store_frames</label>
+          <input
+            type="range"
+            min="0"
+            max="10"
+            id="store_frames_input"
+            name="store_frames_input"
+            value="0"
+          />
+
+          <label for="room_frames_input">room_frames</label>
+          <input
+            type="range"
+            min="0"
+            max="10"
+            id="room_frames_input"
+            name="room_frames_input"
+            value="0"
+          />
+
+          <label for="health_input">health</label>
+          <input type="text" id="health_input" name="health_input" />
+
+          <label for="varroa_input">varroa</label>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            id="varroa_input"
+            name="varroa_input"
+            value="0"
+          />
+
+          <label for="temper_input">temper</label>
+          <input
+            type="range"
+            min="0"
+            max="10"
+            id="temper_input"
+            name="temper_input"
+            value="0"
+          />
+
+          <label for="feed_input">feed</label>
+          <input
+            type="range"
+            min="0"
+            max="10"
+            id="feed_input"
+            name="feed_input"
+            value="0"
+          />
+
+          <label for="supers_input">supers</label>
+          <input
+            type="range"
+            min="0"
+            max="10"
+            id="supers_input"
+            name="supers_input"
+            value="0"
+          />
+
+          <label for="weather_input">weather</label>
+          <input type="text" id="weather_input" name="weather_input" />
+
+          <label for="user_id_input">user_id</label>
+          <input
+            type="number"
+            required
+            min="0"
+            id="user_id_input"
+            name="user_id_input"
+            value="0"
+          />
+
+          <input type="submit" value="submit" id="add_entry" />
+        </form>
+      </section>
       <section id="users-view">
         <h1>Users</h1>
         <table id="users-table">
@@ -62,6 +215,31 @@
             <th>Email</th>
             <th>Password</th>
             <th>Created</th>
+          </tr>
+        </table>
+      </section>
+      <section id="records-view">
+        <h1>Records</h1>
+        <table id="records-table">
+          <tr id="records-header-row">
+            <th>Index</th>
+            <th>Timestamp</th>
+            <th>Apiary ID</th>
+            <th>Colony id</th>
+            <th>Queenright</th>
+            <th>Queen marked</th>
+            <th>Queen clipped</th>
+            <th>Queen cups</th>
+            <th>Brood frames</th>
+            <th>Store frames</th>
+            <th>Room frames</th>
+            <th>Health</th>
+            <th>Varroa</th>
+            <th>Temper</th>
+            <th>Feed</th>
+            <th>Supers</th>
+            <th>Weather</th>
+            <th>User ID</th>
           </tr>
         </table>
       </section>
