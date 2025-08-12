@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <title>Apiary Manager</title>
+  <body>
+    <header>
+      <h1>Apiary Manager</h1>
+    </header>
+    <main>
+      <section id="controller">
+        <form method="post" id="user_add_form">
+          <h2>Add</h2>
+          <label for="email_input">Email</label>
+          <input type="text" required id="email_input" name="email_input" />
+          <label for="password_input">Password</label>
+          <input
+            type="text"
+            required
+            id="password_input"
+            name="password_input"
+          />
+          <input type="submit" value="submit" id="add_entry" />
+        </form>
+        <form method="post" id="user_update_form">
+          <h2>Update</h2>
+          <label for="index_update">Index</label>
+          <input
+            type="number"
+            required
+            min="0"
+            id="index_update"
+            name="index_update"
+          />
+          <label for="email_update">Email</label>
+          <input type="text" required id="email_update" name="email_update" />
+          <label for="password_update">Password</label>
+          <input
+            type="text"
+            required
+            id="password_update"
+            name="password_update"
+          />
+          <input type="submit" value="submit" id="update_entry" />
+        </form>
+        <form method="post" id="user_del_form">
+          <h2>Delete</h2>
+          <label for="index_input">Index</label>
+          <input
+            type="number"
+            required
+            min="0"
+            id="index_input"
+            name="index_input"
+          />
+          <input type="submit" value="submit" id="del_entry" />
+        </form>
+      </section>
+      <section id="view">
+        <h1>Passwords</h1>
+        <table id="view_table">
+          <tr id="header_row">
+            <th>Index</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Created</th>
+          </tr>
+        </table>
+      </section>
+    </main>
+    <script src="index.js"></script>
+  </body>
+</html>

@@ -1,6 +1,3 @@
-'use strict';
-const now = new Date();
-
 // Interfaces
 
 interface UsersList {
@@ -49,10 +46,10 @@ interface Inspection extends Omit<NewInspection, 'timestamp'> {
 }
 
 class UserAccount implements NewUser {
-  user_id: number;
-  email: string;
-  password: string;
-  timestamp: string;
+  #user_id: number = 0;
+  #email: string = '';
+  #password: string = '';
+  #timestamp: string = '';
 
   constructor(
     user_id: number,
@@ -64,6 +61,39 @@ class UserAccount implements NewUser {
     this.email = email;
     this.password = password;
     this.timestamp = timestamp.toISOString();
+  }
+  set user_id(user_id: number) {
+    this.#user_id = user_id;
+  }
+  set email(email: string) {
+    this.#email = email;
+  }
+  set password(password: string) {
+    this.#password = password;
+  }
+  set timestamp(timestamp: string) {
+    this.#timestamp = timestamp;
+  }
+  get user_id() {
+    return this.#user_id;
+  }
+  get email() {
+    return this.#email;
+  }
+  get password() {
+    return this.#password;
+  }
+  get timestamp() {
+    return this.#timestamp;
+  }
+  toObject(index: number) {
+    return {
+      index,
+      user_id: this.user_id,
+      email: this.email,
+      password: this.password,
+      timestamp: this.timestamp,
+    };
   }
 }
 
@@ -129,12 +159,12 @@ class InspectionRecord implements Inspection {
 }
 
 class Users implements UsersList {
-  users: User[] = [];
+  users: UserAccount[] = [];
 
   addUser(newUser: NewUser): UserAccount {
     const user_id: number = Math.floor(Math.random() * 100);
-    const timestamp: Date = now;
-    const user: User = new UserAccount(
+    const timestamp: Date = new Date();
+    const user: UserAccount = new UserAccount(
       user_id,
       newUser.email,
       newUser.password,
@@ -150,7 +180,7 @@ class Records implements RecordsList {
 
   addRecord(newInspection: NewInspection): InspectionRecord {
     const inspection_id: number = Math.floor(Math.random() * 100);
-    const inspection: Inspection = new InspectionRecord(
+    const inspection: InspectionRecord = new InspectionRecord(
       inspection_id,
       newInspection.timestamp,
       newInspection.apiary_id,
@@ -178,70 +208,71 @@ class Records implements RecordsList {
 const userList = new Users();
 const recordsList = new Records();
 
-const user1 = userList.addUser({
-  email: 'jake@example.com',
-  password: 'testpassword',
-});
+// Form controller
+const formController = {
+  getUserData() {
+    const emailInput = document.getElementById(
+      'email_input',
+    ) as HTMLInputElement;
+    if (!emailInput) throw new Error('Email input not found');
+    const email = emailInput.value;
 
-const inspection1 = recordsList.addRecord({
-  timestamp: now,
-  apiary_id: 1,
-  colony_id: 1,
-  queenright: true,
-  queen_marked: 'yellow',
-  queen_clipped: true,
-  queen_cups: 2,
-  brood_frames: 5,
-  store_frames: 6,
-  room_frames: 1,
-  health: 'good',
-  varroa: 10,
-  temper: 5,
-  feed: 1,
-  supers: 3,
-  weather: 'fine',
-  user_id: user1.user_id,
-});
+    const passwordInput = document.getElementById(
+      'password_input',
+    ) as HTMLInputElement;
+    if (!passwordInput) throw new Error('password input not found');
+    const password = passwordInput.value;
 
-const inspection2 = recordsList.addRecord({
-  timestamp: now,
-  apiary_id: 1,
-  colony_id: 2,
-  queenright: true,
-  queen_marked: 'blue',
-  queen_clipped: true,
-  queen_cups: 2,
-  brood_frames: 5,
-  store_frames: 6,
-  room_frames: 1,
-  health: 'good',
-  varroa: 10,
-  temper: 5,
-  feed: 1,
-  supers: 3,
-  weather: 'fine',
-  user_id: user1.user_id,
-});
+    return userList.addUser({ email: email, password: password });
+  },
 
-const inspection3 = recordsList.addRecord({
-  timestamp: now,
-  apiary_id: 2,
-  colony_id: 1,
-  queenright: true,
-  queen_marked: 'red',
-  queen_clipped: true,
-  queen_cups: 2,
-  brood_frames: 5,
-  store_frames: 6,
-  room_frames: 1,
-  health: 'good',
-  varroa: 10,
-  temper: 5,
-  feed: 1,
-  supers: 3,
-  weather: 'fine',
-  user_id: user1.user_id,
-});
+};
 
-console.table(userList.users);
-console.table(recordsList.records);
+// Controller
+function add() {
+  formController.getUserData();
+  updateView();
+}
+
+function updateView() {
+  const userAddInput = document.getElementById(
+    'user_add_form',
+  ) as HTMLFormElement;
+  if (userAddInput) {
+    userAddInput.reset();
+  }
+
+  const table = document.getElementById('view_table') as HTMLTableElement;
+  const headerRow = document.getElementById(
+    'header_row',
+  ) as HTMLTableRowElement;
+  if (table && headerRow) {
+    table.innerHTML = '';
+    table.appendChild(headerRow);
+  }
+
+  userList.users.forEach((entry, index) => {
+    const row = document.createElement('tr');
+    const obj = entry.toObject(index);
+    row.innerHTML = `
+        <td>${obj.index}</td>
+        <td>${obj.email}</td>
+        <td>${obj.password}</td>
+        <td>${obj.timestamp}</td>
+      `;
+    table.appendChild(row);
+  });
+}
+
+// View
+document.addEventListener('DOMContentLoaded', function () {
+  const userAddForm = document.getElementById(
+    'user_add_form',
+  ) as HTMLFormElement;
+  if (userAddForm) {
+    userAddForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      add();
+    });
+  }
+});
