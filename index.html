@@ -110,6 +110,29 @@
           <input type="submit" value="submit" id="add_apiary" />
         </form>
       </section>
+
+      <section id="hives">
+        <h2>hives</h2>
+        <form method="post" id="hive_add_form">
+          <h2>Add</h2>
+          <label for="hive_name_input">hive Name</label>
+          <input
+            type="text"
+            required
+            id="hive_name_input"
+            name="hive_name_input"
+          />
+          <label for="apiary_id_input">apiary_id</label>
+          <input
+            type="number"
+            required
+            id="apiary_id_input"
+            name="apiary_id_input"
+          />
+          <input type="submit" value="submit" id="add_hive" />
+        </form>
+      </section>
+
       <section id="records">
         <h2>Records</h2>
         <form method="post" id="record_add_form">
@@ -294,6 +317,21 @@
           </table>
         </div>
       </section>
+
+      <section id="hives-view">
+        <h1>hives</h1>
+        <div class="responsive-table">
+          <table id="hives-table">
+            <tr id="hives-header-row">
+              <th>Index</th>
+              <th>hive ID</th>
+              <th>Name</th>
+              <th>Apiary ID</th>
+            </tr>
+          </table>
+        </div>
+      </section>
+
       <section id="records-view">
         <h1>Records</h1>
         <div class="responsive-table">

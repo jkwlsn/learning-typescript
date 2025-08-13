@@ -21,6 +21,16 @@ interface ApiaryInterface extends NewApiary {
   apiary_id: number;
 }
 
+interface NewHive {
+  hive_name: string;
+  apiary_id: number;
+}
+
+interface HiveInterface extends NewHive {
+  hive_id: number;
+  index: number;
+}
+
 interface NewInspection {
   timestamp: Date;
   apiary_id: number;
@@ -55,6 +65,11 @@ interface UsersList {
 interface ApiariesList {
   apiaries: Apiary[];
   addApiary(newApiary: NewApiary): Apiary;
+}
+
+interface HivesList {
+  hives: Hive[];
+  addHive(newHive: NewHive): Hive;
 }
 
 interface RecordsList {
@@ -129,6 +144,27 @@ class Apiary implements NewApiary {
       apiary_id: this.apiary_id,
       apiary_name: this.apiary_name,
       user_id: this.user_id,
+    };
+  }
+}
+
+class Hive implements NewHive {
+  hive_id: number;
+  hive_name: string;
+  apiary_id: number;
+
+  constructor(hive_id: number, hive_name: string, apiary_id: number) {
+    this.hive_id = hive_id;
+    this.hive_name = hive_name;
+    this.apiary_id = apiary_id;
+  }
+
+  toObject(index: number): HiveInterface {
+    return {
+      index,
+      hive_id: this.hive_id,
+      hive_name: this.hive_name,
+      apiary_id: this.apiary_id,
     };
   }
 }
@@ -247,6 +283,17 @@ class Apiaries implements ApiariesList {
   }
 }
 
+class Hives implements HivesList {
+  hives: Hive[] = [];
+
+  addHive(newHive: NewHive): Hive {
+    const hive_id = Math.floor(Math.random() * 100);
+    const hive = new Hive(hive_id, newHive.hive_name, newHive.apiary_id);
+    this.hives.push(hive);
+    return hive;
+  }
+}
+
 class Records implements RecordsList {
   records: InspectionRecord[] = [];
 
@@ -279,6 +326,7 @@ class Records implements RecordsList {
 
 const userList = new Users();
 const apiaryList = new Apiaries();
+const hivesList = new Hives();
 const recordsList = new Records();
 
 // Form controller
@@ -468,6 +516,22 @@ const formController = {
 
     return apiaryList.addApiary({ apiary_name: apiary_name, user_id: user_id });
   },
+
+  addHiveData() {
+    const hiveNameInput = document.getElementById(
+      'hive_name_input',
+    ) as HTMLInputElement;
+    if (!hiveNameInput) throw new Error('Hive name input not found');
+    const hive_name = hiveNameInput.value;
+
+    const apiaryIdInput = document.getElementById(
+      'apiary_id_input',
+    ) as HTMLInputElement;
+    if (!apiaryIdInput) throw new Error('hive ID input not found');
+    const apiary_id = parseInt(apiaryIdInput.value);
+
+    return hivesList.addHive({ hive_name, apiary_id });
+  },
 };
 
 // Controller
@@ -479,6 +543,11 @@ function addRecord() {
 function addApiary() {
   formController.addApiaryData();
   updateApiaryView();
+}
+
+function addHive() {
+  formController.addHiveData();
+  updateHiveView();
 }
 
 function add() {
@@ -559,6 +628,29 @@ function updateApiaryView() {
         <td>${obj.apiary_id}</td>
         <td>${obj.apiary_name}</td>
         <td>${obj.user_id}</td>
+      `;
+    table.appendChild(row);
+  });
+}
+
+function updateHiveView() {
+  const table = document.getElementById('hives-table') as HTMLTableElement;
+  const headerRow = document.getElementById(
+    'hives-header-row',
+  ) as HTMLTableRowElement;
+  if (table && headerRow) {
+    table.innerHTML = '';
+    table.appendChild(headerRow);
+  }
+
+  hivesList.hives.forEach((entry, index) => {
+    const row = document.createElement('tr');
+    const obj = entry.toObject(index);
+    row.innerHTML = `
+        <td>${obj.index}</td>
+        <td>${obj.hive_id}</td>
+        <td>${obj.hive_name}</td>
+        <td>${obj.apiary_id}</td>
       `;
     table.appendChild(row);
   });
@@ -661,4 +753,16 @@ document.addEventListener('DOMContentLoaded', function () {
       addApiary();
     });
   }
+
+  // Hives
+  const hiveAddForm = document.getElementById(
+    'hive_add_form',
+  ) as HTMLFormElement;
+  if (hiveAddForm) {
+    hiveAddForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      addHive();
+    });
+  }
+
 });
