@@ -1,18 +1,14 @@
 // Interfaces
 
-interface UsersList {
-  users: User[];
-  addUser(newUser: NewUser): UserAccount;
-}
-
-interface RecordsList {
-  records: InspectionRecord[];
-  addRecord(newInspection: NewInspection): InspectionRecord;
-}
-
 interface NewUser {
   email: string;
   password: string;
+}
+
+interface User extends NewUser {
+  index: number;
+  user_id: number;
+  timestamp: Date;
 }
 
 interface NewInspection {
@@ -35,21 +31,27 @@ interface NewInspection {
   user_id: number;
 }
 
-interface User extends NewUser {
-  user_id: number;
-  timestamp: string;
+interface Inspection extends Omit<NewInspection, 'timestamp'> {
+  index: number;
+  inspection_id: number;
+  timestamp: Date;
 }
 
-interface Inspection extends Omit<NewInspection, 'timestamp'> {
-  inspection_id: number;
-  timestamp: string;
+interface UsersList {
+  users: UserAccount[];
+  addUser(newUser: NewUser): UserAccount;
+}
+
+interface RecordsList {
+  records: InspectionRecord[];
+  addRecord(newInspection: NewInspection): InspectionRecord;
 }
 
 class UserAccount implements NewUser {
   #user_id: number = 0;
   #email: string = '';
   #password: string = '';
-  #timestamp: string = '';
+  #timestamp: Date = new Date();
 
   constructor(
     user_id: number,
@@ -60,7 +62,7 @@ class UserAccount implements NewUser {
     this.user_id = user_id;
     this.email = email;
     this.password = password;
-    this.timestamp = timestamp.toISOString();
+    this.timestamp = timestamp;
   }
   set user_id(user_id: number) {
     this.#user_id = user_id;
@@ -71,7 +73,7 @@ class UserAccount implements NewUser {
   set password(password: string) {
     this.#password = password;
   }
-  set timestamp(timestamp: string) {
+  set timestamp(timestamp: Date) {
     this.#timestamp = timestamp;
   }
   get user_id() {
@@ -86,7 +88,7 @@ class UserAccount implements NewUser {
   get timestamp() {
     return this.#timestamp;
   }
-  toObject(index: number) {
+  toObject(index: number): User {
     return {
       index,
       user_id: this.user_id,
@@ -97,9 +99,9 @@ class UserAccount implements NewUser {
   }
 }
 
-class InspectionRecord implements Inspection {
+class InspectionRecord implements NewInspection {
   inspection_id: number;
-  timestamp: string;
+  timestamp: Date;
   apiary_id: number;
   colony_id: number;
   queenright: boolean;
@@ -138,7 +140,7 @@ class InspectionRecord implements Inspection {
     user_id: number,
   ) {
     this.inspection_id = inspection_id;
-    this.timestamp = timestamp.toISOString();
+    this.timestamp = timestamp;
     this.apiary_id = apiary_id;
     this.colony_id = colony_id;
     this.queenright = queenright;
@@ -156,7 +158,7 @@ class InspectionRecord implements Inspection {
     this.weather = weather;
     this.user_id = user_id;
   }
-  toObject(index: number) {
+  toObject(index: number): Inspection {
     return {
       index,
       inspection_id: this.inspection_id,
@@ -463,7 +465,7 @@ function updateUserView() {
         <td>${obj.index}</td>
         <td>${obj.email}</td>
         <td>${obj.password}</td>
-        <td>${obj.timestamp}</td>
+        <td>${obj.timestamp.toLocaleString()}</td>
       `;
     table.appendChild(row);
   });
@@ -491,7 +493,7 @@ function updateRecordView() {
     const obj = entry.toObject(index);
     row.innerHTML = `
         <td>${obj.index}</td>
-        <td>${obj.timestamp}</td>
+        <td>${obj.timestamp.toLocaleString()}</td>
         <td>${obj.apiary_id}</td>
         <td>${obj.colony_id}</td>
         <td>${obj.queenright}</td>

@@ -4,12 +4,12 @@ class UserAccount {
     #user_id = 0;
     #email = '';
     #password = '';
-    #timestamp = '';
+    #timestamp = new Date();
     constructor(user_id, email, password, timestamp) {
         this.user_id = user_id;
         this.email = email;
         this.password = password;
-        this.timestamp = timestamp.toISOString();
+        this.timestamp = timestamp;
     }
     set user_id(user_id) {
         this.#user_id = user_id;
@@ -66,7 +66,7 @@ class InspectionRecord {
     user_id;
     constructor(inspection_id, timestamp, apiary_id, colony_id, queenright, queen_marked, queen_clipped, queen_cups, brood_frames, store_frames, room_frames, health, varroa, temper, feed, supers, weather, user_id) {
         this.inspection_id = inspection_id;
-        this.timestamp = timestamp.toISOString();
+        this.timestamp = timestamp;
         this.apiary_id = apiary_id;
         this.colony_id = colony_id;
         this.queenright = queenright;
@@ -300,7 +300,7 @@ function updateUserView() {
         <td>${obj.index}</td>
         <td>${obj.email}</td>
         <td>${obj.password}</td>
-        <td>${obj.timestamp}</td>
+        <td>${obj.timestamp.toLocaleString()}</td>
       `;
         table.appendChild(row);
     });
@@ -321,7 +321,7 @@ function updateRecordView() {
         const obj = entry.toObject(index);
         row.innerHTML = `
         <td>${obj.index}</td>
-        <td>${obj.timestamp}</td>
+        <td>${obj.timestamp.toLocaleString()}</td>
         <td>${obj.apiary_id}</td>
         <td>${obj.colony_id}</td>
         <td>${obj.queenright}</td>
