@@ -1,3 +1,85 @@
+// Storage
+
+// Setters
+function saveUsers() {
+  localStorage.setItem('users', JSON.stringify(userList.records));
+}
+
+function saveApiaries() {
+  localStorage.setItem('apiaries', JSON.stringify(apiaryList.records));
+}
+
+function saveHives() {
+  localStorage.setItem('hives', JSON.stringify(hivesList.records));
+}
+
+function saveColonies() {
+  localStorage.setItem('colonies', JSON.stringify(coloniesList.records));
+}
+
+function saveQueens() {
+  localStorage.setItem('queens', JSON.stringify(queensList.records));
+}
+
+function saveInspections() {
+  localStorage.setItem('records', JSON.stringify(inspectionsList.records));
+}
+
+// Getters
+function loadUsers() {
+  const usersJSON = localStorage.getItem('users');
+  if (usersJSON) {
+    const usersArray = JSON.parse(usersJSON);
+    userList.records = usersArray.map((data: UserModel) => new User(data));
+  }
+}
+
+function loadApiaries() {
+  const apiariesJSON = localStorage.getItem('apiaries');
+  if (apiariesJSON) {
+    const apiaryArray = JSON.parse(apiariesJSON);
+    apiaryList.records = apiaryArray.map(
+      (data: ApiaryModel) => new Apiary(data),
+    );
+  }
+}
+
+function loadHives() {
+  const hivesJSON = localStorage.getItem('hives');
+  if (hivesJSON) {
+    const hiveArray = JSON.parse(hivesJSON);
+    hivesList.records = hiveArray.map((data: HiveModel) => new Hive(data));
+  }
+}
+
+function loadColonies() {
+  const coloniesJSON = localStorage.getItem('colonies');
+  if (coloniesJSON) {
+    const colonyArray = JSON.parse(coloniesJSON);
+    coloniesList.records = colonyArray.map(
+      (data: ColonyModel) => new Colony(data),
+    );
+  }
+}
+
+function loadQueens() {
+  const queensJSON = localStorage.getItem('queens');
+  if (queensJSON) {
+    const queenArray = JSON.parse(queensJSON);
+    queensList.records = queenArray.map((data: QueenModel) => new Queen(data));
+  }
+}
+
+function loadInspections() {
+  const recordsJSON = localStorage.getItem('records');
+  if (recordsJSON) {
+    const recordArray = JSON.parse(recordsJSON);
+    inspectionsList.records = recordArray.map(
+      (data: InspectionModel) => new Inspection(data),
+    );
+  }
+}
+
 // Interfaces
 
 // Models
