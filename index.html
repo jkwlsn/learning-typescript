@@ -52,7 +52,7 @@
             id="password_input"
             name="password_input"
           />
-          <input type="submit" value="submit" id="add_entry" />
+          <input type="submit" value="submit" id="add_user" />
         </form>
         <form method="post" id="user_update_form">
           <h2>Update</h2>
@@ -73,7 +73,7 @@
             id="password_update"
             name="password_update"
           />
-          <input type="submit" value="submit" id="update_entry" />
+          <input type="submit" value="submit" id="update_user" />
         </form>
         <form method="post" id="user_del_form">
           <h2>Delete</h2>
@@ -85,9 +85,10 @@
             id="index_input"
             name="index_input"
           />
-          <input type="submit" value="submit" id="del_entry" />
+          <input type="submit" value="submit" id="del_user" />
         </form>
       </section>
+
       <section id="apiaries">
         <h2>Apiaries</h2>
         <form method="post" id="apiary_add_form">
@@ -104,9 +105,9 @@
             type="number"
             required
             id="user_id_input"
-            name="use_id_input"
+            name="user_id_input"
           />
-          <input type="submit" value="submit" id="add_entry" />
+          <input type="submit" value="submit" id="add_apiary" />
         </form>
       </section>
       <section id="records">
@@ -120,6 +121,7 @@
             name="timestamp_input"
             required
           />
+
           <label for="apiary_id_input">apiary_id</label>
           <input
             type="number"
@@ -259,15 +261,18 @@
             value="0"
           />
 
-          <input type="submit" value="submit" id="add_entry" />
+          <input type="submit" value="Add record" id="add_record" />
+          <input type="reset" value="Reset" id="reset_record" />
         </form>
       </section>
+
       <section id="users-view">
         <h1>Users</h1>
         <div class="responsive-table">
           <table id="users-table">
             <tr id="users-header-row">
               <th>Index</th>
+              <th>User ID</th>
               <th>Email</th>
               <th>Password</th>
               <th>Created</th>
@@ -275,6 +280,7 @@
           </table>
         </div>
       </section>
+
       <section id="apiaries-view">
         <h1>Apiaries</h1>
         <div class="responsive-table">

@@ -532,6 +532,7 @@ function updateUserView() {
     const obj = entry.toObject(index);
     row.innerHTML = `
         <td>${obj.index}</td>
+        <td>${obj.user_id}</td>
         <td>${obj.email}</td>
         <td>${obj.password}</td>
         <td>${obj.timestamp.toLocaleString()}</td>
