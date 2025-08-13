@@ -31,6 +31,16 @@ interface HiveInterface extends NewHive {
   index: number;
 }
 
+interface NewColony {
+  colony_name: string;
+  hive_id: number;
+}
+
+interface ColonyInterface extends NewColony {
+  colony_id: number;
+  index: number;
+}
+
 interface NewInspection {
   timestamp: Date;
   apiary_id: number;
@@ -70,6 +80,11 @@ interface ApiariesList {
 interface HivesList {
   hives: Hive[];
   addHive(newHive: NewHive): Hive;
+}
+
+interface ColoniesList {
+  colonies: Colony[];
+  addColony(newColony: NewColony): Colony;
 }
 
 interface RecordsList {
@@ -165,6 +180,27 @@ class Hive implements NewHive {
       hive_id: this.hive_id,
       hive_name: this.hive_name,
       apiary_id: this.apiary_id,
+    };
+  }
+}
+
+class Colony implements NewColony {
+  colony_id: number;
+  colony_name: string;
+  hive_id: number;
+
+  constructor(colony_id: number, colony_name: string, hive_id: number) {
+    this.colony_id = colony_id;
+    this.colony_name = colony_name;
+    this.hive_id = hive_id;
+  }
+
+  toObject(index: number): ColonyInterface {
+    return {
+      index,
+      colony_id: this.colony_id,
+      colony_name: this.colony_name,
+      hive_id: this.hive_id,
     };
   }
 }
@@ -294,6 +330,21 @@ class Hives implements HivesList {
   }
 }
 
+class Colonies implements ColoniesList {
+  colonies: Colony[] = [];
+
+  addColony(newColony: NewColony): Colony {
+    const colony_id = Math.floor(Math.random() * 100);
+    const colony = new Colony(
+      colony_id,
+      newColony.colony_name,
+      newColony.hive_id,
+    );
+    this.colonies.push(colony);
+    return colony;
+  }
+}
+
 class Records implements RecordsList {
   records: InspectionRecord[] = [];
 
@@ -327,6 +378,7 @@ class Records implements RecordsList {
 const userList = new Users();
 const apiaryList = new Apiaries();
 const hivesList = new Hives();
+const coloniesList = new Colonies();
 const recordsList = new Records();
 
 // Form controller
@@ -532,6 +584,22 @@ const formController = {
 
     return hivesList.addHive({ hive_name, apiary_id });
   },
+
+  addColonyData() {
+    const colonyNameInput = document.getElementById(
+      'colony_name_input',
+    ) as HTMLInputElement;
+    if (!colonyNameInput) throw new Error('Colony name input not found');
+    const colony_name = colonyNameInput.value;
+
+    const hiveIdInput = document.getElementById(
+      'hive_id_input',
+    ) as HTMLInputElement;
+    if (!hiveIdInput) throw new Error('hive ID input not found');
+    const hive_id = parseInt(hiveIdInput.value);
+
+    return coloniesList.addColony({ colony_name, hive_id });
+  },
 };
 
 // Controller
@@ -548,6 +616,11 @@ function addApiary() {
 function addHive() {
   formController.addHiveData();
   updateHiveView();
+}
+
+function addColony() {
+  formController.addColonyData();
+  updateColonyView();
 }
 
 function add() {
@@ -652,6 +725,30 @@ function updateHiveView() {
         <td>${obj.hive_name}</td>
         <td>${obj.apiary_id}</td>
       `;
+    table.appendChild(row);
+  });
+}
+
+function updateColonyView() {
+  const table = document.getElementById('colonies-table') as HTMLTableElement;
+  const headerRow = document.getElementById(
+    'colonies-header-row',
+  ) as HTMLTableRowElement;
+
+  if (table && headerRow) {
+    table.innerHTML = '';
+    table.appendChild(headerRow);
+  }
+
+  coloniesList.colonies.forEach((entry, index) => {
+    const row = document.createElement('tr');
+    const obj = entry.toObject(index);
+    row.innerHTML = `
+      <td>${obj.index}</td>
+      <td>${obj.colony_id}</td>
+      <td>${obj.colony_name}</td>
+      <td>${obj.hive_id}</td>
+    `;
     table.appendChild(row);
   });
 }
@@ -765,4 +862,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // Colonies
+  const colonyAddForm = document.getElementById(
+    'colony_add_form',
+  ) as HTMLFormElement;
+  if (colonyAddForm) {
+    colonyAddForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      addColony();
+    });
+  }
 });
