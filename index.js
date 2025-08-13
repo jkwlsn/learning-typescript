@@ -455,18 +455,6 @@ function del() {
     updateUserView();
 }
 function updateUserView() {
-    const userAddInput = document.getElementById('user_add_form');
-    if (userAddInput) {
-        userAddInput.reset();
-    }
-    const userUpdateInput = document.getElementById('user_update_form');
-    if (userUpdateInput) {
-        userUpdateInput.reset();
-    }
-    const userDelInput = document.getElementById('user_del_form');
-    if (userDelInput) {
-        userDelInput.reset();
-    }
     const table = document.getElementById('users-table');
     const headerRow = document.getElementById('users-header-row');
     if (table && headerRow) {
@@ -606,6 +594,7 @@ document.addEventListener('DOMContentLoaded', function () {
         userAddForm.addEventListener('submit', (event) => {
             event.preventDefault();
             add();
+            userAddForm.reset();
         });
     }
     const userUpdateForm = document.getElementById('user_update_form');
@@ -613,6 +602,7 @@ document.addEventListener('DOMContentLoaded', function () {
         userUpdateForm.addEventListener('submit', (event) => {
             event.preventDefault();
             update();
+            userUpdateForm.reset();
         });
     }
     const userDelForm = document.getElementById('user_del_form');
@@ -620,6 +610,7 @@ document.addEventListener('DOMContentLoaded', function () {
         userDelForm.addEventListener('submit', (event) => {
             event.preventDefault();
             del();
+            userDelForm.reset();
         });
     }
     // RECORDS
@@ -628,6 +619,7 @@ document.addEventListener('DOMContentLoaded', function () {
         recordAddForm.addEventListener('submit', (event) => {
             event.preventDefault();
             addRecord();
+            recordAddForm.reset();
         });
     }
     // Apiaries
@@ -636,6 +628,7 @@ document.addEventListener('DOMContentLoaded', function () {
         apiaryAddForm.addEventListener('submit', (event) => {
             event.preventDefault();
             addApiary();
+            apiaryAddForm.reset();
         });
     }
     // Hives
@@ -644,6 +637,7 @@ document.addEventListener('DOMContentLoaded', function () {
         hiveAddForm.addEventListener('submit', (event) => {
             event.preventDefault();
             addHive();
+            hiveAddForm.reset();
         });
     }
     // Colonies
@@ -652,6 +646,7 @@ document.addEventListener('DOMContentLoaded', function () {
         colonyAddForm.addEventListener('submit', (event) => {
             event.preventDefault();
             addColony();
+            colonyAddForm.reset();
         });
     }
     // Queens
@@ -660,6 +655,7 @@ document.addEventListener('DOMContentLoaded', function () {
         queenAddForm.addEventListener('submit', (event) => {
             event.preventDefault();
             addQueen();
+            queenAddForm.reset();
         });
     }
 });

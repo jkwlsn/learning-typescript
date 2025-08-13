@@ -728,27 +728,6 @@ function del() {
 }
 
 function updateUserView() {
-  const userAddInput = document.getElementById(
-    'user_add_form',
-  ) as HTMLFormElement;
-  if (userAddInput) {
-    userAddInput.reset();
-  }
-
-  const userUpdateInput = document.getElementById(
-    'user_update_form',
-  ) as HTMLFormElement;
-  if (userUpdateInput) {
-    userUpdateInput.reset();
-  }
-
-  const userDelInput = document.getElementById(
-    'user_del_form',
-  ) as HTMLFormElement;
-  if (userDelInput) {
-    userDelInput.reset();
-  }
-
   const table = document.getElementById('users-table') as HTMLTableElement;
   const headerRow = document.getElementById(
     'users-header-row',
@@ -919,6 +898,7 @@ document.addEventListener('DOMContentLoaded', function () {
     userAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       add();
+      userAddForm.reset();
     });
   }
 
@@ -929,6 +909,7 @@ document.addEventListener('DOMContentLoaded', function () {
     userUpdateForm.addEventListener('submit', (event) => {
       event.preventDefault();
       update();
+      userUpdateForm.reset();
     });
   }
 
@@ -939,6 +920,7 @@ document.addEventListener('DOMContentLoaded', function () {
     userDelForm.addEventListener('submit', (event) => {
       event.preventDefault();
       del();
+      userDelForm.reset();
     });
   }
 
@@ -950,6 +932,7 @@ document.addEventListener('DOMContentLoaded', function () {
     recordAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addRecord();
+      recordAddForm.reset();
     });
   }
 
@@ -961,6 +944,7 @@ document.addEventListener('DOMContentLoaded', function () {
     apiaryAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addApiary();
+      apiaryAddForm.reset();
     });
   }
 
@@ -972,6 +956,7 @@ document.addEventListener('DOMContentLoaded', function () {
     hiveAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addHive();
+      hiveAddForm.reset();
     });
   }
 
@@ -983,6 +968,7 @@ document.addEventListener('DOMContentLoaded', function () {
     colonyAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addColony();
+      colonyAddForm.reset();
     });
   }
 
@@ -994,6 +980,7 @@ document.addEventListener('DOMContentLoaded', function () {
     queenAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addQueen();
+      queenAddForm.reset();
     });
   }
 });
