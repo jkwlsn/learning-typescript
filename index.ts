@@ -531,6 +531,8 @@ const formController = {
       return;
     }
 
+    saveApiaries();
+
     return apiaryList.addApiary({ apiary_name: apiary_name, user_id: user_id });
   },
 
@@ -552,6 +554,7 @@ const formController = {
       return;
     }
 
+    saveHives();
 
     return hivesList.addHive({ hive_name, apiary_id });
   },
@@ -574,6 +577,7 @@ const formController = {
       return;
     }
 
+    saveColonies();
 
     return coloniesList.addColony({ colony_name, hive_id });
   },
@@ -614,6 +618,7 @@ const formController = {
       return;
     }
 
+    saveQueens();
 
     return queensList.addQueen({
       queen_name,
@@ -707,6 +712,7 @@ const formController = {
     if (!user_idInput) throw new Error('user_id input not found');
     const user_id = parseInt(user_idInput.value);
 
+    saveInspections();
 
     return inspectionsList.addInspection({
       timestamp,
@@ -936,8 +942,26 @@ function updateRecordView() {
   });
 }
 
+function init() {
+  loadUsers();
+  loadApiaries();
+  loadHives();
+  loadColonies();
+  loadQueens();
+  loadInspections();
+
+  updateUserView();
+  updateApiaryView();
+  updateHiveView();
+  updateColonyView();
+  updateQueenView();
+  updateRecordView();
+}
+
 // View
 document.addEventListener('DOMContentLoaded', function () {
+  init();
+
   const userAddForm = document.getElementById(
     'user_add_form',
   ) as HTMLFormElement;
@@ -945,6 +969,7 @@ document.addEventListener('DOMContentLoaded', function () {
     userAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addUser();
+      saveUsers();
     });
   }
 
