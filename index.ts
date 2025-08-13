@@ -83,48 +83,44 @@ function loadInspections() {
 // Interfaces
 
 // Models
-interface NewUser {
+interface NewUserModel {
   email: string;
   password: string;
 }
 
-interface User extends NewUser {
-  index: number;
+interface UserModel extends NewUserModel {
   user_id: number;
   timestamp: Date;
 }
 
-interface NewApiary {
+interface NewApiaryModel {
   apiary_name: string;
   user_id: number;
 }
 
-interface ApiaryInterface extends NewApiary {
-  index: number;
+interface ApiaryModel extends NewApiaryModel {
   apiary_id: number;
 }
 
-interface NewHive {
+interface NewHiveModel {
   hive_name: string;
   apiary_id: number;
 }
 
-interface HiveInterface extends NewHive {
+interface HiveModel extends NewHiveModel {
   hive_id: number;
-  index: number;
 }
 
-interface NewColony {
+interface NewColonyModel {
   colony_name: string;
   hive_id: number;
 }
 
-interface ColonyInterface extends NewColony {
+interface ColonyModel extends NewColonyModel {
   colony_id: number;
-  index: number;
 }
 
-interface NewQueen {
+interface NewQueenModel {
   queen_name: string;
   queenright: boolean;
   marked: string;
@@ -132,12 +128,11 @@ interface NewQueen {
   colony_id: number;
 }
 
-interface QueenInterface extends NewQueen {
-  index: number;
+interface QueenModel extends NewQueenModel {
   queen_id: number;
 }
 
-interface NewInspection {
+interface NewInspectionModel {
   timestamp: Date;
   apiary_id: number;
   colony_id: number;
@@ -154,90 +149,58 @@ interface NewInspection {
   user_id: number;
 }
 
-interface Inspection extends Omit<NewInspection, 'timestamp'> {
-  index: number;
+interface InspectionModel extends NewInspectionModel {
   inspection_id: number;
-  timestamp: Date;
 }
 
 // Lists
 
 interface UsersList {
-  users: UserAccount[];
-  addUser(newUser: NewUser): UserAccount;
+  records: UserModel[];
+  addUser(newUser: NewUserModel): UserModel;
 }
 
 interface ApiariesList {
-  apiaries: Apiary[];
-  addApiary(newApiary: NewApiary): Apiary;
+  records: ApiaryModel[];
+  addApiary(newApiary: ApiaryModel): ApiaryModel;
 }
 
 interface HivesList {
-  hives: Hive[];
-  addHive(newHive: NewHive): Hive;
+  records: HiveModel[];
+  addHive(newHive: HiveModel): HiveModel;
 }
 
 interface ColoniesList {
-  colonies: Colony[];
-  addColony(newColony: NewColony): Colony;
+  records: ColonyModel[];
+  addColony(newColony: ColonyModel): ColonyModel;
 }
 
 interface QueensList {
-  queens: Queen[];
-  addQueen(newQueen: NewQueen): Queen;
+  records: QueenModel[];
+  addQueen(newQueen: QueenModel): QueenModel;
 }
 
-interface RecordsList {
-  records: InspectionRecord[];
-  addRecord(newInspection: NewInspection): InspectionRecord;
+interface InspectionsList {
+  records: InspectionModel[];
+  addInspection(newInspection: InspectionModel): InspectionModel;
 }
 
 // Data Classes
 
-class UserAccount implements NewUser {
-  #user_id: number = 0;
-  #email: string = '';
-  #password: string = '';
-  #timestamp: Date = new Date();
+class User implements UserModel {
+  user_id: number = 0;
+  email: string = '';
+  password: string = '';
+  timestamp: Date = new Date();
 
-  constructor(
-    user_id: number,
-    email: string,
-    password: string,
-    timestamp: Date,
-  ) {
+  constructor({ user_id, email, password, timestamp }: UserModel) {
     this.user_id = user_id;
     this.email = email;
     this.password = password;
     this.timestamp = timestamp;
   }
-  set user_id(user_id: number) {
-    this.#user_id = user_id;
-  }
-  set email(email: string) {
-    this.#email = email;
-  }
-  set password(password: string) {
-    this.#password = password;
-  }
-  set timestamp(timestamp: Date) {
-    this.#timestamp = timestamp;
-  }
-  get user_id() {
-    return this.#user_id;
-  }
-  get email() {
-    return this.#email;
-  }
-  get password() {
-    return this.#password;
-  }
-  get timestamp() {
-    return this.#timestamp;
-  }
-  toObject(index: number): User {
+  toObject(): UserModel {
     return {
-      index,
       user_id: this.user_id,
       email: this.email,
       password: this.password,
@@ -246,18 +209,17 @@ class UserAccount implements NewUser {
   }
 }
 
-class Apiary implements NewApiary {
+class Apiary implements ApiaryModel {
   apiary_id: number;
   apiary_name: string;
   user_id: number;
-  constructor(apiary_id: number, apiary_name: string, user_id: number) {
+  constructor({ apiary_id, apiary_name, user_id }: ApiaryModel) {
     this.apiary_id = apiary_id;
     this.apiary_name = apiary_name;
     this.user_id = user_id;
   }
-  toObject(index: number): ApiaryInterface {
+  toObject(): ApiaryModel {
     return {
-      index,
       apiary_id: this.apiary_id,
       apiary_name: this.apiary_name,
       user_id: this.user_id,
@@ -265,20 +227,19 @@ class Apiary implements NewApiary {
   }
 }
 
-class Hive implements NewHive {
+class Hive implements HiveModel {
   hive_id: number;
   hive_name: string;
   apiary_id: number;
 
-  constructor(hive_id: number, hive_name: string, apiary_id: number) {
+  constructor({ hive_id, hive_name, apiary_id }: HiveModel) {
     this.hive_id = hive_id;
     this.hive_name = hive_name;
     this.apiary_id = apiary_id;
   }
 
-  toObject(index: number): HiveInterface {
+  toObject(): HiveModel {
     return {
-      index,
       hive_id: this.hive_id,
       hive_name: this.hive_name,
       apiary_id: this.apiary_id,
@@ -286,20 +247,19 @@ class Hive implements NewHive {
   }
 }
 
-class Colony implements NewColony {
+class Colony implements ColonyModel {
   colony_id: number;
   colony_name: string;
   hive_id: number;
 
-  constructor(colony_id: number, colony_name: string, hive_id: number) {
+  constructor({ colony_id, colony_name, hive_id }: ColonyModel) {
     this.colony_id = colony_id;
     this.colony_name = colony_name;
     this.hive_id = hive_id;
   }
 
-  toObject(index: number): ColonyInterface {
+  toObject(): ColonyModel {
     return {
-      index,
       colony_id: this.colony_id,
       colony_name: this.colony_name,
       hive_id: this.hive_id,
@@ -307,7 +267,7 @@ class Colony implements NewColony {
   }
 }
 
-class Queen implements NewQueen {
+class Queen implements QueenModel {
   queen_id: number;
   queen_name: string;
   queenright: boolean;
@@ -315,14 +275,14 @@ class Queen implements NewQueen {
   clipped: boolean;
   colony_id: number;
 
-  constructor(
-    queen_id: number,
-    queen_name: string,
-    queenright: boolean,
-    marked: string,
-    clipped: boolean,
-    colony_id: number,
-  ) {
+  constructor({
+    queen_id,
+    queen_name,
+    queenright,
+    marked,
+    clipped,
+    colony_id,
+  }: QueenModel) {
     this.queen_id = queen_id;
     this.queen_name = queen_name;
     this.queenright = queenright;
@@ -331,9 +291,8 @@ class Queen implements NewQueen {
     this.colony_id = colony_id;
   }
 
-  toObject(index: number): QueenInterface {
+  toObject(): QueenModel {
     return {
-      index,
       queen_id: this.queen_id,
       queen_name: this.queen_name,
       queenright: this.queenright,
@@ -344,7 +303,7 @@ class Queen implements NewQueen {
   }
 }
 
-class InspectionRecord implements NewInspection {
+class Inspection implements InspectionModel {
   inspection_id: number;
   timestamp: Date;
   apiary_id: number;
@@ -361,23 +320,23 @@ class InspectionRecord implements NewInspection {
   weather: string;
   user_id: number;
 
-  constructor(
-    inspection_id: number,
-    timestamp: Date,
-    apiary_id: number,
-    colony_id: number,
-    queen_cups: number,
-    brood_frames: number,
-    store_frames: number,
-    room_frames: number,
-    health: string,
-    varroa: number,
-    temper: number,
-    feed: number,
-    supers: number,
-    weather: string,
-    user_id: number,
-  ) {
+  constructor({
+    inspection_id,
+    timestamp,
+    apiary_id,
+    colony_id,
+    queen_cups,
+    brood_frames,
+    store_frames,
+    room_frames,
+    health,
+    varroa,
+    temper,
+    feed,
+    supers,
+    weather,
+    user_id,
+  }: InspectionModel) {
     this.inspection_id = inspection_id;
     this.timestamp = timestamp;
     this.apiary_id = apiary_id;
@@ -394,9 +353,8 @@ class InspectionRecord implements NewInspection {
     this.weather = weather;
     this.user_id = user_id;
   }
-  toObject(index: number): Inspection {
+  toObject(): InspectionModel {
     return {
-      index,
       inspection_id: this.inspection_id,
       timestamp: this.timestamp,
       apiary_id: this.apiary_id,
@@ -419,101 +377,110 @@ class InspectionRecord implements NewInspection {
 // Collection Classes
 
 class Users implements UsersList {
-  users: UserAccount[] = [];
+  records: User[] = [];
 
-  addUser(newUser: NewUser): UserAccount {
+  addUser(newUser: NewUserModel): User {
     const user_id: number = Math.floor(Math.random() * 100);
     const timestamp: Date = new Date();
-    const user: UserAccount = new UserAccount(
-      user_id,
-      newUser.email,
-      newUser.password,
-      timestamp,
-    );
-    this.users.push(user);
+    const user: User = new User({
+      user_id: user_id,
+      email: newUser.email,
+      password: newUser.password,
+      timestamp: timestamp,
+    });
+    this.records.push(user);
+
     return user;
   }
 }
 
 class Apiaries implements ApiariesList {
-  apiaries: Apiary[] = [];
+  records: Apiary[] = [];
 
-  addApiary(newApiary: NewApiary): Apiary {
+  addApiary(newApiary: NewApiaryModel): Apiary {
     const apiary_id: number = Math.floor(Math.random() * 100);
     const apiary_name: string = newApiary.apiary_name;
     const user_id: number = newApiary.user_id;
-    const apiary: Apiary = new Apiary(apiary_id, apiary_name, user_id);
-    this.apiaries.push(apiary);
+    const apiary: Apiary = new Apiary({
+      apiary_id: apiary_id,
+      apiary_name: apiary_name,
+      user_id: user_id,
+    });
+    this.records.push(apiary);
     return apiary;
   }
 }
 
 class Hives implements HivesList {
-  hives: Hive[] = [];
+  records: Hive[] = [];
 
-  addHive(newHive: NewHive): Hive {
+  addHive(newHive: NewHiveModel): Hive {
     const hive_id = Math.floor(Math.random() * 100);
-    const hive = new Hive(hive_id, newHive.hive_name, newHive.apiary_id);
-    this.hives.push(hive);
+    const hive: Hive = new Hive({
+      hive_id: hive_id,
+      hive_name: newHive.hive_name,
+      apiary_id: newHive.apiary_id,
+    });
+    this.records.push(hive);
     return hive;
   }
 }
 
 class Colonies implements ColoniesList {
-  colonies: Colony[] = [];
+  records: Colony[] = [];
 
-  addColony(newColony: NewColony): Colony {
+  addColony(newColony: NewColonyModel): Colony {
     const colony_id = Math.floor(Math.random() * 100);
-    const colony = new Colony(
-      colony_id,
-      newColony.colony_name,
-      newColony.hive_id,
-    );
-    this.colonies.push(colony);
+    const colony: Colony = new Colony({
+      colony_id: colony_id,
+      colony_name: newColony.colony_name,
+      hive_id: newColony.hive_id,
+    });
+    this.records.push(colony);
     return colony;
   }
 }
 
 class Queens implements QueensList {
-  queens: Queen[] = [];
+  records: Queen[] = [];
 
-  addQueen(newQueen: NewQueen): Queen {
+  addQueen(newQueen: NewQueenModel): Queen {
     const queen_id = Math.floor(Math.random() * 100);
-    const queen = new Queen(
-      queen_id,
-      newQueen.queen_name,
-      newQueen.queenright,
-      newQueen.marked,
-      newQueen.clipped,
-      newQueen.colony_id,
-    );
-    this.queens.push(queen);
+    const queen: Queen = new Queen({
+      queen_id: queen_id,
+      queen_name: newQueen.queen_name,
+      queenright: newQueen.queenright,
+      marked: newQueen.marked,
+      clipped: newQueen.clipped,
+      colony_id: newQueen.colony_id,
+    });
+    this.records.push(queen);
     return queen;
   }
 }
 
-class Records implements RecordsList {
-  records: InspectionRecord[] = [];
+class Inspections implements InspectionsList {
+  records: Inspection[] = [];
 
-  addRecord(newInspection: NewInspection): InspectionRecord {
+  addInspection(newInspection: NewInspectionModel): Inspection {
     const inspection_id: number = Math.floor(Math.random() * 100);
-    const inspection: InspectionRecord = new InspectionRecord(
-      inspection_id,
-      newInspection.timestamp,
-      newInspection.apiary_id,
-      newInspection.colony_id,
-      newInspection.queen_cups,
-      newInspection.brood_frames,
-      newInspection.store_frames,
-      newInspection.room_frames,
-      newInspection.health,
-      newInspection.varroa,
-      newInspection.temper,
-      newInspection.feed,
-      newInspection.supers,
-      newInspection.weather,
-      newInspection.user_id,
-    );
+    const inspection: Inspection = new Inspection({
+      inspection_id: inspection_id,
+      timestamp: newInspection.timestamp,
+      apiary_id: newInspection.apiary_id,
+      colony_id: newInspection.colony_id,
+      queen_cups: newInspection.queen_cups,
+      brood_frames: newInspection.brood_frames,
+      store_frames: newInspection.store_frames,
+      room_frames: newInspection.room_frames,
+      health: newInspection.health,
+      varroa: newInspection.varroa,
+      temper: newInspection.temper,
+      feed: newInspection.feed,
+      supers: newInspection.supers,
+      weather: newInspection.weather,
+      user_id: newInspection.user_id,
+    });
     this.records.push(inspection);
     return inspection;
   }
@@ -526,7 +493,7 @@ const apiaryList = new Apiaries();
 const hivesList = new Hives();
 const coloniesList = new Colonies();
 const queensList = new Queens();
-const recordsList = new Records();
+const inspectionsList = new Inspections();
 
 // Form controller
 const formController = {
@@ -661,7 +628,8 @@ const formController = {
     if (!user_idInput) throw new Error('user_id input not found');
     const user_id = parseInt(user_idInput.value);
 
-    return recordsList.addRecord({
+
+    return inspectionsList.addInspection({
       timestamp,
       apiary_id,
       colony_id,
@@ -830,19 +798,19 @@ function delUser() {
 }
 
 function userExists(user_id: number): boolean {
-  return userList.users.some((user) => user.user_id === user_id);
+  return userList.records.some((user) => user.user_id === user_id);
 }
 
 function apiaryExists(apiary_id: number): boolean {
-  return apiaryList.apiaries.some((apiary) => apiary.apiary_id === apiary_id);
+  return apiaryList.records.some((apiary) => apiary.apiary_id === apiary_id);
 }
 
 function hiveExists(hive_id: number): boolean {
-  return hivesList.hives.some((hive) => hive.hive_id === hive_id);
+  return hivesList.records.some((hive) => hive.hive_id === hive_id);
 }
 
 function colonyExists(colony_id: number): boolean {
-  return coloniesList.colonies.some((colony) => colony.colony_id === colony_id);
+  return coloniesList.records.some((colony) => colony.colony_id === colony_id);
 }
 
 function updateUserView() {
@@ -857,11 +825,10 @@ function updateUserView() {
     table.appendChild(headerRow);
   }
 
-  userList.users.forEach((entry, index) => {
+  userList.records.forEach((entry) => {
     const row = document.createElement('tr');
-    const obj = entry.toObject(index);
+    const obj = entry.toObject();
     row.innerHTML = `
-        <td>${obj.index}</td>
         <td>${obj.user_id}</td>
         <td>${obj.email}</td>
         <td>${obj.password}</td>
@@ -883,11 +850,10 @@ function updateApiaryView() {
     table.appendChild(headerRow);
   }
 
-  apiaryList.apiaries.forEach((entry, index) => {
+  apiaryList.records.forEach((entry) => {
     const row = document.createElement('tr');
-    const obj = entry.toObject(index);
+    const obj = entry.toObject();
     row.innerHTML = `
-        <td>${obj.index}</td>
         <td>${obj.apiary_id}</td>
         <td>${obj.apiary_name}</td>
         <td>${obj.user_id}</td>
@@ -908,11 +874,10 @@ function updateHiveView() {
     table.appendChild(headerRow);
   }
 
-  hivesList.hives.forEach((entry, index) => {
+  hivesList.records.forEach((entry) => {
     const row = document.createElement('tr');
-    const obj = entry.toObject(index);
+    const obj = entry.toObject();
     row.innerHTML = `
-        <td>${obj.index}</td>
         <td>${obj.hive_id}</td>
         <td>${obj.hive_name}</td>
         <td>${obj.apiary_id}</td>
@@ -934,11 +899,10 @@ function updateColonyView() {
     table.appendChild(headerRow);
   }
 
-  coloniesList.colonies.forEach((entry, index) => {
+  coloniesList.records.forEach((entry) => {
     const row = document.createElement('tr');
-    const obj = entry.toObject(index);
+    const obj = entry.toObject();
     row.innerHTML = `
-      <td>${obj.index}</td>
       <td>${obj.colony_id}</td>
       <td>${obj.colony_name}</td>
       <td>${obj.hive_id}</td>
@@ -960,11 +924,10 @@ function updateQueenView() {
     table.appendChild(headerRow);
   }
 
-  queensList.queens.forEach((entry, index) => {
+  queensList.records.forEach((entry) => {
     const row = document.createElement('tr');
-    const obj = entry.toObject(index);
+    const obj = entry.toObject();
     row.innerHTML = `
-      <td>${obj.index}</td>
       <td>${obj.queen_id}</td>
       <td>${obj.queen_name}</td>
       <td>${obj.queenright}</td>
@@ -988,11 +951,10 @@ function updateRecordView() {
     table.appendChild(headerRow);
   }
 
-  recordsList.records.forEach((entry, index) => {
+  inspectionsList.records.forEach((entry) => {
     const row = document.createElement('tr');
-    const obj = entry.toObject(index);
+    const obj = entry.toObject();
     row.innerHTML = `
-        <td>${obj.index}</td>
         <td>${obj.timestamp.toLocaleString()}</td>
         <td>${obj.apiary_id}</td>
         <td>${obj.colony_id}</td>
