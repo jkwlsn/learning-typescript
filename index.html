@@ -155,6 +155,52 @@
         </form>
       </section>
 
+      <section id="queens">
+        <h2>Queens</h2>
+        <form method="post" id="queen_add_form">
+          <h2>Add</h2>
+          <label for="queen_name_input">Queen Name</label>
+          <input
+            type="text"
+            required
+            id="queen_name_input"
+            name="queen_name_input"
+          />
+
+          <label for="queenright_input">queenright</label>
+          <input
+            type="checkbox"
+            id="queenright_input"
+            name="queenright_input"
+          />
+
+          <label for="queen_marked_input">queen_marked</label>
+          <select name="queen_marked_input" id="queen_marked_input">
+            <option value="white">White</option>
+            <option value="yellow">Yellow</option>
+            <option value="red">Red</option>
+            <option value="green">Green</option>
+            <option value="blue">Blue</option>
+          </select>
+
+          <label for="queen_clipped_input">queen_clipped</label>
+          <input
+            type="checkbox"
+            id="queen_clipped_input"
+            name="queen_clipped_input"
+          />
+
+          <label for="colony_id_input">colony_id</label>
+          <input
+            type="number"
+            required
+            id="colony_id_input"
+            name="colony_id_input"
+          />
+          <input type="submit" value="submit" id="add_queen" />
+        </form>
+      </section>
+
       <section id="records">
         <h2>Records</h2>
         <form method="post" id="record_add_form">
@@ -186,30 +232,6 @@
             name="colony_id_input"
             value="0"
           />
-
-          <label for="queenright_input">queenright</label>
-          <input
-            type="checkbox"
-            id="queenright_input"
-            name="queenright_input"
-          />
-
-          <label for="queen_marked_input">queen_marked</label>
-          <select name="queen_marked_input" id="queen_marked_input">
-            <option value="white">White</option>
-            <option value="yellow">Yellow</option>
-            <option value="red">Red</option>
-            <option value="green">Green</option>
-            <option value="blue">Blue</option>
-          </select>
-
-          <label for="queen_clipped_input">queen_clipped</label>
-          <input
-            type="checkbox"
-            id="queen_clipped_input"
-            name="queen_clipped_input"
-          />
-
           <label for="queen_cups_input">queen_cups</label>
           <input
             type="range"
@@ -368,6 +390,23 @@
         </div>
       </section>
 
+      <section id="queens-view">
+        <h1>queens</h1>
+        <div class="responsive-table">
+          <table id="queens-table">
+            <tr id="queens-header-row">
+              <th>Index</th>
+              <th>Queen ID</th>
+              <th>Name</th>
+              <th>Queenright</th>
+              <th>Marked</th>
+              <th>Clipped</th>
+              <th>Colony ID</th>
+            </tr>
+          </table>
+        </div>
+      </section>
+
       <section id="records-view">
         <h1>Records</h1>
         <div class="responsive-table">
@@ -377,9 +416,6 @@
               <th>Timestamp</th>
               <th>Apiary ID</th>
               <th>Colony id</th>
-              <th>Queenright</th>
-              <th>Queen marked</th>
-              <th>Queen clipped</th>
               <th>Queen cups</th>
               <th>Brood frames</th>
               <th>Store frames</th>

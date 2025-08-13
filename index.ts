@@ -1,5 +1,6 @@
 // Interfaces
 
+// Models
 interface NewUser {
   email: string;
   password: string;
@@ -41,13 +42,23 @@ interface ColonyInterface extends NewColony {
   index: number;
 }
 
+interface NewQueen {
+  queen_name: string;
+  queenright: boolean;
+  marked: string;
+  clipped: boolean;
+  colony_id: number;
+}
+
+interface QueenInterface extends NewQueen {
+  index: number;
+  queen_id: number;
+}
+
 interface NewInspection {
   timestamp: Date;
   apiary_id: number;
   colony_id: number;
-  queenright: boolean;
-  queen_marked: string;
-  queen_clipped: boolean;
   queen_cups: number;
   brood_frames: number;
   store_frames: number;
@@ -66,6 +77,8 @@ interface Inspection extends Omit<NewInspection, 'timestamp'> {
   inspection_id: number;
   timestamp: Date;
 }
+
+// Lists
 
 interface UsersList {
   users: UserAccount[];
@@ -87,10 +100,17 @@ interface ColoniesList {
   addColony(newColony: NewColony): Colony;
 }
 
+interface QueensList {
+  queens: Queen[];
+  addQueen(newQueen: NewQueen): Queen;
+}
+
 interface RecordsList {
   records: InspectionRecord[];
   addRecord(newInspection: NewInspection): InspectionRecord;
 }
+
+// Data Classes
 
 class UserAccount implements NewUser {
   #user_id: number = 0;
@@ -205,14 +225,48 @@ class Colony implements NewColony {
   }
 }
 
+class Queen implements NewQueen {
+  queen_id: number;
+  queen_name: string;
+  queenright: boolean;
+  marked: string;
+  clipped: boolean;
+  colony_id: number;
+
+  constructor(
+    queen_id: number,
+    queen_name: string,
+    queenright: boolean,
+    marked: string,
+    clipped: boolean,
+    colony_id: number,
+  ) {
+    this.queen_id = queen_id;
+    this.queen_name = queen_name;
+    this.queenright = queenright;
+    this.marked = marked;
+    this.clipped = clipped;
+    this.colony_id = colony_id;
+  }
+
+  toObject(index: number): QueenInterface {
+    return {
+      index,
+      queen_id: this.queen_id,
+      queen_name: this.queen_name,
+      queenright: this.queenright,
+      marked: this.marked,
+      clipped: this.clipped,
+      colony_id: this.colony_id,
+    };
+  }
+}
+
 class InspectionRecord implements NewInspection {
   inspection_id: number;
   timestamp: Date;
   apiary_id: number;
   colony_id: number;
-  queenright: boolean;
-  queen_marked: string;
-  queen_clipped: boolean;
   queen_cups: number;
   brood_frames: number;
   store_frames: number;
@@ -230,9 +284,6 @@ class InspectionRecord implements NewInspection {
     timestamp: Date,
     apiary_id: number,
     colony_id: number,
-    queenright: boolean,
-    queen_marked: string,
-    queen_clipped: boolean,
     queen_cups: number,
     brood_frames: number,
     store_frames: number,
@@ -249,9 +300,6 @@ class InspectionRecord implements NewInspection {
     this.timestamp = timestamp;
     this.apiary_id = apiary_id;
     this.colony_id = colony_id;
-    this.queenright = queenright;
-    this.queen_marked = queen_marked;
-    this.queen_clipped = queen_clipped;
     this.queen_cups = queen_cups;
     this.brood_frames = brood_frames;
     this.store_frames = store_frames;
@@ -271,9 +319,6 @@ class InspectionRecord implements NewInspection {
       timestamp: this.timestamp,
       apiary_id: this.apiary_id,
       colony_id: this.colony_id,
-      queenright: this.queenright,
-      queen_marked: this.queen_marked,
-      queen_clipped: this.queen_clipped,
       queen_cups: this.queen_cups,
       brood_frames: this.brood_frames,
       store_frames: this.store_frames,
@@ -288,6 +333,8 @@ class InspectionRecord implements NewInspection {
     };
   }
 }
+
+// Collection Classes
 
 class Users implements UsersList {
   users: UserAccount[] = [];
@@ -345,6 +392,24 @@ class Colonies implements ColoniesList {
   }
 }
 
+class Queens implements QueensList {
+  queens: Queen[] = [];
+
+  addQueen(newQueen: NewQueen): Queen {
+    const queen_id = Math.floor(Math.random() * 100);
+    const queen = new Queen(
+      queen_id,
+      newQueen.queen_name,
+      newQueen.queenright,
+      newQueen.marked,
+      newQueen.clipped,
+      newQueen.colony_id,
+    );
+    this.queens.push(queen);
+    return queen;
+  }
+}
+
 class Records implements RecordsList {
   records: InspectionRecord[] = [];
 
@@ -355,9 +420,6 @@ class Records implements RecordsList {
       newInspection.timestamp,
       newInspection.apiary_id,
       newInspection.colony_id,
-      newInspection.queenright,
-      newInspection.queen_marked,
-      newInspection.queen_clipped,
       newInspection.queen_cups,
       newInspection.brood_frames,
       newInspection.store_frames,
@@ -375,10 +437,13 @@ class Records implements RecordsList {
   }
 }
 
+// Instances
+
 const userList = new Users();
 const apiaryList = new Apiaries();
 const hivesList = new Hives();
 const coloniesList = new Colonies();
+const queensList = new Queens();
 const recordsList = new Records();
 
 // Form controller
@@ -450,24 +515,6 @@ const formController = {
     if (!colony_idInput) throw new Error('colony_id input not found');
     const colony_id = parseInt(colony_idInput.value);
 
-    const queenrightInput = document.getElementById(
-      'queenright_input',
-    ) as HTMLInputElement;
-    if (!queenrightInput) throw new Error('queenright input not found');
-    const queenright = queenrightInput.checked;
-
-    const queen_markedInput = document.getElementById(
-      'queen_marked_input',
-    ) as HTMLInputElement;
-    if (!queen_markedInput) throw new Error('queen_marked input not found');
-    const queen_marked = queen_markedInput.value;
-
-    const queen_clippedInput = document.getElementById(
-      'queen_clipped_input',
-    ) as HTMLInputElement;
-    if (!queen_clippedInput) throw new Error('queen_clipped input not found');
-    const queen_clipped = queen_clippedInput.checked;
-
     const queen_cupsInput = document.getElementById(
       'queen_cups_input',
     ) as HTMLInputElement;
@@ -536,9 +583,6 @@ const formController = {
       timestamp,
       apiary_id,
       colony_id,
-      queenright,
-      queen_marked,
-      queen_clipped,
       queen_cups,
       brood_frames,
       store_frames,
@@ -600,6 +644,46 @@ const formController = {
 
     return coloniesList.addColony({ colony_name, hive_id });
   },
+
+  addQueenData() {
+    const queenNameInput = document.getElementById(
+      'queen_name_input',
+    ) as HTMLInputElement;
+    if (!queenNameInput) throw new Error('Queen name input not found');
+    const queen_name = queenNameInput.value;
+
+    const queenrightInput = document.getElementById(
+      'queenright_input',
+    ) as HTMLInputElement;
+    if (!queenrightInput) throw new Error('queenright input not found');
+    const queenright = queenrightInput.checked;
+
+    const queen_markedInput = document.getElementById(
+      'queen_marked_input',
+    ) as HTMLInputElement;
+    if (!queen_markedInput) throw new Error('queen_marked input not found');
+    const marked = queen_markedInput.value;
+
+    const queen_clippedInput = document.getElementById(
+      'queen_clipped_input',
+    ) as HTMLInputElement;
+    if (!queen_clippedInput) throw new Error('queen_clipped input not found');
+    const clipped = queen_clippedInput.checked;
+
+    const colonyIdInput = document.getElementById(
+      'colony_id_input',
+    ) as HTMLInputElement;
+    if (!colonyIdInput) throw new Error('colony ID input not found');
+    const colony_id = parseInt(colonyIdInput.value);
+
+    return queensList.addQueen({
+      queen_name,
+      queenright,
+      marked,
+      clipped,
+      colony_id,
+    });
+  },
 };
 
 // Controller
@@ -621,6 +705,11 @@ function addHive() {
 function addColony() {
   formController.addColonyData();
   updateColonyView();
+}
+
+function addQueen() {
+  formController.addQueenData();
+  updateQueenView();
 }
 
 function add() {
@@ -753,6 +842,33 @@ function updateColonyView() {
   });
 }
 
+function updateQueenView() {
+  const table = document.getElementById('queens-table') as HTMLTableElement;
+  const headerRow = document.getElementById(
+    'queens-header-row',
+  ) as HTMLTableRowElement;
+
+  if (table && headerRow) {
+    table.innerHTML = '';
+    table.appendChild(headerRow);
+  }
+
+  queensList.queens.forEach((entry, index) => {
+    const row = document.createElement('tr');
+    const obj = entry.toObject(index);
+    row.innerHTML = `
+      <td>${obj.index}</td>
+      <td>${obj.queen_id}</td>
+      <td>${obj.queen_name}</td>
+      <td>${obj.queenright}</td>
+      <td>${obj.marked}</td>
+      <td>${obj.clipped}</td>
+      <td>${obj.colony_id}</td>
+    `;
+    table.appendChild(row);
+  });
+}
+
 function updateRecordView() {
   const userAddInput = document.getElementById(
     'user_add_form',
@@ -778,9 +894,6 @@ function updateRecordView() {
         <td>${obj.timestamp.toLocaleString()}</td>
         <td>${obj.apiary_id}</td>
         <td>${obj.colony_id}</td>
-        <td>${obj.queenright}</td>
-        <td>${obj.queen_marked}</td>
-        <td>${obj.queen_clipped}</td>
         <td>${obj.queen_cups}</td>
         <td>${obj.brood_frames}</td>
         <td>${obj.store_frames}</td>
@@ -870,6 +983,17 @@ document.addEventListener('DOMContentLoaded', function () {
     colonyAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addColony();
+    });
+  }
+
+  // Queens
+  const queenAddForm = document.getElementById(
+    'queen_add_form',
+  ) as HTMLFormElement;
+  if (queenAddForm) {
+    queenAddForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      addQueen();
     });
   }
 });
