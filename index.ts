@@ -610,6 +610,11 @@ const formController = {
     if (!userIdInput) throw new Error('User_id input not found');
     const user_id = parseInt(userIdInput.value);
 
+    if (!userExists(user_id)) {
+      alert(`User ID ${user_id} does not exist.`);
+      return;
+    }
+
     return apiaryList.addApiary({ apiary_name: apiary_name, user_id: user_id });
   },
 
@@ -626,6 +631,11 @@ const formController = {
     if (!apiaryIdInput) throw new Error('hive ID input not found');
     const apiary_id = parseInt(apiaryIdInput.value);
 
+    if (!apiaryExists(apiary_id)) {
+      alert(`Apiary ID ${apiary_id} does not exist.`);
+      return;
+    }
+
     return hivesList.addHive({ hive_name, apiary_id });
   },
 
@@ -641,6 +651,11 @@ const formController = {
     ) as HTMLInputElement;
     if (!hiveIdInput) throw new Error('hive ID input not found');
     const hive_id = parseInt(hiveIdInput.value);
+
+    if (!hiveExists(hive_id)) {
+      alert(`hive ID ${hive_id} does not exist.`);
+      return;
+    }
 
     return coloniesList.addColony({ colony_name, hive_id });
   },
@@ -675,6 +690,11 @@ const formController = {
     ) as HTMLInputElement;
     if (!colonyIdInput) throw new Error('colony ID input not found');
     const colony_id = parseInt(colonyIdInput.value);
+
+    if (!colonyExists(colony_id)) {
+      alert(`colony ID ${colony_id} does not exist.`);
+      return;
+    }
 
     return queensList.addQueen({
       queen_name,
@@ -712,23 +732,41 @@ function addQueen() {
   updateQueenView();
 }
 
-function add() {
+function addUser() {
   formController.getUserData();
   updateUserView();
 }
 
-function update() {
+function updateUser() {
   formController.updateUserData();
   updateUserView();
 }
 
-function del() {
+function delUser() {
   formController.delUserData();
   updateUserView();
 }
 
+function userExists(user_id: number): boolean {
+  return userList.users.some((user) => user.user_id === user_id);
+}
+
+function apiaryExists(apiary_id: number): boolean {
+  return apiaryList.apiaries.some((apiary) => apiary.apiary_id === apiary_id);
+}
+
+function hiveExists(hive_id: number): boolean {
+  return hivesList.hives.some((hive) => hive.hive_id === hive_id);
+}
+
+function colonyExists(colony_id: number): boolean {
+  return coloniesList.colonies.some((colony) => colony.colony_id === colony_id);
+}
+
 function updateUserView() {
   const table = document.getElementById('users-table') as HTMLTableElement;
+  const form = document.getElementById('user_add_form') as HTMLFormElement;
+  form.reset();
   const headerRow = document.getElementById(
     'users-header-row',
   ) as HTMLTableRowElement;
@@ -753,6 +791,8 @@ function updateUserView() {
 
 function updateApiaryView() {
   const table = document.getElementById('apiaries-table') as HTMLTableElement;
+  const form = document.getElementById('apiary_add_form') as HTMLFormElement;
+  form.reset();
   const headerRow = document.getElementById(
     'apiaries-header-row',
   ) as HTMLTableRowElement;
@@ -776,6 +816,8 @@ function updateApiaryView() {
 
 function updateHiveView() {
   const table = document.getElementById('hives-table') as HTMLTableElement;
+  const form = document.getElementById('hive_add_form') as HTMLFormElement;
+  form.reset();
   const headerRow = document.getElementById(
     'hives-header-row',
   ) as HTMLTableRowElement;
@@ -799,6 +841,8 @@ function updateHiveView() {
 
 function updateColonyView() {
   const table = document.getElementById('colonies-table') as HTMLTableElement;
+  const form = document.getElementById('colony_add_form') as HTMLFormElement;
+  form.reset();
   const headerRow = document.getElementById(
     'colonies-header-row',
   ) as HTMLTableRowElement;
@@ -823,6 +867,8 @@ function updateColonyView() {
 
 function updateQueenView() {
   const table = document.getElementById('queens-table') as HTMLTableElement;
+  const form = document.getElementById('queen_add_form') as HTMLFormElement;
+  form.reset();
   const headerRow = document.getElementById(
     'queens-header-row',
   ) as HTMLTableRowElement;
@@ -849,14 +895,9 @@ function updateQueenView() {
 }
 
 function updateRecordView() {
-  const userAddInput = document.getElementById(
-    'user_add_form',
-  ) as HTMLFormElement;
-  if (userAddInput) {
-    userAddInput.reset();
-  }
-
   const table = document.getElementById('records-table') as HTMLTableElement;
+  const form = document.getElementById('record_add_form') as HTMLFormElement;
+  form.reset();
   const headerRow = document.getElementById(
     'records-header-row',
   ) as HTMLTableRowElement;
@@ -897,8 +938,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (userAddForm) {
     userAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      add();
-      userAddForm.reset();
+      addUser();
     });
   }
 
@@ -908,8 +948,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (userUpdateForm) {
     userUpdateForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      update();
-      userUpdateForm.reset();
+      updateUser();
     });
   }
 
@@ -919,8 +958,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (userDelForm) {
     userDelForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      del();
-      userDelForm.reset();
+      delUser();
     });
   }
 
@@ -932,7 +970,6 @@ document.addEventListener('DOMContentLoaded', function () {
     recordAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addRecord();
-      recordAddForm.reset();
     });
   }
 
@@ -944,7 +981,6 @@ document.addEventListener('DOMContentLoaded', function () {
     apiaryAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addApiary();
-      apiaryAddForm.reset();
     });
   }
 
@@ -956,7 +992,6 @@ document.addEventListener('DOMContentLoaded', function () {
     hiveAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addHive();
-      hiveAddForm.reset();
     });
   }
 
@@ -968,7 +1003,6 @@ document.addEventListener('DOMContentLoaded', function () {
     colonyAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addColony();
-      colonyAddForm.reset();
     });
   }
 
@@ -980,7 +1014,6 @@ document.addEventListener('DOMContentLoaded', function () {
     queenAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addQueen();
-      queenAddForm.reset();
     });
   }
 });

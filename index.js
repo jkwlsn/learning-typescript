@@ -367,6 +367,10 @@ const formController = {
         if (!userIdInput)
             throw new Error('User_id input not found');
         const user_id = parseInt(userIdInput.value);
+        if (!userExists(user_id)) {
+            alert(`User ID ${user_id} does not exist.`);
+            return;
+        }
         return apiaryList.addApiary({ apiary_name: apiary_name, user_id: user_id });
     },
     addHiveData() {
@@ -378,6 +382,10 @@ const formController = {
         if (!apiaryIdInput)
             throw new Error('hive ID input not found');
         const apiary_id = parseInt(apiaryIdInput.value);
+        if (!apiaryExists(apiary_id)) {
+            alert(`Apiary ID ${apiary_id} does not exist.`);
+            return;
+        }
         return hivesList.addHive({ hive_name, apiary_id });
     },
     addColonyData() {
@@ -389,6 +397,10 @@ const formController = {
         if (!hiveIdInput)
             throw new Error('hive ID input not found');
         const hive_id = parseInt(hiveIdInput.value);
+        if (!hiveExists(hive_id)) {
+            alert(`hive ID ${hive_id} does not exist.`);
+            return;
+        }
         return coloniesList.addColony({ colony_name, hive_id });
     },
     addQueenData() {
@@ -412,6 +424,10 @@ const formController = {
         if (!colonyIdInput)
             throw new Error('colony ID input not found');
         const colony_id = parseInt(colonyIdInput.value);
+        if (!colonyExists(colony_id)) {
+            alert(`colony ID ${colony_id} does not exist.`);
+            return;
+        }
         return queensList.addQueen({
             queen_name,
             queenright,
@@ -442,20 +458,34 @@ function addQueen() {
     formController.addQueenData();
     updateQueenView();
 }
-function add() {
+function addUser() {
     formController.getUserData();
     updateUserView();
 }
-function update() {
+function updateUser() {
     formController.updateUserData();
     updateUserView();
 }
-function del() {
+function delUser() {
     formController.delUserData();
     updateUserView();
 }
+function userExists(user_id) {
+    return userList.users.some((user) => user.user_id === user_id);
+}
+function apiaryExists(apiary_id) {
+    return apiaryList.apiaries.some((apiary) => apiary.apiary_id === apiary_id);
+}
+function hiveExists(hive_id) {
+    return hivesList.hives.some((hive) => hive.hive_id === hive_id);
+}
+function colonyExists(colony_id) {
+    return coloniesList.colonies.some((colony) => colony.colony_id === colony_id);
+}
 function updateUserView() {
     const table = document.getElementById('users-table');
+    const form = document.getElementById('user_add_form');
+    form.reset();
     const headerRow = document.getElementById('users-header-row');
     if (table && headerRow) {
         table.innerHTML = '';
@@ -476,6 +506,8 @@ function updateUserView() {
 }
 function updateApiaryView() {
     const table = document.getElementById('apiaries-table');
+    const form = document.getElementById('apiary_add_form');
+    form.reset();
     const headerRow = document.getElementById('apiaries-header-row');
     if (table && headerRow) {
         table.innerHTML = '';
@@ -495,6 +527,8 @@ function updateApiaryView() {
 }
 function updateHiveView() {
     const table = document.getElementById('hives-table');
+    const form = document.getElementById('hive_add_form');
+    form.reset();
     const headerRow = document.getElementById('hives-header-row');
     if (table && headerRow) {
         table.innerHTML = '';
@@ -514,6 +548,8 @@ function updateHiveView() {
 }
 function updateColonyView() {
     const table = document.getElementById('colonies-table');
+    const form = document.getElementById('colony_add_form');
+    form.reset();
     const headerRow = document.getElementById('colonies-header-row');
     if (table && headerRow) {
         table.innerHTML = '';
@@ -533,6 +569,8 @@ function updateColonyView() {
 }
 function updateQueenView() {
     const table = document.getElementById('queens-table');
+    const form = document.getElementById('queen_add_form');
+    form.reset();
     const headerRow = document.getElementById('queens-header-row');
     if (table && headerRow) {
         table.innerHTML = '';
@@ -554,11 +592,9 @@ function updateQueenView() {
     });
 }
 function updateRecordView() {
-    const userAddInput = document.getElementById('user_add_form');
-    if (userAddInput) {
-        userAddInput.reset();
-    }
     const table = document.getElementById('records-table');
+    const form = document.getElementById('record_add_form');
+    form.reset();
     const headerRow = document.getElementById('records-header-row');
     if (table && headerRow) {
         table.innerHTML = '';
@@ -593,24 +629,21 @@ document.addEventListener('DOMContentLoaded', function () {
     if (userAddForm) {
         userAddForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            add();
-            userAddForm.reset();
+            addUser();
         });
     }
     const userUpdateForm = document.getElementById('user_update_form');
     if (userUpdateForm) {
         userUpdateForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            update();
-            userUpdateForm.reset();
+            updateUser();
         });
     }
     const userDelForm = document.getElementById('user_del_form');
     if (userDelForm) {
         userDelForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            del();
-            userDelForm.reset();
+            delUser();
         });
     }
     // RECORDS
@@ -619,7 +652,6 @@ document.addEventListener('DOMContentLoaded', function () {
         recordAddForm.addEventListener('submit', (event) => {
             event.preventDefault();
             addRecord();
-            recordAddForm.reset();
         });
     }
     // Apiaries
@@ -628,7 +660,6 @@ document.addEventListener('DOMContentLoaded', function () {
         apiaryAddForm.addEventListener('submit', (event) => {
             event.preventDefault();
             addApiary();
-            apiaryAddForm.reset();
         });
     }
     // Hives
@@ -637,7 +668,6 @@ document.addEventListener('DOMContentLoaded', function () {
         hiveAddForm.addEventListener('submit', (event) => {
             event.preventDefault();
             addHive();
-            hiveAddForm.reset();
         });
     }
     // Colonies
@@ -646,7 +676,6 @@ document.addEventListener('DOMContentLoaded', function () {
         colonyAddForm.addEventListener('submit', (event) => {
             event.preventDefault();
             addColony();
-            colonyAddForm.reset();
         });
     }
     // Queens
@@ -655,7 +684,6 @@ document.addEventListener('DOMContentLoaded', function () {
         queenAddForm.addEventListener('submit', (event) => {
             event.preventDefault();
             addQueen();
-            queenAddForm.reset();
         });
     }
 });
