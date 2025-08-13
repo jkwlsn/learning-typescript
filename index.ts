@@ -11,6 +11,16 @@ interface User extends NewUser {
   timestamp: Date;
 }
 
+interface NewApiary {
+  apiary_name: string;
+  user_id: number;
+}
+
+interface ApiaryInterface extends NewApiary {
+  index: number;
+  apiary_id: number;
+}
+
 interface NewInspection {
   timestamp: Date;
   apiary_id: number;
@@ -40,6 +50,11 @@ interface Inspection extends Omit<NewInspection, 'timestamp'> {
 interface UsersList {
   users: UserAccount[];
   addUser(newUser: NewUser): UserAccount;
+}
+
+interface ApiariesList {
+  apiaries: Apiary[];
+  addApiary(newApiary: NewApiary): Apiary;
 }
 
 interface RecordsList {
@@ -95,6 +110,25 @@ class UserAccount implements NewUser {
       email: this.email,
       password: this.password,
       timestamp: this.timestamp,
+    };
+  }
+}
+
+class Apiary implements NewApiary {
+  apiary_id: number;
+  apiary_name: string;
+  user_id: number;
+  constructor(apiary_id: number, apiary_name: string, user_id: number) {
+    this.apiary_id = apiary_id;
+    this.apiary_name = apiary_name;
+    this.user_id = user_id;
+  }
+  toObject(index: number): ApiaryInterface {
+    return {
+      index,
+      apiary_id: this.apiary_id,
+      apiary_name: this.apiary_name,
+      user_id: this.user_id,
     };
   }
 }
@@ -200,6 +234,19 @@ class Users implements UsersList {
   }
 }
 
+class Apiaries implements ApiariesList {
+  apiaries: Apiary[] = [];
+
+  addApiary(newApiary: NewApiary): Apiary {
+    const apiary_id: number = Math.floor(Math.random() * 100);
+    const apiary_name: string = newApiary.apiary_name;
+    const user_id: number = newApiary.user_id;
+    const apiary: Apiary = new Apiary(apiary_id, apiary_name, user_id);
+    this.apiaries.push(apiary);
+    return apiary;
+  }
+}
+
 class Records implements RecordsList {
   records: InspectionRecord[] = [];
 
@@ -231,6 +278,7 @@ class Records implements RecordsList {
 }
 
 const userList = new Users();
+const apiaryList = new Apiaries();
 const recordsList = new Records();
 
 // Form controller
@@ -404,12 +452,33 @@ const formController = {
       user_id,
     });
   },
+
+  addApiaryData() {
+    const apiaryNameInput = document.getElementById(
+      'apiary_name_input',
+    ) as HTMLInputElement;
+    if (!apiaryNameInput) throw new Error('Apiary name input not found');
+    const apiary_name = apiaryNameInput.value;
+
+    const userIdInput = document.getElementById(
+      'user_id_input',
+    ) as HTMLInputElement;
+    if (!userIdInput) throw new Error('User_id input not found');
+    const user_id = parseInt(userIdInput.value);
+
+    return apiaryList.addApiary({ apiary_name: apiary_name, user_id: user_id });
+  },
 };
 
 // Controller
 function addRecord() {
   formController.addRecordData();
   updateRecordView();
+}
+
+function addApiary() {
+  formController.addApiaryData();
+  updateApiaryView();
 }
 
 function add() {
@@ -466,6 +535,29 @@ function updateUserView() {
         <td>${obj.email}</td>
         <td>${obj.password}</td>
         <td>${obj.timestamp.toLocaleString()}</td>
+      `;
+    table.appendChild(row);
+  });
+}
+
+function updateApiaryView() {
+  const table = document.getElementById('apiaries-table') as HTMLTableElement;
+  const headerRow = document.getElementById(
+    'apiaries-header-row',
+  ) as HTMLTableRowElement;
+  if (table && headerRow) {
+    table.innerHTML = '';
+    table.appendChild(headerRow);
+  }
+
+  apiaryList.apiaries.forEach((entry, index) => {
+    const row = document.createElement('tr');
+    const obj = entry.toObject(index);
+    row.innerHTML = `
+        <td>${obj.index}</td>
+        <td>${obj.apiary_id}</td>
+        <td>${obj.apiary_name}</td>
+        <td>${obj.user_id}</td>
       `;
     table.appendChild(row);
   });
@@ -555,6 +647,17 @@ document.addEventListener('DOMContentLoaded', function () {
     recordAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addRecord();
+    });
+  }
+
+  // Apiaries
+  const apiaryAddForm = document.getElementById(
+    'apiary_add_form',
+  ) as HTMLFormElement;
+  if (apiaryAddForm) {
+    apiaryAddForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      addApiary();
     });
   }
 });
