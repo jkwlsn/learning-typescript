@@ -497,7 +497,7 @@ const inspectionsList = new Inspections();
 
 // Form controller
 const formController = {
-  getUserData() {
+  addUserData() {
     const emailInput = document.getElementById(
       'email_input',
     ) as HTMLInputElement;
@@ -513,36 +513,115 @@ const formController = {
     return userList.addUser({ email: email, password: password });
   },
 
-  updateUserData() {
-    const indexInput = document.getElementById(
-      'index_update',
+  addApiaryData() {
+    const apiaryNameInput = document.getElementById(
+      'apiary_name_input',
     ) as HTMLInputElement;
-    if (!indexInput) throw new Error('Index input not found');
-    const index = parseInt(indexInput.value);
+    if (!apiaryNameInput) throw new Error('Apiary name input not found');
+    const apiary_name = apiaryNameInput.value;
 
-    const emailInput = document.getElementById(
-      'email_update',
+    const userIdInput = document.getElementById(
+      'user_id_input',
     ) as HTMLInputElement;
-    if (!emailInput) throw new Error('Email input not found');
-    const email = emailInput.value;
+    if (!userIdInput) throw new Error('User_id input not found');
+    const user_id = parseInt(userIdInput.value);
 
-    const passwordInput = document.getElementById(
-      'password_update',
-    ) as HTMLInputElement;
-    if (!passwordInput) throw new Error('password input not found');
-    const password = passwordInput.value;
+    if (!userExists(user_id)) {
+      alert(`User ID ${user_id} does not exist.`);
+      return;
+    }
 
-    if (email) userList.users[index].email = email;
-    if (password) userList.users[index].password = password;
+    return apiaryList.addApiary({ apiary_name: apiary_name, user_id: user_id });
   },
 
-  delUserData() {
-    const indexInput = document.getElementById(
-      'index_input',
+  addHiveData() {
+    const hiveNameInput = document.getElementById(
+      'hive_name_input',
     ) as HTMLInputElement;
-    if (!indexInput) throw new Error('Index input not found');
-    const index = parseInt(indexInput.value);
-    return userList.users.splice(index, 1);
+    if (!hiveNameInput) throw new Error('Hive name input not found');
+    const hive_name = hiveNameInput.value;
+
+    const apiaryIdInput = document.getElementById(
+      'apiary_id_input',
+    ) as HTMLInputElement;
+    if (!apiaryIdInput) throw new Error('hive ID input not found');
+    const apiary_id = parseInt(apiaryIdInput.value);
+
+    if (!apiaryExists(apiary_id)) {
+      alert(`Apiary ID ${apiary_id} does not exist.`);
+      return;
+    }
+
+
+    return hivesList.addHive({ hive_name, apiary_id });
+  },
+
+  addColonyData() {
+    const colonyNameInput = document.getElementById(
+      'colony_name_input',
+    ) as HTMLInputElement;
+    if (!colonyNameInput) throw new Error('Colony name input not found');
+    const colony_name = colonyNameInput.value;
+
+    const hiveIdInput = document.getElementById(
+      'hive_id_input',
+    ) as HTMLInputElement;
+    if (!hiveIdInput) throw new Error('hive ID input not found');
+    const hive_id = parseInt(hiveIdInput.value);
+
+    if (!hiveExists(hive_id)) {
+      alert(`hive ID ${hive_id} does not exist.`);
+      return;
+    }
+
+
+    return coloniesList.addColony({ colony_name, hive_id });
+  },
+
+  addQueenData() {
+    const queenNameInput = document.getElementById(
+      'queen_name_input',
+    ) as HTMLInputElement;
+    if (!queenNameInput) throw new Error('Queen name input not found');
+    const queen_name = queenNameInput.value;
+
+    const queenrightInput = document.getElementById(
+      'queenright_input',
+    ) as HTMLInputElement;
+    if (!queenrightInput) throw new Error('queenright input not found');
+    const queenright = queenrightInput.checked;
+
+    const queen_markedInput = document.getElementById(
+      'queen_marked_input',
+    ) as HTMLInputElement;
+    if (!queen_markedInput) throw new Error('queen_marked input not found');
+    const marked = queen_markedInput.value;
+
+    const queen_clippedInput = document.getElementById(
+      'queen_clipped_input',
+    ) as HTMLInputElement;
+    if (!queen_clippedInput) throw new Error('queen_clipped input not found');
+    const clipped = queen_clippedInput.checked;
+
+    const colonyIdInput = document.getElementById(
+      'colony_id_input',
+    ) as HTMLInputElement;
+    if (!colonyIdInput) throw new Error('colony ID input not found');
+    const colony_id = parseInt(colonyIdInput.value);
+
+    if (!colonyExists(colony_id)) {
+      alert(`colony ID ${colony_id} does not exist.`);
+      return;
+    }
+
+
+    return queensList.addQueen({
+      queen_name,
+      queenright,
+      marked,
+      clipped,
+      colony_id,
+    });
   },
 
   addRecordData() {
@@ -646,120 +725,13 @@ const formController = {
       user_id,
     });
   },
-
-  addApiaryData() {
-    const apiaryNameInput = document.getElementById(
-      'apiary_name_input',
-    ) as HTMLInputElement;
-    if (!apiaryNameInput) throw new Error('Apiary name input not found');
-    const apiary_name = apiaryNameInput.value;
-
-    const userIdInput = document.getElementById(
-      'user_id_input',
-    ) as HTMLInputElement;
-    if (!userIdInput) throw new Error('User_id input not found');
-    const user_id = parseInt(userIdInput.value);
-
-    if (!userExists(user_id)) {
-      alert(`User ID ${user_id} does not exist.`);
-      return;
-    }
-
-    return apiaryList.addApiary({ apiary_name: apiary_name, user_id: user_id });
-  },
-
-  addHiveData() {
-    const hiveNameInput = document.getElementById(
-      'hive_name_input',
-    ) as HTMLInputElement;
-    if (!hiveNameInput) throw new Error('Hive name input not found');
-    const hive_name = hiveNameInput.value;
-
-    const apiaryIdInput = document.getElementById(
-      'apiary_id_input',
-    ) as HTMLInputElement;
-    if (!apiaryIdInput) throw new Error('hive ID input not found');
-    const apiary_id = parseInt(apiaryIdInput.value);
-
-    if (!apiaryExists(apiary_id)) {
-      alert(`Apiary ID ${apiary_id} does not exist.`);
-      return;
-    }
-
-    return hivesList.addHive({ hive_name, apiary_id });
-  },
-
-  addColonyData() {
-    const colonyNameInput = document.getElementById(
-      'colony_name_input',
-    ) as HTMLInputElement;
-    if (!colonyNameInput) throw new Error('Colony name input not found');
-    const colony_name = colonyNameInput.value;
-
-    const hiveIdInput = document.getElementById(
-      'hive_id_input',
-    ) as HTMLInputElement;
-    if (!hiveIdInput) throw new Error('hive ID input not found');
-    const hive_id = parseInt(hiveIdInput.value);
-
-    if (!hiveExists(hive_id)) {
-      alert(`hive ID ${hive_id} does not exist.`);
-      return;
-    }
-
-    return coloniesList.addColony({ colony_name, hive_id });
-  },
-
-  addQueenData() {
-    const queenNameInput = document.getElementById(
-      'queen_name_input',
-    ) as HTMLInputElement;
-    if (!queenNameInput) throw new Error('Queen name input not found');
-    const queen_name = queenNameInput.value;
-
-    const queenrightInput = document.getElementById(
-      'queenright_input',
-    ) as HTMLInputElement;
-    if (!queenrightInput) throw new Error('queenright input not found');
-    const queenright = queenrightInput.checked;
-
-    const queen_markedInput = document.getElementById(
-      'queen_marked_input',
-    ) as HTMLInputElement;
-    if (!queen_markedInput) throw new Error('queen_marked input not found');
-    const marked = queen_markedInput.value;
-
-    const queen_clippedInput = document.getElementById(
-      'queen_clipped_input',
-    ) as HTMLInputElement;
-    if (!queen_clippedInput) throw new Error('queen_clipped input not found');
-    const clipped = queen_clippedInput.checked;
-
-    const colonyIdInput = document.getElementById(
-      'colony_id_input',
-    ) as HTMLInputElement;
-    if (!colonyIdInput) throw new Error('colony ID input not found');
-    const colony_id = parseInt(colonyIdInput.value);
-
-    if (!colonyExists(colony_id)) {
-      alert(`colony ID ${colony_id} does not exist.`);
-      return;
-    }
-
-    return queensList.addQueen({
-      queen_name,
-      queenright,
-      marked,
-      clipped,
-      colony_id,
-    });
-  },
 };
 
 // Controller
-function addRecord() {
-  formController.addRecordData();
-  updateRecordView();
+
+function addUser() {
+  formController.addUserData();
+  updateUserView();
 }
 
 function addApiary() {
@@ -782,19 +754,9 @@ function addQueen() {
   updateQueenView();
 }
 
-function addUser() {
-  formController.getUserData();
-  updateUserView();
-}
-
-function updateUser() {
-  formController.updateUserData();
-  updateUserView();
-}
-
-function delUser() {
-  formController.delUserData();
-  updateUserView();
+function addRecord() {
+  formController.addRecordData();
+  updateRecordView();
 }
 
 function userExists(user_id: number): boolean {
@@ -983,26 +945,6 @@ document.addEventListener('DOMContentLoaded', function () {
     userAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addUser();
-    });
-  }
-
-  const userUpdateForm = document.getElementById(
-    'user_update_form',
-  ) as HTMLFormElement;
-  if (userUpdateForm) {
-    userUpdateForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      updateUser();
-    });
-  }
-
-  const userDelForm = document.getElementById(
-    'user_del_form',
-  ) as HTMLFormElement;
-  if (userDelForm) {
-    userDelForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      delUser();
     });
   }
 
