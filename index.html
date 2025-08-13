@@ -54,39 +54,6 @@
           />
           <input type="submit" value="Add user" id="add_user" />
         </form>
-        <form method="post" id="user_update_form">
-          <h2>Update</h2>
-          <label for="index_update">Index</label>
-          <input
-            type="number"
-            required
-            min="0"
-            id="index_update"
-            name="index_update"
-          />
-          <label for="email_update">Email</label>
-          <input type="email" required id="email_update" name="email_update" />
-          <label for="password_update">Password</label>
-          <input
-            type="password"
-            required
-            id="password_update"
-            name="password_update"
-          />
-          <input type="submit" value="Update user" id="update_user" />
-        </form>
-        <form method="post" id="user_del_form">
-          <h2>Delete</h2>
-          <label for="index_input">Index</label>
-          <input
-            type="number"
-            required
-            min="0"
-            id="index_input"
-            name="index_input"
-          />
-          <input type="submit" value="Delete user" id="del_user" />
-        </form>
       </section>
 
       <section id="apiaries">
@@ -338,7 +305,6 @@
         <div class="responsive-table">
           <table id="users-table">
             <tr id="users-header-row">
-              <th>Index</th>
               <th>User ID</th>
               <th>Email</th>
               <th>Password</th>
@@ -353,7 +319,6 @@
         <div class="responsive-table">
           <table id="apiaries-table">
             <tr id="apiaries-header-row">
-              <th>Index</th>
               <th>Apiary ID</th>
               <th>Name</th>
               <th>User ID</th>
@@ -367,7 +332,6 @@
         <div class="responsive-table">
           <table id="hives-table">
             <tr id="hives-header-row">
-              <th>Index</th>
               <th>hive ID</th>
               <th>Name</th>
               <th>Apiary ID</th>
@@ -381,7 +345,6 @@
         <div class="responsive-table">
           <table id="colonies-table">
             <tr id="colonies-header-row">
-              <th>Index</th>
               <th>Colony ID</th>
               <th>Name</th>
               <th>Apiary ID</th>
@@ -395,7 +358,6 @@
         <div class="responsive-table">
           <table id="queens-table">
             <tr id="queens-header-row">
-              <th>Index</th>
               <th>Queen ID</th>
               <th>Name</th>
               <th>Queenright</th>
@@ -412,7 +374,6 @@
         <div class="responsive-table">
           <table id="records-table">
             <tr id="records-header-row">
-              <th>Index</th>
               <th>Timestamp</th>
               <th>Apiary ID</th>
               <th>Colony id</th>
