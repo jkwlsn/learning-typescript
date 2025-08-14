@@ -3,26 +3,32 @@
 // Setters
 function saveUsers() {
   localStorage.setItem('users', JSON.stringify(usersList.records));
+  localStorage.setItem('usersNextId', usersList.nextId.toString());
 }
 
 function saveApiaries() {
   localStorage.setItem('apiaries', JSON.stringify(apiariesList.records));
+  localStorage.setItem('apiariesNextId', apiariesList.nextId.toString());
 }
 
 function saveHives() {
   localStorage.setItem('hives', JSON.stringify(hivesList.records));
+  localStorage.setItem('hivesNextId', hivesList.nextId.toString());
 }
 
 function saveColonies() {
   localStorage.setItem('colonies', JSON.stringify(coloniesList.records));
+  localStorage.setItem('coloniesNextId', coloniesList.nextId.toString());
 }
 
 function saveQueens() {
   localStorage.setItem('queens', JSON.stringify(queensList.records));
+  localStorage.setItem('queensNextId', queensList.nextId.toString());
 }
 
 function saveInspections() {
   localStorage.setItem('records', JSON.stringify(inspectionsList.records));
+  localStorage.setItem('inspectionsNextId', inspectionsList.nextId.toString());
 }
 
 // Getters
@@ -31,6 +37,16 @@ function loadUsers() {
   if (usersJSON) {
     const usersArray = JSON.parse(usersJSON);
     usersList.records = usersArray.map((data: UserModel) => new User(data));
+  }
+
+  const nextId = localStorage.getItem('nextUserId');
+  if (nextId) {
+    usersList.nextId = parseInt(nextId, 10);
+  } else {
+    usersList.nextId =
+      usersList.records.length > 0
+        ? Math.max(...usersList.records.map((user) => user.user_id)) + 1
+        : 1;
   }
 }
 
@@ -42,6 +58,17 @@ function loadApiaries() {
       (data: ApiaryModel) => new Apiary(data),
     );
   }
+
+  const nextId = localStorage.getItem('nextApiaryId');
+  if (nextId) {
+    apiariesList.nextId = parseInt(nextId, 10);
+  } else {
+    apiariesList.nextId =
+      apiariesList.records.length > 0
+        ? Math.max(...apiariesList.records.map((apiary) => apiary.apiary_id)) +
+          1
+        : 1;
+  }
 }
 
 function loadHives() {
@@ -49,6 +76,16 @@ function loadHives() {
   if (hivesJSON) {
     const hiveArray = JSON.parse(hivesJSON);
     hivesList.records = hiveArray.map((data: HiveModel) => new Hive(data));
+  }
+
+  const nextId = localStorage.getItem('nextHiveId');
+  if (nextId) {
+    hivesList.nextId = parseInt(nextId, 10);
+  } else {
+    hivesList.nextId =
+      hivesList.records.length > 0
+        ? Math.max(...hivesList.records.map((hive) => hive.hive_id)) + 1
+        : 1;
   }
 }
 
@@ -60,6 +97,17 @@ function loadColonies() {
       (data: ColonyModel) => new Colony(data),
     );
   }
+
+  const nextId = localStorage.getItem('nextUserId');
+  if (nextId) {
+    coloniesList.nextId = parseInt(nextId, 10);
+  } else {
+    coloniesList.nextId =
+      coloniesList.records.length > 0
+        ? Math.max(...coloniesList.records.map((colony) => colony.colony_id)) +
+          1
+        : 1;
+  }
 }
 
 function loadQueens() {
@@ -67,6 +115,16 @@ function loadQueens() {
   if (queensJSON) {
     const queenArray = JSON.parse(queensJSON);
     queensList.records = queenArray.map((data: QueenModel) => new Queen(data));
+  }
+
+  const nextId = localStorage.getItem('nextUserId');
+  if (nextId) {
+    queensList.nextId = parseInt(nextId, 10);
+  } else {
+    queensList.nextId =
+      queensList.records.length > 0
+        ? Math.max(...queensList.records.map((queen) => queen.queen_id)) + 1
+        : 1;
   }
 }
 
@@ -77,6 +135,20 @@ function loadInspections() {
     inspectionsList.records = inspectionArray.map(
       (data: InspectionModel) => new Inspection(data),
     );
+  }
+
+  const nextId = localStorage.getItem('nextUserId');
+  if (nextId) {
+    inspectionsList.nextId = parseInt(nextId, 10);
+  } else {
+    inspectionsList.nextId =
+      inspectionsList.records.length > 0
+        ? Math.max(
+            ...inspectionsList.records.map(
+              (inspection) => inspection.inspection_id,
+            ),
+          ) + 1
+        : 1;
   }
 }
 
@@ -382,10 +454,11 @@ class Inspection implements InspectionModel {
 // Collection Classes
 
 class Users implements UsersList {
+  nextId = 1;
   records: User[] = [];
 
   addUser(newUser: NewUserModel): User {
-    const user_id: number = Math.floor(Math.random() * 100);
+    const user_id: number = this.nextId++;
     const timestamp: Date = new Date();
     const user: User = new User({
       user_id: user_id,
@@ -416,10 +489,11 @@ class Users implements UsersList {
 }
 
 class Apiaries implements ApiariesList {
+  nextId = 1;
   records: Apiary[] = [];
 
   addApiary(newApiary: NewApiaryModel): Apiary {
-    const apiary_id: number = Math.floor(Math.random() * 100);
+    const apiary_id: number = this.nextId++;
     const apiary_name: string = newApiary.apiary_name;
     const user_id: number = newApiary.user_id;
     const apiary: Apiary = new Apiary({
@@ -454,10 +528,11 @@ class Apiaries implements ApiariesList {
 }
 
 class Hives implements HivesList {
+  nextId = 1;
   records: Hive[] = [];
 
   addHive(newHive: NewHiveModel): Hive {
-    const hive_id = Math.floor(Math.random() * 100);
+    const hive_id = this.nextId++;
     const hive: Hive = new Hive({
       hive_id: hive_id,
       hive_name: newHive.hive_name,
@@ -488,10 +563,11 @@ class Hives implements HivesList {
 }
 
 class Colonies implements ColoniesList {
+  nextId = 1;
   records: Colony[] = [];
 
   addColony(newColony: NewColonyModel): Colony {
-    const colony_id = Math.floor(Math.random() * 100);
+    const colony_id = this.nextId++;
     const colony: Colony = new Colony({
       colony_id: colony_id,
       colony_name: newColony.colony_name,
@@ -524,10 +600,11 @@ class Colonies implements ColoniesList {
 }
 
 class Queens implements QueensList {
+  nextId = 1;
   records: Queen[] = [];
 
   addQueen(newQueen: NewQueenModel): Queen {
-    const queen_id = Math.floor(Math.random() * 100);
+    const queen_id = this.nextId++;
     const queen: Queen = new Queen({
       queen_id: queen_id,
       queen_name: newQueen.queen_name,
@@ -562,10 +639,11 @@ class Queens implements QueensList {
 }
 
 class Inspections implements InspectionsList {
+  nextId = 1;
   records: Inspection[] = [];
 
   addInspection(newInspection: NewInspectionModel): Inspection {
-    const inspection_id: number = Math.floor(Math.random() * 100);
+    const inspection_id: number = this.nextId++;
     const inspection: Inspection = new Inspection({
       inspection_id: inspection_id,
       timestamp: newInspection.timestamp,

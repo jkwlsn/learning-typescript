@@ -3,21 +3,27 @@
 // Setters
 function saveUsers() {
     localStorage.setItem('users', JSON.stringify(usersList.records));
+    localStorage.setItem('usersNextId', usersList.nextId.toString());
 }
 function saveApiaries() {
     localStorage.setItem('apiaries', JSON.stringify(apiariesList.records));
+    localStorage.setItem('apiariesNextId', apiariesList.nextId.toString());
 }
 function saveHives() {
     localStorage.setItem('hives', JSON.stringify(hivesList.records));
+    localStorage.setItem('hivesNextId', hivesList.nextId.toString());
 }
 function saveColonies() {
     localStorage.setItem('colonies', JSON.stringify(coloniesList.records));
+    localStorage.setItem('coloniesNextId', coloniesList.nextId.toString());
 }
 function saveQueens() {
     localStorage.setItem('queens', JSON.stringify(queensList.records));
+    localStorage.setItem('queensNextId', queensList.nextId.toString());
 }
 function saveInspections() {
     localStorage.setItem('records', JSON.stringify(inspectionsList.records));
+    localStorage.setItem('inspectionsNextId', inspectionsList.nextId.toString());
 }
 // Getters
 function loadUsers() {
@@ -26,12 +32,33 @@ function loadUsers() {
         const usersArray = JSON.parse(usersJSON);
         usersList.records = usersArray.map((data) => new User(data));
     }
+    const nextId = localStorage.getItem('nextUserId');
+    if (nextId) {
+        usersList.nextId = parseInt(nextId, 10);
+    }
+    else {
+        usersList.nextId =
+            usersList.records.length > 0
+                ? Math.max(...usersList.records.map((user) => user.user_id)) + 1
+                : 1;
+    }
 }
 function loadApiaries() {
     const apiariesJSON = localStorage.getItem('apiaries');
     if (apiariesJSON) {
         const apiaryArray = JSON.parse(apiariesJSON);
         apiariesList.records = apiaryArray.map((data) => new Apiary(data));
+    }
+    const nextId = localStorage.getItem('nextApiaryId');
+    if (nextId) {
+        apiariesList.nextId = parseInt(nextId, 10);
+    }
+    else {
+        apiariesList.nextId =
+            apiariesList.records.length > 0
+                ? Math.max(...apiariesList.records.map((apiary) => apiary.apiary_id)) +
+                    1
+                : 1;
     }
 }
 function loadHives() {
@@ -40,12 +67,33 @@ function loadHives() {
         const hiveArray = JSON.parse(hivesJSON);
         hivesList.records = hiveArray.map((data) => new Hive(data));
     }
+    const nextId = localStorage.getItem('nextHiveId');
+    if (nextId) {
+        hivesList.nextId = parseInt(nextId, 10);
+    }
+    else {
+        hivesList.nextId =
+            hivesList.records.length > 0
+                ? Math.max(...hivesList.records.map((hive) => hive.hive_id)) + 1
+                : 1;
+    }
 }
 function loadColonies() {
     const coloniesJSON = localStorage.getItem('colonies');
     if (coloniesJSON) {
         const colonyArray = JSON.parse(coloniesJSON);
         coloniesList.records = colonyArray.map((data) => new Colony(data));
+    }
+    const nextId = localStorage.getItem('nextUserId');
+    if (nextId) {
+        coloniesList.nextId = parseInt(nextId, 10);
+    }
+    else {
+        coloniesList.nextId =
+            coloniesList.records.length > 0
+                ? Math.max(...coloniesList.records.map((colony) => colony.colony_id)) +
+                    1
+                : 1;
     }
 }
 function loadQueens() {
@@ -54,12 +102,32 @@ function loadQueens() {
         const queenArray = JSON.parse(queensJSON);
         queensList.records = queenArray.map((data) => new Queen(data));
     }
+    const nextId = localStorage.getItem('nextUserId');
+    if (nextId) {
+        queensList.nextId = parseInt(nextId, 10);
+    }
+    else {
+        queensList.nextId =
+            queensList.records.length > 0
+                ? Math.max(...queensList.records.map((queen) => queen.queen_id)) + 1
+                : 1;
+    }
 }
 function loadInspections() {
     const inspectionsJSON = localStorage.getItem('inspections');
     if (inspectionsJSON) {
         const inspectionArray = JSON.parse(inspectionsJSON);
         inspectionsList.records = inspectionArray.map((data) => new Inspection(data));
+    }
+    const nextId = localStorage.getItem('nextUserId');
+    if (nextId) {
+        inspectionsList.nextId = parseInt(nextId, 10);
+    }
+    else {
+        inspectionsList.nextId =
+            inspectionsList.records.length > 0
+                ? Math.max(...inspectionsList.records.map((inspection) => inspection.inspection_id)) + 1
+                : 1;
     }
 }
 // Data Classes
@@ -218,9 +286,10 @@ class Inspection {
 }
 // Collection Classes
 class Users {
+    nextId = 1;
     records = [];
     addUser(newUser) {
-        const user_id = Math.floor(Math.random() * 100);
+        const user_id = this.nextId++;
         const timestamp = new Date();
         const user = new User({
             user_id: user_id,
@@ -248,9 +317,10 @@ class Users {
     }
 }
 class Apiaries {
+    nextId = 1;
     records = [];
     addApiary(newApiary) {
-        const apiary_id = Math.floor(Math.random() * 100);
+        const apiary_id = this.nextId++;
         const apiary_name = newApiary.apiary_name;
         const user_id = newApiary.user_id;
         const apiary = new Apiary({
@@ -278,9 +348,10 @@ class Apiaries {
     }
 }
 class Hives {
+    nextId = 1;
     records = [];
     addHive(newHive) {
-        const hive_id = Math.floor(Math.random() * 100);
+        const hive_id = this.nextId++;
         const hive = new Hive({
             hive_id: hive_id,
             hive_name: newHive.hive_name,
@@ -306,9 +377,10 @@ class Hives {
     }
 }
 class Colonies {
+    nextId = 1;
     records = [];
     addColony(newColony) {
-        const colony_id = Math.floor(Math.random() * 100);
+        const colony_id = this.nextId++;
         const colony = new Colony({
             colony_id: colony_id,
             colony_name: newColony.colony_name,
@@ -334,9 +406,10 @@ class Colonies {
     }
 }
 class Queens {
+    nextId = 1;
     records = [];
     addQueen(newQueen) {
-        const queen_id = Math.floor(Math.random() * 100);
+        const queen_id = this.nextId++;
         const queen = new Queen({
             queen_id: queen_id,
             queen_name: newQueen.queen_name,
@@ -364,9 +437,10 @@ class Queens {
     }
 }
 class Inspections {
+    nextId = 1;
     records = [];
     addInspection(newInspection) {
-        const inspection_id = Math.floor(Math.random() * 100);
+        const inspection_id = this.nextId++;
         const inspection = new Inspection({
             inspection_id: inspection_id,
             timestamp: newInspection.timestamp,
