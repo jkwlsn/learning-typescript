@@ -30,6 +30,17 @@
       tr:nth-child(even) {
         background-color: #f2f2f2;
       }
+
+      main {
+        display: flex;
+      }
+
+      .column {
+        flex: 1;
+        overflow: auto;
+        height: 90vh;
+      }
+
       .responsive-table {
         overflow-x: auto;
       }
@@ -40,7 +51,7 @@
       <h1>Apiary Manager</h1>
     </header>
     <main>
-      <section id="inputs">
+      <section id="inputs" class="column">
         <section id="users">
           <form method="post" id="user_add_form">
             <h2>Add</h2>
@@ -301,7 +312,7 @@
           </form>
         </section>
       </section>
-      <section id="outputs">
+      <section id="outputs" class="column">
         <section id="users-view">
           <h1>Users</h1>
           <div class="responsive-table">
