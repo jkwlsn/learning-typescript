@@ -1,156 +1,46 @@
-// Storage
+// Define constants for your storage keys to avoid magic strings
+const STORAGE_KEYS = {
+  USERS: 'users',
+  APIARIES: 'apiaries',
+  HIVES: 'hives',
+  COLONIES: 'colonies',
+  QUEENS: 'queens',
+  INSPECTIONS: 'inspections',
+};
 
-// Setters
-function saveUsers() {
-  localStorage.setItem('users', JSON.stringify(usersList.records));
-  localStorage.setItem('usersNextId', usersList.nextId.toString());
+// A generic interface for any of your collection classes
+interface Storable {
+  records: any[];
+  nextId: number;
 }
 
-function saveApiaries() {
-  localStorage.setItem('apiaries', JSON.stringify(apiariesList.records));
-  localStorage.setItem('apiariesNextId', apiariesList.nextId.toString());
-}
-
-function saveHives() {
-  localStorage.setItem('hives', JSON.stringify(hivesList.records));
-  localStorage.setItem('hivesNextId', hivesList.nextId.toString());
-}
-
-function saveColonies() {
-  localStorage.setItem('colonies', JSON.stringify(coloniesList.records));
-  localStorage.setItem('coloniesNextId', coloniesList.nextId.toString());
-}
-
-function saveQueens() {
-  localStorage.setItem('queens', JSON.stringify(queensList.records));
-  localStorage.setItem('queensNextId', queensList.nextId.toString());
-}
-
-function saveInspections() {
-  localStorage.setItem('records', JSON.stringify(inspectionsList.records));
-  localStorage.setItem('inspectionsNextId', inspectionsList.nextId.toString());
-}
-
-// Getters
-function loadUsers() {
-  const usersJSON = localStorage.getItem('users');
-  if (usersJSON) {
-    const usersArray = JSON.parse(usersJSON);
-    usersList.records = usersArray.map((data: UserModel) => new User(data));
+class StorageService {
+  // Save any of your data collections
+  save(key: string, data: Storable): void {
+    try {
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch (error) {
+      console.error(`Error saving data for key "${key}":`, error);
+    }
   }
 
-  const nextId = localStorage.getItem('nextUserId');
-  if (nextId) {
-    usersList.nextId = parseInt(nextId, 10);
-  } else {
-    usersList.nextId =
-      usersList.records.length > 0
-        ? Math.max(...usersList.records.map((user) => user.user_id)) + 1
-        : 1;
+  // Load any of your data collections
+  load(key: string): Storable | null {
+    try {
+      const data = localStorage.getItem(key);
+      if (data === null) {
+        return null;
+      }
+      return JSON.parse(data) as Storable;
+    } catch (error) {
+      console.error(`Error loading data for key "${key}":`, error);
+      return null;
+    }
   }
 }
 
-function loadApiaries() {
-  const apiariesJSON = localStorage.getItem('apiaries');
-  if (apiariesJSON) {
-    const apiaryArray = JSON.parse(apiariesJSON);
-    apiariesList.records = apiaryArray.map(
-      (data: ApiaryModel) => new Apiary(data),
-    );
-  }
-
-  const nextId = localStorage.getItem('nextApiaryId');
-  if (nextId) {
-    apiariesList.nextId = parseInt(nextId, 10);
-  } else {
-    apiariesList.nextId =
-      apiariesList.records.length > 0
-        ? Math.max(...apiariesList.records.map((apiary) => apiary.apiary_id)) +
-          1
-        : 1;
-  }
-}
-
-function loadHives() {
-  const hivesJSON = localStorage.getItem('hives');
-  if (hivesJSON) {
-    const hiveArray = JSON.parse(hivesJSON);
-    hivesList.records = hiveArray.map((data: HiveModel) => new Hive(data));
-  }
-
-  const nextId = localStorage.getItem('nextHiveId');
-  if (nextId) {
-    hivesList.nextId = parseInt(nextId, 10);
-  } else {
-    hivesList.nextId =
-      hivesList.records.length > 0
-        ? Math.max(...hivesList.records.map((hive) => hive.hive_id)) + 1
-        : 1;
-  }
-}
-
-function loadColonies() {
-  const coloniesJSON = localStorage.getItem('colonies');
-  if (coloniesJSON) {
-    const colonyArray = JSON.parse(coloniesJSON);
-    coloniesList.records = colonyArray.map(
-      (data: ColonyModel) => new Colony(data),
-    );
-  }
-
-  const nextId = localStorage.getItem('nextUserId');
-  if (nextId) {
-    coloniesList.nextId = parseInt(nextId, 10);
-  } else {
-    coloniesList.nextId =
-      coloniesList.records.length > 0
-        ? Math.max(...coloniesList.records.map((colony) => colony.colony_id)) +
-          1
-        : 1;
-  }
-}
-
-function loadQueens() {
-  const queensJSON = localStorage.getItem('queens');
-  if (queensJSON) {
-    const queenArray = JSON.parse(queensJSON);
-    queensList.records = queenArray.map((data: QueenModel) => new Queen(data));
-  }
-
-  const nextId = localStorage.getItem('nextUserId');
-  if (nextId) {
-    queensList.nextId = parseInt(nextId, 10);
-  } else {
-    queensList.nextId =
-      queensList.records.length > 0
-        ? Math.max(...queensList.records.map((queen) => queen.queen_id)) + 1
-        : 1;
-  }
-}
-
-function loadInspections() {
-  const inspectionsJSON = localStorage.getItem('inspections');
-  if (inspectionsJSON) {
-    const inspectionArray = JSON.parse(inspectionsJSON);
-    inspectionsList.records = inspectionArray.map(
-      (data: InspectionModel) => new Inspection(data),
-    );
-  }
-
-  const nextId = localStorage.getItem('nextUserId');
-  if (nextId) {
-    inspectionsList.nextId = parseInt(nextId, 10);
-  } else {
-    inspectionsList.nextId =
-      inspectionsList.records.length > 0
-        ? Math.max(
-            ...inspectionsList.records.map(
-              (inspection) => inspection.inspection_id,
-            ),
-          ) + 1
-        : 1;
-  }
-}
+// Create a single instance to be used throughout the app
+const storageService = new StorageService();
 
 // Interfaces
 
@@ -235,27 +125,27 @@ interface UsersList {
 
 interface ApiariesList {
   records: ApiaryModel[];
-  addApiary(newApiary: ApiaryModel): ApiaryModel;
+  addApiary(newApiary: NewApiaryModel): ApiaryModel;
 }
 
 interface HivesList {
   records: HiveModel[];
-  addHive(newHive: HiveModel): HiveModel;
+  addHive(newHive: NewHiveModel): HiveModel;
 }
 
 interface ColoniesList {
   records: ColonyModel[];
-  addColony(newColony: ColonyModel): ColonyModel;
+  addColony(newColony: NewColonyModel): ColonyModel;
 }
 
 interface QueensList {
   records: QueenModel[];
-  addQueen(newQueen: QueenModel): QueenModel;
+  addQueen(newQueen: NewQueenModel): QueenModel;
 }
 
 interface InspectionsList {
   records: InspectionModel[];
-  addInspection(newInspection: InspectionModel): InspectionModel;
+  addInspection(newInspection: NewInspectionModel): InspectionModel;
 }
 
 // Data Classes
@@ -270,7 +160,7 @@ class User implements UserModel {
     this.user_id = user_id;
     this.email = email;
     this.password = password;
-    this.timestamp = timestamp;
+    this.timestamp = new Date(timestamp); // Ensure timestamp is a Date object
   }
   toObject(): UserModel {
     return {
@@ -411,7 +301,7 @@ class Inspection implements InspectionModel {
     user_id,
   }: InspectionModel) {
     this.inspection_id = inspection_id;
-    this.timestamp = timestamp;
+    this.timestamp = new Date(timestamp); // Ensure timestamp is a Date object
     this.apiary_id = apiary_id;
     this.colony_id = colony_id;
     this.queen_cups = queen_cups;
@@ -451,7 +341,7 @@ class Inspection implements InspectionModel {
   }
 }
 
-// Collection Classes
+// --- Data Management Classes (SRP: Manages in-memory state) ---
 
 class Users implements UsersList {
   nextId = 1;
@@ -467,7 +357,6 @@ class Users implements UsersList {
       timestamp: timestamp,
     });
     this.records.push(user);
-    saveUsers();
     return user;
   }
 
@@ -483,7 +372,6 @@ class Users implements UsersList {
     const index = this.records.findIndex((user) => user.user_id === user_id);
     if (index === -1) return false;
     this.records.splice(index, 1);
-    saveUsers();
     return true;
   }
 }
@@ -494,17 +382,12 @@ class Apiaries implements ApiariesList {
 
   addApiary(newApiary: NewApiaryModel): Apiary {
     const apiary_id: number = this.nextId++;
-    const apiary_name: string = newApiary.apiary_name;
-    const user_id: number = newApiary.user_id;
     const apiary: Apiary = new Apiary({
       apiary_id: apiary_id,
-      apiary_name: apiary_name,
-      user_id: user_id,
+      apiary_name: newApiary.apiary_name,
+      user_id: newApiary.user_id,
     });
     this.records.push(apiary);
-
-    saveApiaries();
-
     return apiary;
   }
 
@@ -522,7 +405,6 @@ class Apiaries implements ApiariesList {
     );
     if (index === -1) return false;
     this.records.splice(index, 1);
-    saveApiaries();
     return true;
   }
 }
@@ -539,9 +421,6 @@ class Hives implements HivesList {
       apiary_id: newHive.apiary_id,
     });
     this.records.push(hive);
-
-    saveHives();
-
     return hive;
   }
 
@@ -557,7 +436,6 @@ class Hives implements HivesList {
     const index = this.records.findIndex((hive) => hive.hive_id === hive_id);
     if (index === -1) return false;
     this.records.splice(index, 1);
-    saveHives();
     return true;
   }
 }
@@ -574,9 +452,6 @@ class Colonies implements ColoniesList {
       hive_id: newColony.hive_id,
     });
     this.records.push(colony);
-
-    saveColonies();
-
     return colony;
   }
 
@@ -594,7 +469,6 @@ class Colonies implements ColoniesList {
     );
     if (index === -1) return false;
     this.records.splice(index, 1);
-    saveColonies();
     return true;
   }
 }
@@ -613,9 +487,6 @@ class Queens implements QueensList {
       colony_id: newQueen.colony_id,
     });
     this.records.push(queen);
-
-    saveQueens();
-
     return queen;
   }
 
@@ -633,7 +504,6 @@ class Queens implements QueensList {
     );
     if (index === -1) return false;
     this.records.splice(index, 1);
-    saveQueens();
     return true;
   }
 }
@@ -646,27 +516,9 @@ class Inspections implements InspectionsList {
     const inspection_id: number = this.nextId++;
     const inspection: Inspection = new Inspection({
       inspection_id: inspection_id,
-      timestamp: newInspection.timestamp,
-      apiary_id: newInspection.apiary_id,
-      colony_id: newInspection.colony_id,
-      queen_cups: newInspection.queen_cups,
-      queenright: newInspection.queenright,
-      bias: newInspection.bias,
-      brood_frames: newInspection.brood_frames,
-      store_frames: newInspection.store_frames,
-      room_frames: newInspection.room_frames,
-      health: newInspection.health,
-      varroa: newInspection.varroa,
-      temper: newInspection.temper,
-      feed: newInspection.feed,
-      supers: newInspection.supers,
-      weather: newInspection.weather,
-      user_id: newInspection.user_id,
+      ...newInspection,
     });
     this.records.push(inspection);
-
-    saveInspections();
-
     return inspection;
   }
 
@@ -686,19 +538,344 @@ class Inspections implements InspectionsList {
     );
     if (index === -1) return false;
     this.records.splice(index, 1);
-    saveInspections();
     return true;
+  }
+}
+
+// --- Repository Classes (SRP: Manages persistence) ---
+
+class UsersRepository {
+  readonly usersCollection = new Users();
+
+  constructor() {
+    this.load();
+  }
+
+  private save(): void {
+    storageService.save(STORAGE_KEYS.USERS, {
+      records: this.usersCollection.records.map((user) => user.toObject()),
+      nextId: this.usersCollection.nextId,
+    });
+  }
+
+  private load(): void {
+    const savedData = storageService.load(STORAGE_KEYS.USERS) as {
+      records: UserModel[];
+      nextId: number;
+    } | null;
+    if (savedData) {
+      this.usersCollection.records = savedData.records.map(
+        (data) => new User(data),
+      );
+      this.usersCollection.nextId = savedData.nextId;
+    }
+  }
+
+  addUser(newUser: NewUserModel): User {
+    const user = this.usersCollection.addUser(newUser);
+    this.save();
+    return user;
+  }
+
+  deleteById(user_id: number): boolean {
+    const result = this.usersCollection.deleteById(user_id);
+    if (result) {
+      this.save();
+    }
+    return result;
+  }
+
+  getById(user_id: number): User | undefined {
+    return this.usersCollection.getById(user_id);
+  }
+
+  getByEmail(email: string): User | undefined {
+    return this.usersCollection.getByEmail(email);
+  }
+
+  get allRecords(): User[] {
+    return this.usersCollection.records;
+  }
+}
+
+class ApiariesRepository {
+  readonly apiariesCollection = new Apiaries();
+
+  constructor() {
+    this.load();
+  }
+
+  private save(): void {
+    storageService.save(STORAGE_KEYS.APIARIES, {
+      records: this.apiariesCollection.records.map((r) => r.toObject()),
+      nextId: this.apiariesCollection.nextId,
+    });
+  }
+
+  private load(): void {
+    const savedData = storageService.load(STORAGE_KEYS.APIARIES) as {
+      records: ApiaryModel[];
+      nextId: number;
+    } | null;
+    if (savedData) {
+      this.apiariesCollection.records = savedData.records.map(
+        (data) => new Apiary(data),
+      );
+      this.apiariesCollection.nextId = savedData.nextId;
+    }
+  }
+
+  addApiary(newApiary: NewApiaryModel): Apiary {
+    const apiary = this.apiariesCollection.addApiary(newApiary);
+    this.save();
+    return apiary;
+  }
+
+  removeById(apiary_id: number): boolean {
+    const result = this.apiariesCollection.removeById(apiary_id);
+    if (result) {
+      this.save();
+    }
+    return result;
+  }
+
+  getById(apiary_id: number): Apiary | undefined {
+    return this.apiariesCollection.getById(apiary_id);
+  }
+
+  getByUserId(user_id: number): Apiary[] {
+    return this.apiariesCollection.getByUserId(user_id);
+  }
+
+  get allRecords(): Apiary[] {
+    return this.apiariesCollection.records;
+  }
+}
+
+class HivesRepository {
+  readonly hivesCollection = new Hives();
+
+  constructor() {
+    this.load();
+  }
+
+  private save(): void {
+    storageService.save(STORAGE_KEYS.HIVES, {
+      records: this.hivesCollection.records.map((r) => r.toObject()),
+      nextId: this.hivesCollection.nextId,
+    });
+  }
+
+  private load(): void {
+    const savedData = storageService.load(STORAGE_KEYS.HIVES) as {
+      records: HiveModel[];
+      nextId: number;
+    } | null;
+    if (savedData) {
+      this.hivesCollection.records = savedData.records.map(
+        (data) => new Hive(data),
+      );
+      this.hivesCollection.nextId = savedData.nextId;
+    }
+  }
+
+  addHive(newHive: NewHiveModel): Hive {
+    const hive = this.hivesCollection.addHive(newHive);
+    this.save();
+    return hive;
+  }
+
+  removeById(hive_id: number): boolean {
+    const result = this.hivesCollection.removeById(hive_id);
+    if (result) {
+      this.save();
+    }
+    return result;
+  }
+
+  getById(hive_id: number): Hive | undefined {
+    return this.hivesCollection.getById(hive_id);
+  }
+
+  getByApiaryId(apiary_id: number): Hive[] {
+    return this.hivesCollection.getByApiaryId(apiary_id);
+  }
+
+  get allRecords(): Hive[] {
+    return this.hivesCollection.records;
+  }
+}
+
+class ColoniesRepository {
+  readonly coloniesCollection = new Colonies();
+
+  constructor() {
+    this.load();
+  }
+
+  private save(): void {
+    storageService.save(STORAGE_KEYS.COLONIES, {
+      records: this.coloniesCollection.records.map((r) => r.toObject()),
+      nextId: this.coloniesCollection.nextId,
+    });
+  }
+
+  private load(): void {
+    const savedData = storageService.load(STORAGE_KEYS.COLONIES) as {
+      records: ColonyModel[];
+      nextId: number;
+    } | null;
+    if (savedData) {
+      this.coloniesCollection.records = savedData.records.map(
+        (data) => new Colony(data),
+      );
+      this.coloniesCollection.nextId = savedData.nextId;
+    }
+  }
+
+  addColony(newColony: NewColonyModel): Colony {
+    const colony = this.coloniesCollection.addColony(newColony);
+    this.save();
+    return colony;
+  }
+
+  removeById(colony_id: number): boolean {
+    const result = this.coloniesCollection.removeById(colony_id);
+    if (result) {
+      this.save();
+    }
+    return result;
+  }
+
+  getById(colony_id: number): Colony | undefined {
+    return this.coloniesCollection.getById(colony_id);
+  }
+
+  getByHiveId(hive_id: number): Colony[] {
+    return this.coloniesCollection.getByHiveId(hive_id);
+  }
+
+  get allRecords(): Colony[] {
+    return this.coloniesCollection.records;
+  }
+}
+
+class QueensRepository {
+  readonly queensCollection = new Queens();
+
+  constructor() {
+    this.load();
+  }
+
+  private save(): void {
+    storageService.save(STORAGE_KEYS.QUEENS, {
+      records: this.queensCollection.records.map((r) => r.toObject()),
+      nextId: this.queensCollection.nextId,
+    });
+  }
+
+  private load(): void {
+    const savedData = storageService.load(STORAGE_KEYS.QUEENS) as {
+      records: QueenModel[];
+      nextId: number;
+    } | null;
+    if (savedData) {
+      this.queensCollection.records = savedData.records.map(
+        (data) => new Queen(data),
+      );
+      this.queensCollection.nextId = savedData.nextId;
+    }
+  }
+
+  addQueen(newQueen: NewQueenModel): Queen {
+    const queen = this.queensCollection.addQueen(newQueen);
+    this.save();
+    return queen;
+  }
+
+  removeById(queen_id: number): boolean {
+    const result = this.queensCollection.removeById(queen_id);
+    if (result) {
+      this.save();
+    }
+    return result;
+  }
+
+  getById(queen_id: number): Queen | undefined {
+    return this.queensCollection.getById(queen_id);
+  }
+
+  getByColonyId(colony_id: number): Queen[] {
+    return this.queensCollection.getByColonyId(colony_id);
+  }
+
+  get allRecords(): Queen[] {
+    return this.queensCollection.records;
+  }
+}
+
+class InspectionsRepository {
+  readonly inspectionsCollection = new Inspections();
+
+  constructor() {
+    this.load();
+  }
+
+  private save(): void {
+    storageService.save(STORAGE_KEYS.INSPECTIONS, {
+      records: this.inspectionsCollection.records.map((r) => r.toObject()),
+      nextId: this.inspectionsCollection.nextId,
+    });
+  }
+
+  private load(): void {
+    const savedData = storageService.load(STORAGE_KEYS.INSPECTIONS) as {
+      records: InspectionModel[];
+      nextId: number;
+    } | null;
+    if (savedData) {
+      this.inspectionsCollection.records = savedData.records.map(
+        (data) => new Inspection(data),
+      );
+      this.inspectionsCollection.nextId = savedData.nextId;
+    }
+  }
+
+  addInspection(newInspection: NewInspectionModel): Inspection {
+    const inspection = this.inspectionsCollection.addInspection(newInspection);
+    this.save();
+    return inspection;
+  }
+
+  removeById(inspection_id: number): boolean {
+    const result = this.inspectionsCollection.removeById(inspection_id);
+    if (result) {
+      this.save();
+    }
+    return result;
+  }
+
+  getById(inspection_id: number): Inspection | undefined {
+    return this.inspectionsCollection.getById(inspection_id);
+  }
+
+  getByColonyId(colony_id: number): Inspection[] {
+    return this.inspectionsCollection.getByColonyId(colony_id);
+  }
+
+  get allRecords(): Inspection[] {
+    return this.inspectionsCollection.records;
   }
 }
 
 // Instances
 
-const usersList = new Users();
-const apiariesList = new Apiaries();
-const hivesList = new Hives();
-const coloniesList = new Colonies();
-const queensList = new Queens();
-const inspectionsList = new Inspections();
+const usersRepository = new UsersRepository();
+const apiariesRepository = new ApiariesRepository();
+const hivesRepository = new HivesRepository();
+const coloniesRepository = new ColoniesRepository();
+const queensRepository = new QueensRepository();
+const inspectionsRepository = new InspectionsRepository();
 
 // Form controller
 
@@ -739,7 +916,7 @@ const formController = {
       userAddForm.reset();
     }
 
-    return usersList.addUser({ email: email, password: password });
+    return usersRepository.addUser({ email: email, password: password });
   },
 
   delUserData() {},
@@ -769,7 +946,7 @@ const formController = {
       apiaryAddForm.reset();
     }
 
-    return apiariesList.addApiary({
+    return apiariesRepository.addApiary({
       apiary_name: apiary_name,
       user_id: user_id,
     });
@@ -800,7 +977,7 @@ const formController = {
       hiveAddForm.reset();
     }
 
-    return hivesList.addHive({ hive_name, apiary_id });
+    return hivesRepository.addHive({ hive_name, apiary_id });
   },
 
   addColonyData() {
@@ -828,7 +1005,7 @@ const formController = {
       colonyAddForm.reset();
     }
 
-    return coloniesList.addColony({ colony_name, hive_id });
+    return coloniesRepository.addColony({ colony_name, hive_id });
   },
 
   addQueenData() {
@@ -868,7 +1045,7 @@ const formController = {
       queenAddForm.reset();
     }
 
-    return queensList.addQueen({
+    return queensRepository.addQueen({
       queen_name,
       marked,
       clipped,
@@ -976,7 +1153,7 @@ const formController = {
       inspectionAddForm.reset();
     }
 
-    return inspectionsList.addInspection({
+    return inspectionsRepository.addInspection({
       timestamp,
       apiary_id,
       colony_id,
@@ -1035,24 +1212,27 @@ function addInspection() {
 }
 
 function userExists(user_id: number): boolean {
-  return usersList.records.some((user) => user.user_id === user_id);
+  return usersRepository.allRecords.some((user) => user.user_id === user_id);
 }
 
 function apiaryExists(apiary_id: number): boolean {
-  return apiariesList.records.some((apiary) => apiary.apiary_id === apiary_id);
+  return apiariesRepository.allRecords.some(
+    (apiary) => apiary.apiary_id === apiary_id,
+  );
 }
 
 function hiveExists(hive_id: number): boolean {
-  return hivesList.records.some((hive) => hive.hive_id === hive_id);
+  return hivesRepository.allRecords.some((hive) => hive.hive_id === hive_id);
 }
 
 function colonyExists(colony_id: number): boolean {
-  return coloniesList.records.some((colony) => colony.colony_id === colony_id);
+  return coloniesRepository.allRecords.some(
+    (colony) => colony.colony_id === colony_id,
+  );
 }
 
 function updateUserView() {
   const table = document.getElementById('users-table') as HTMLTableElement;
-  const form = document.getElementById('user_add_form') as HTMLFormElement;
   const headerRow = document.getElementById(
     'users-header-row',
   ) as HTMLTableRowElement;
@@ -1061,7 +1241,7 @@ function updateUserView() {
     table.appendChild(headerRow);
   }
 
-  usersList.records.forEach((entry) => {
+  usersRepository.allRecords.forEach((entry) => {
     const row = document.createElement('tr');
     const obj = entry.toObject();
     row.innerHTML = `
@@ -1076,7 +1256,6 @@ function updateUserView() {
 
 function updateApiaryView() {
   const table = document.getElementById('apiaries-table') as HTMLTableElement;
-  const form = document.getElementById('apiary_add_form') as HTMLFormElement;
   const headerRow = document.getElementById(
     'apiaries-header-row',
   ) as HTMLTableRowElement;
@@ -1085,7 +1264,7 @@ function updateApiaryView() {
     table.appendChild(headerRow);
   }
 
-  apiariesList.records.forEach((entry) => {
+  apiariesRepository.allRecords.forEach((entry) => {
     const row = document.createElement('tr');
     const obj = entry.toObject();
     row.innerHTML = `
@@ -1099,7 +1278,6 @@ function updateApiaryView() {
 
 function updateHiveView() {
   const table = document.getElementById('hives-table') as HTMLTableElement;
-  const form = document.getElementById('hive_add_form') as HTMLFormElement;
   const headerRow = document.getElementById(
     'hives-header-row',
   ) as HTMLTableRowElement;
@@ -1108,7 +1286,7 @@ function updateHiveView() {
     table.appendChild(headerRow);
   }
 
-  hivesList.records.forEach((entry) => {
+  hivesRepository.allRecords.forEach((entry) => {
     const row = document.createElement('tr');
     const obj = entry.toObject();
     row.innerHTML = `
@@ -1122,7 +1300,6 @@ function updateHiveView() {
 
 function updateColonyView() {
   const table = document.getElementById('colonies-table') as HTMLTableElement;
-  const form = document.getElementById('colony_add_form') as HTMLFormElement;
   const headerRow = document.getElementById(
     'colonies-header-row',
   ) as HTMLTableRowElement;
@@ -1132,7 +1309,7 @@ function updateColonyView() {
     table.appendChild(headerRow);
   }
 
-  coloniesList.records.forEach((entry) => {
+  coloniesRepository.allRecords.forEach((entry) => {
     const row = document.createElement('tr');
     const obj = entry.toObject();
     row.innerHTML = `
@@ -1146,7 +1323,6 @@ function updateColonyView() {
 
 function updateQueenView() {
   const table = document.getElementById('queens-table') as HTMLTableElement;
-  const form = document.getElementById('queen_add_form') as HTMLFormElement;
   const headerRow = document.getElementById(
     'queens-header-row',
   ) as HTMLTableRowElement;
@@ -1156,7 +1332,7 @@ function updateQueenView() {
     table.appendChild(headerRow);
   }
 
-  queensList.records.forEach((entry) => {
+  queensRepository.allRecords.forEach((entry) => {
     const row = document.createElement('tr');
     const obj = entry.toObject();
     row.innerHTML = `
@@ -1174,9 +1350,6 @@ function updateInspectionView() {
   const table = document.getElementById(
     'inspections-table',
   ) as HTMLTableElement;
-  const form = document.getElementById(
-    'inspection_add_form',
-  ) as HTMLFormElement;
   const headerRow = document.getElementById(
     'inspections-header-row',
   ) as HTMLTableRowElement;
@@ -1185,7 +1358,7 @@ function updateInspectionView() {
     table.appendChild(headerRow);
   }
 
-  inspectionsList.records.forEach((entry) => {
+  inspectionsRepository.allRecords.forEach((entry) => {
     const row = document.createElement('tr');
     const obj = entry.toObject();
     row.innerHTML = `
@@ -1211,13 +1384,8 @@ function updateInspectionView() {
 }
 
 function init() {
-  loadUsers();
-  loadApiaries();
-  loadHives();
-  loadColonies();
-  loadQueens();
-  loadInspections();
-
+  // All data loading is now handled by the constructors of the repository classes.
+  // We just need to update the views when the app starts.
   updateUserView();
   updateApiaryView();
   updateHiveView();
