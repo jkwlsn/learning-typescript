@@ -527,6 +527,13 @@ const formController = {
     if (!passwordInput) throw new Error('password input not found');
     const password = passwordInput.value;
 
+    const userAddForm = document.getElementById(
+      'user_add_form',
+    ) as HTMLFormElement;
+    if (userAddForm) {
+      userAddForm.reset();
+    }
+
     return userList.addUser({ email: email, password: password });
   },
 
@@ -548,6 +555,12 @@ const formController = {
       return;
     }
 
+    const apiaryAddForm = document.getElementById(
+      'apiary_add_form',
+    ) as HTMLFormElement;
+    if (apiaryAddForm) {
+      apiaryAddForm.reset();
+    }
 
     return apiaryList.addApiary({ apiary_name: apiary_name, user_id: user_id });
   },
@@ -570,6 +583,12 @@ const formController = {
       return;
     }
 
+    const hiveAddForm = document.getElementById(
+      'hive_add_form',
+    ) as HTMLFormElement;
+    if (hiveAddForm) {
+      hiveAddForm.reset();
+    }
 
     return hivesList.addHive({ hive_name, apiary_id });
   },
@@ -592,6 +611,12 @@ const formController = {
       return;
     }
 
+    const colonyAddForm = document.getElementById(
+      'colony_add_form',
+    ) as HTMLFormElement;
+    if (colonyAddForm) {
+      colonyAddForm.reset();
+    }
 
     return coloniesList.addColony({ colony_name, hive_id });
   },
@@ -632,6 +657,12 @@ const formController = {
       return;
     }
 
+    const queenAddForm = document.getElementById(
+      'queen_add_form',
+    ) as HTMLFormElement;
+    if (queenAddForm) {
+      queenAddForm.reset();
+    }
 
     return queensList.addQueen({
       queen_name,
@@ -725,6 +756,12 @@ const formController = {
     if (!user_idInput) throw new Error('user_id input not found');
     const user_id = parseInt(user_idInput.value);
 
+    const inspectionAddForm = document.getElementById(
+      'inspection_add_form',
+    ) as HTMLFormElement;
+    if (inspectionAddForm) {
+      inspectionAddForm.reset();
+    }
 
     return inspectionsList.addInspection({
       timestamp,
@@ -796,7 +833,6 @@ function colonyExists(colony_id: number): boolean {
 function updateUserView() {
   const table = document.getElementById('users-table') as HTMLTableElement;
   const form = document.getElementById('user_add_form') as HTMLFormElement;
-  form.reset();
   const headerRow = document.getElementById(
     'users-header-row',
   ) as HTMLTableRowElement;
@@ -821,7 +857,6 @@ function updateUserView() {
 function updateApiaryView() {
   const table = document.getElementById('apiaries-table') as HTMLTableElement;
   const form = document.getElementById('apiary_add_form') as HTMLFormElement;
-  form.reset();
   const headerRow = document.getElementById(
     'apiaries-header-row',
   ) as HTMLTableRowElement;
@@ -845,7 +880,6 @@ function updateApiaryView() {
 function updateHiveView() {
   const table = document.getElementById('hives-table') as HTMLTableElement;
   const form = document.getElementById('hive_add_form') as HTMLFormElement;
-  form.reset();
   const headerRow = document.getElementById(
     'hives-header-row',
   ) as HTMLTableRowElement;
@@ -869,7 +903,6 @@ function updateHiveView() {
 function updateColonyView() {
   const table = document.getElementById('colonies-table') as HTMLTableElement;
   const form = document.getElementById('colony_add_form') as HTMLFormElement;
-  form.reset();
   const headerRow = document.getElementById(
     'colonies-header-row',
   ) as HTMLTableRowElement;
@@ -894,7 +927,6 @@ function updateColonyView() {
 function updateQueenView() {
   const table = document.getElementById('queens-table') as HTMLTableElement;
   const form = document.getElementById('queen_add_form') as HTMLFormElement;
-  form.reset();
   const headerRow = document.getElementById(
     'queens-header-row',
   ) as HTMLTableRowElement;
