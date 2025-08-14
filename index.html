@@ -90,12 +90,12 @@
               id="hive_name_input"
               name="hive_name_input"
             />
-            <label for="hives_apiary_id_input">apiary_id</label>
+            <label for="hive_apiary_id_input">apiary_id</label>
             <input
               type="number"
               required
-              id="hives_apiary_id_input"
-              name="hives_apiary_id_input"
+              id="hive_apiary_id_input"
+              name="hive_apiary_id_input"
             />
             <input type="submit" value="Add hive" id="add_hive" />
           </form>
@@ -112,12 +112,12 @@
               id="colony_name_input"
               name="colony_name_input"
             />
-            <label for="hive_id_input">hive_id</label>
+            <label for="colony_hive_id_input">hive_id</label>
             <input
               type="number"
               required
-              id="hive_id_input"
-              name="hive_id_input"
+              id="colony_hive_id_input"
+              name="colony_hive_id_input"
             />
             <input type="submit" value="Add colony" id="add_colony" />
           </form>
@@ -169,9 +169,9 @@
           </form>
         </section>
 
-        <section id="records">
-          <h2>Records</h2>
-          <form method="post" id="record_add_form">
+        <section id="inspections">
+          <h2>Inspections</h2>
+          <form method="post" id="inspection_add_form">
             <h2>Add</h2>
             <label for="timestamp_input">Timestamp</label>
             <input
@@ -181,23 +181,23 @@
               required
             />
 
-            <label for="apiary_id_input">apiary_id</label>
+            <label for="inspection_apiary_id_input">apiary_id</label>
             <input
               type="number"
               required
               min="0"
-              id="apiary_id_input"
-              name="apiary_id_input"
+              id="inspection_apiary_id_input"
+              name="inspection_apiary_id_input"
               value="0"
             />
 
-            <label for="colony_id_input">colony_id</label>
+            <label for="inspection_colony_id_input">colony_id</label>
             <input
               type="number"
               required
               min="0"
-              id="colony_id_input"
-              name="colony_id_input"
+              id="inspection_colony_id_input"
+              name="inspection_colony_id_input"
               value="0"
             />
             <label for="queen_cups_input">queen_cups</label>
@@ -286,18 +286,18 @@
             <label for="weather_input">weather</label>
             <input type="text" id="weather_input" name="weather_input" />
 
-            <label for="user_id_input">user_id</label>
+            <label for="inspection_user_id_input">user_id</label>
             <input
               type="number"
               required
               min="0"
-              id="user_id_input"
-              name="user_id_input"
+              id="inspection_user_id_input"
+              name="inspection_user_id_input"
               value="0"
             />
 
-            <input type="submit" value="Add record" id="add_record" />
-            <input type="reset" value="Reset" id="reset_record" />
+            <input type="submit" value="Add inspection" id="add_inspection" />
+            <input type="reset" value="Reset" id="reset_inspection" />
           </form>
         </section>
       </section>
@@ -371,11 +371,11 @@
           </div>
         </section>
 
-        <section id="records-view">
-          <h1>Records</h1>
+        <section id="inspections-view">
+          <h1>inspections</h1>
           <div class="responsive-table">
-            <table id="records-table">
-              <tr id="records-header-row">
+            <table id="inspections-table">
+              <tr id="inspections-header-row">
                 <th>Timestamp</th>
                 <th>Apiary ID</th>
                 <th>Colony id</th>

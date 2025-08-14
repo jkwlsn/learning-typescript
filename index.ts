@@ -545,7 +545,7 @@ const formController = {
     const apiary_name = apiaryNameInput.value;
 
     const userIdInput = document.getElementById(
-      'user_id_input',
+      'apiary_user_id_input',
     ) as HTMLInputElement;
     if (!userIdInput) throw new Error('User_id input not found');
     const user_id = parseInt(userIdInput.value);
@@ -573,7 +573,7 @@ const formController = {
     const hive_name = hiveNameInput.value;
 
     const apiaryIdInput = document.getElementById(
-      'apiary_id_input',
+      'hive_apiary_id_input',
     ) as HTMLInputElement;
     if (!apiaryIdInput) throw new Error('hive ID input not found');
     const apiary_id = parseInt(apiaryIdInput.value);
@@ -601,7 +601,7 @@ const formController = {
     const colony_name = colonyNameInput.value;
 
     const hiveIdInput = document.getElementById(
-      'hive_id_input',
+      'colony_hive_id_input',
     ) as HTMLInputElement;
     if (!hiveIdInput) throw new Error('hive ID input not found');
     const hive_id = parseInt(hiveIdInput.value);
@@ -647,7 +647,7 @@ const formController = {
     const clipped = queen_clippedInput.checked;
 
     const colonyIdInput = document.getElementById(
-      'colony_id_input',
+      'queen_colony_id_input',
     ) as HTMLInputElement;
     if (!colonyIdInput) throw new Error('colony ID input not found');
     const colony_id = parseInt(colonyIdInput.value);
@@ -681,13 +681,13 @@ const formController = {
     const timestamp = new Date(timestampInput.value);
 
     const apiary_idInput = document.getElementById(
-      'apiary_id_input',
+      'inspection_apiary_id_input',
     ) as HTMLInputElement;
     if (!apiary_idInput) throw new Error('apiary_id input not found');
     const apiary_id = parseInt(apiary_idInput.value);
 
     const colony_idInput = document.getElementById(
-      'colony_id_input',
+      'inspection_colony_id_input',
     ) as HTMLInputElement;
     if (!colony_idInput) throw new Error('colony_id input not found');
     const colony_id = parseInt(colony_idInput.value);
@@ -751,7 +751,7 @@ const formController = {
     const weather = weatherInput.value;
 
     const user_idInput = document.getElementById(
-      'user_id_input',
+      'inspection_user_id_input',
     ) as HTMLInputElement;
     if (!user_idInput) throw new Error('user_id input not found');
     const user_id = parseInt(user_idInput.value);
