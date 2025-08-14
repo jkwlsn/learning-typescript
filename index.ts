@@ -188,9 +188,9 @@ interface InspectionsList {
 // Data Classes
 
 class User implements UserModel {
-  user_id: number = 0;
-  email: string = '';
-  password: string = '';
+  user_id = 0;
+  email = '';
+  password = '';
   timestamp: Date = new Date();
 
   constructor({ user_id, email, password, timestamp }: UserModel) {
