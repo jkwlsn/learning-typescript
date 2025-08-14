@@ -71,10 +71,10 @@ function loadQueens() {
 }
 
 function loadInspections() {
-  const recordsJSON = localStorage.getItem('records');
-  if (recordsJSON) {
-    const recordArray = JSON.parse(recordsJSON);
-    inspectionsList.records = recordArray.map(
+  const inspectionsJSON = localStorage.getItem('inspections');
+  if (inspectionsJSON) {
+    const inspectionArray = JSON.parse(inspectionsJSON);
+    inspectionsList.records = inspectionArray.map(
       (data: InspectionModel) => new Inspection(data),
     );
   }
@@ -629,7 +629,7 @@ const formController = {
     });
   },
 
-  addRecordData() {
+  addInspectionData() {
     const timestampInput = document.getElementById(
       'timestamp_input',
     ) as HTMLInputElement;
@@ -760,9 +760,9 @@ function addQueen() {
   updateQueenView();
 }
 
-function addRecord() {
-  formController.addRecordData();
-  updateRecordView();
+function addInspection() {
+  formController.addInspectionData();
+  updateInspectionView();
 }
 
 function userExists(user_id: number): boolean {
@@ -907,12 +907,15 @@ function updateQueenView() {
   });
 }
 
-function updateRecordView() {
-  const table = document.getElementById('records-table') as HTMLTableElement;
-  const form = document.getElementById('record_add_form') as HTMLFormElement;
-  form.reset();
+function updateInspectionView() {
+  const table = document.getElementById(
+    'inspections-table',
+  ) as HTMLTableElement;
+  const form = document.getElementById(
+    'inspection_add_form',
+  ) as HTMLFormElement;
   const headerRow = document.getElementById(
-    'records-header-row',
+    'inspections-header-row',
   ) as HTMLTableRowElement;
   if (table && headerRow) {
     table.innerHTML = '';
@@ -955,7 +958,7 @@ function init() {
   updateHiveView();
   updateColonyView();
   updateQueenView();
-  updateRecordView();
+  updateInspectionView();
 }
 
 // View
@@ -970,17 +973,6 @@ document.addEventListener('DOMContentLoaded', function () {
       event.preventDefault();
       addUser();
       saveUsers();
-    });
-  }
-
-  // RECORDS
-  const recordAddForm = document.getElementById(
-    'record_add_form',
-  ) as HTMLFormElement;
-  if (recordAddForm) {
-    recordAddForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      addRecord();
     });
   }
 
@@ -1025,6 +1017,17 @@ document.addEventListener('DOMContentLoaded', function () {
     queenAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addQueen();
+    });
+  }
+
+  // Inspections
+  const inspectionAddForm = document.getElementById(
+    'inspection_add_form',
+  ) as HTMLFormElement;
+  if (inspectionAddForm) {
+    inspectionAddForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      addInspection();
     });
   }
 });
