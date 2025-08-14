@@ -137,14 +137,12 @@ class Colony {
 class Queen {
     queen_id;
     queen_name;
-    queenright;
     marked;
     clipped;
     colony_id;
-    constructor({ queen_id, queen_name, queenright, marked, clipped, colony_id, }) {
+    constructor({ queen_id, queen_name, marked, clipped, colony_id, }) {
         this.queen_id = queen_id;
         this.queen_name = queen_name;
-        this.queenright = queenright;
         this.marked = marked;
         this.clipped = clipped;
         this.colony_id = colony_id;
@@ -153,7 +151,6 @@ class Queen {
         return {
             queen_id: this.queen_id,
             queen_name: this.queen_name,
-            queenright: this.queenright,
             marked: this.marked,
             clipped: this.clipped,
             colony_id: this.colony_id,
@@ -165,6 +162,8 @@ class Inspection {
     timestamp;
     apiary_id;
     colony_id;
+    queenright;
+    bias;
     queen_cups;
     brood_frames;
     store_frames;
@@ -176,12 +175,14 @@ class Inspection {
     supers;
     weather;
     user_id;
-    constructor({ inspection_id, timestamp, apiary_id, colony_id, queen_cups, brood_frames, store_frames, room_frames, health, varroa, temper, feed, supers, weather, user_id, }) {
+    constructor({ inspection_id, timestamp, apiary_id, colony_id, queenright, bias, queen_cups, brood_frames, store_frames, room_frames, health, varroa, temper, feed, supers, weather, user_id, }) {
         this.inspection_id = inspection_id;
         this.timestamp = timestamp;
         this.apiary_id = apiary_id;
         this.colony_id = colony_id;
         this.queen_cups = queen_cups;
+        this.queenright = queenright;
+        this.bias = bias;
         this.brood_frames = brood_frames;
         this.store_frames = store_frames;
         this.room_frames = room_frames;
@@ -199,6 +200,8 @@ class Inspection {
             timestamp: this.timestamp,
             apiary_id: this.apiary_id,
             colony_id: this.colony_id,
+            queenright: this.queenright,
+            bias: this.bias,
             queen_cups: this.queen_cups,
             brood_frames: this.brood_frames,
             store_frames: this.store_frames,
@@ -337,7 +340,6 @@ class Queens {
         const queen = new Queen({
             queen_id: queen_id,
             queen_name: newQueen.queen_name,
-            queenright: newQueen.queenright,
             marked: newQueen.marked,
             clipped: newQueen.clipped,
             colony_id: newQueen.colony_id,
@@ -371,6 +373,8 @@ class Inspections {
             apiary_id: newInspection.apiary_id,
             colony_id: newInspection.colony_id,
             queen_cups: newInspection.queen_cups,
+            queenright: newInspection.queenright,
+            bias: newInspection.bias,
             brood_frames: newInspection.brood_frames,
             store_frames: newInspection.store_frames,
             room_frames: newInspection.room_frames,
@@ -502,10 +506,6 @@ const formController = {
         if (!queenNameInput)
             throw new Error('Queen name input not found');
         const queen_name = queenNameInput.value;
-        const queenrightInput = document.getElementById('queenright_input');
-        if (!queenrightInput)
-            throw new Error('queenright input not found');
-        const queenright = queenrightInput.checked;
         const queen_markedInput = document.getElementById('queen_marked_input');
         if (!queen_markedInput)
             throw new Error('queen_marked input not found');
@@ -528,7 +528,6 @@ const formController = {
         }
         return queensList.addQueen({
             queen_name,
-            queenright,
             marked,
             clipped,
             colony_id,
@@ -547,6 +546,14 @@ const formController = {
         if (!colony_idInput)
             throw new Error('colony_id input not found');
         const colony_id = parseInt(colony_idInput.value);
+        const queenrightInput = document.getElementById('queenright_input');
+        if (!queenrightInput)
+            throw new Error('queenright input not found');
+        const queenright = queenrightInput.checked;
+        const biasInput = document.getElementById('bias_input');
+        if (!biasInput)
+            throw new Error('bias input not found');
+        const bias = biasInput.checked;
         const queen_cupsInput = document.getElementById('queen_cups_input');
         if (!queen_cupsInput)
             throw new Error('queen_cups input not found');
@@ -600,6 +607,8 @@ const formController = {
             apiary_id,
             colony_id,
             queen_cups,
+            queenright,
+            bias,
             brood_frames,
             store_frames,
             room_frames,
@@ -745,7 +754,6 @@ function updateQueenView() {
         row.innerHTML = `
       <td>${obj.queen_id}</td>
       <td>${obj.queen_name}</td>
-      <td>${obj.queenright}</td>
       <td>${obj.marked}</td>
       <td>${obj.clipped}</td>
       <td>${obj.colony_id}</td>
@@ -768,6 +776,8 @@ function updateInspectionView() {
         <td>${obj.timestamp.toLocaleString()}</td>
         <td>${obj.apiary_id}</td>
         <td>${obj.colony_id}</td>
+        <td>${obj.queenright}</td>
+        <td>${obj.bias}</td>
         <td>${obj.queen_cups}</td>
         <td>${obj.brood_frames}</td>
         <td>${obj.store_frames}</td>
