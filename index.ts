@@ -389,9 +389,7 @@ class Users implements UsersList {
       timestamp: timestamp,
     });
     this.records.push(user);
-
     saveUsers();
-
     return user;
   }
 
@@ -401,6 +399,14 @@ class Users implements UsersList {
 
   getByEmail(email: string): User | undefined {
     return this.records.find((user) => user.email === email);
+  }
+
+  deleteById(user_id: number): boolean {
+    const index = this.records.findIndex((user) => user.user_id === user_id);
+    if (index === -1) return false;
+    this.records.splice(index, 1);
+    saveUsers();
+    return true;
   }
 }
 
@@ -430,6 +436,16 @@ class Apiaries implements ApiariesList {
   getByUserId(user_id: number): Apiary[] | [] {
     return this.records.filter((user) => user.user_id === user_id);
   }
+
+  removeById(apiary_id: number): boolean {
+    const index = this.records.findIndex(
+      (apiary) => apiary.apiary_id === apiary_id,
+    );
+    if (index === -1) return false;
+    this.records.splice(index, 1);
+    saveApiaries();
+    return true;
+  }
 }
 
 class Hives implements HivesList {
@@ -456,6 +472,14 @@ class Hives implements HivesList {
   getByApiaryId(apiary_id: number): Hive[] | [] {
     return this.records.filter((apiary) => apiary.apiary_id === apiary_id);
   }
+
+  removeById(hive_id: number): boolean {
+    const index = this.records.findIndex((hive) => hive.hive_id === hive_id);
+    if (index === -1) return false;
+    this.records.splice(index, 1);
+    saveHives();
+    return true;
+  }
 }
 
 class Colonies implements ColoniesList {
@@ -481,6 +505,16 @@ class Colonies implements ColoniesList {
 
   getByHiveId(hive_id: number): Colony[] | [] {
     return this.records.filter((hive) => hive.hive_id === hive_id);
+  }
+
+  removeById(colony_id: number): boolean {
+    const index = this.records.findIndex(
+      (colony) => colony.colony_id === colony_id,
+    );
+    if (index === -1) return false;
+    this.records.splice(index, 1);
+    saveColonies();
+    return true;
   }
 }
 
@@ -510,6 +544,16 @@ class Queens implements QueensList {
 
   getByColonyId(colony_id: number): Queen[] | [] {
     return this.records.filter((colony) => colony.colony_id === colony_id);
+  }
+
+  removeById(queen_id: number): boolean {
+    const index = this.records.findIndex(
+      (queen) => queen.queen_id === queen_id,
+    );
+    if (index === -1) return false;
+    this.records.splice(index, 1);
+    saveQueens();
+    return true;
   }
 }
 
@@ -551,6 +595,16 @@ class Inspections implements InspectionsList {
   getByColonyId(colony_id: number): Inspection[] | [] {
     return this.records.filter((colony) => colony.colony_id === colony_id);
   }
+
+  removeById(inspection_id: number): boolean {
+    const index = this.records.findIndex(
+      (inspection) => inspection.inspection_id === inspection_id,
+    );
+    if (index === -1) return false;
+    this.records.splice(index, 1);
+    saveInspections();
+    return true;
+  }
 }
 
 // Instances
@@ -563,6 +617,23 @@ const queensList = new Queens();
 const inspectionsList = new Inspections();
 
 // Form controller
+
+// Utility functions
+
+function validateNumber(value: string, fieldName: string): number {
+  const num = parseInt(value);
+  if (isNaN(num)) throw new Error(`${fieldName} must be a valid number`);
+  return num;
+}
+
+function validateDate(value: string): Date {
+  const date = new Date(value);
+  if (isNaN(date.getTime())) throw new Error('Invalid date format');
+  return date;
+}
+
+// Business logic
+
 const formController = {
   addUserData() {
     const emailInput = document.getElementById(
@@ -586,6 +657,8 @@ const formController = {
 
     return userList.addUser({ email: email, password: password });
   },
+
+  delUserData() {},
 
   addApiaryData() {
     const apiaryNameInput = document.getElementById(
@@ -836,6 +909,11 @@ const formController = {
 
 function addUser() {
   formController.addUserData();
+  updateUserView();
+}
+
+function delUser() {
+  formController.delUserData();
   updateUserView();
 }
 
