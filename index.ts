@@ -2,11 +2,11 @@
 
 // Setters
 function saveUsers() {
-  localStorage.setItem('users', JSON.stringify(userList.records));
+  localStorage.setItem('users', JSON.stringify(usersList.records));
 }
 
 function saveApiaries() {
-  localStorage.setItem('apiaries', JSON.stringify(apiaryList.records));
+  localStorage.setItem('apiaries', JSON.stringify(apiariesList.records));
 }
 
 function saveHives() {
@@ -30,7 +30,7 @@ function loadUsers() {
   const usersJSON = localStorage.getItem('users');
   if (usersJSON) {
     const usersArray = JSON.parse(usersJSON);
-    userList.records = usersArray.map((data: UserModel) => new User(data));
+    usersList.records = usersArray.map((data: UserModel) => new User(data));
   }
 }
 
@@ -38,7 +38,7 @@ function loadApiaries() {
   const apiariesJSON = localStorage.getItem('apiaries');
   if (apiariesJSON) {
     const apiaryArray = JSON.parse(apiariesJSON);
-    apiaryList.records = apiaryArray.map(
+    apiariesList.records = apiaryArray.map(
       (data: ApiaryModel) => new Apiary(data),
     );
   }
@@ -615,8 +615,8 @@ class Inspections implements InspectionsList {
 
 // Instances
 
-const userList = new Users();
-const apiaryList = new Apiaries();
+const usersList = new Users();
+const apiariesList = new Apiaries();
 const hivesList = new Hives();
 const coloniesList = new Colonies();
 const queensList = new Queens();
@@ -661,7 +661,7 @@ const formController = {
       userAddForm.reset();
     }
 
-    return userList.addUser({ email: email, password: password });
+    return usersList.addUser({ email: email, password: password });
   },
 
   delUserData() {},
@@ -691,7 +691,10 @@ const formController = {
       apiaryAddForm.reset();
     }
 
-    return apiaryList.addApiary({ apiary_name: apiary_name, user_id: user_id });
+    return apiariesList.addApiary({
+      apiary_name: apiary_name,
+      user_id: user_id,
+    });
   },
 
   addHiveData() {
@@ -954,11 +957,11 @@ function addInspection() {
 }
 
 function userExists(user_id: number): boolean {
-  return userList.records.some((user) => user.user_id === user_id);
+  return usersList.records.some((user) => user.user_id === user_id);
 }
 
 function apiaryExists(apiary_id: number): boolean {
-  return apiaryList.records.some((apiary) => apiary.apiary_id === apiary_id);
+  return apiariesList.records.some((apiary) => apiary.apiary_id === apiary_id);
 }
 
 function hiveExists(hive_id: number): boolean {
@@ -980,7 +983,7 @@ function updateUserView() {
     table.appendChild(headerRow);
   }
 
-  userList.records.forEach((entry) => {
+  usersList.records.forEach((entry) => {
     const row = document.createElement('tr');
     const obj = entry.toObject();
     row.innerHTML = `
@@ -1004,7 +1007,7 @@ function updateApiaryView() {
     table.appendChild(headerRow);
   }
 
-  apiaryList.records.forEach((entry) => {
+  apiariesList.records.forEach((entry) => {
     const row = document.createElement('tr');
     const obj = entry.toObject();
     row.innerHTML = `

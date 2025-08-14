@@ -2,10 +2,10 @@
 // Storage
 // Setters
 function saveUsers() {
-    localStorage.setItem('users', JSON.stringify(userList.records));
+    localStorage.setItem('users', JSON.stringify(usersList.records));
 }
 function saveApiaries() {
-    localStorage.setItem('apiaries', JSON.stringify(apiaryList.records));
+    localStorage.setItem('apiaries', JSON.stringify(apiariesList.records));
 }
 function saveHives() {
     localStorage.setItem('hives', JSON.stringify(hivesList.records));
@@ -24,14 +24,14 @@ function loadUsers() {
     const usersJSON = localStorage.getItem('users');
     if (usersJSON) {
         const usersArray = JSON.parse(usersJSON);
-        userList.records = usersArray.map((data) => new User(data));
+        usersList.records = usersArray.map((data) => new User(data));
     }
 }
 function loadApiaries() {
     const apiariesJSON = localStorage.getItem('apiaries');
     if (apiariesJSON) {
         const apiaryArray = JSON.parse(apiariesJSON);
-        apiaryList.records = apiaryArray.map((data) => new Apiary(data));
+        apiariesList.records = apiaryArray.map((data) => new Apiary(data));
     }
 }
 function loadHives() {
@@ -406,8 +406,8 @@ class Inspections {
     }
 }
 // Instances
-const userList = new Users();
-const apiaryList = new Apiaries();
+const usersList = new Users();
+const apiariesList = new Apiaries();
 const hivesList = new Hives();
 const coloniesList = new Colonies();
 const queensList = new Queens();
@@ -441,7 +441,7 @@ const formController = {
         if (userAddForm) {
             userAddForm.reset();
         }
-        return userList.addUser({ email: email, password: password });
+        return usersList.addUser({ email: email, password: password });
     },
     delUserData() { },
     addApiaryData() {
@@ -461,7 +461,10 @@ const formController = {
         if (apiaryAddForm) {
             apiaryAddForm.reset();
         }
-        return apiaryList.addApiary({ apiary_name: apiary_name, user_id: user_id });
+        return apiariesList.addApiary({
+            apiary_name: apiary_name,
+            user_id: user_id,
+        });
     },
     addHiveData() {
         const hiveNameInput = document.getElementById('hive_name_input');
@@ -652,10 +655,10 @@ function addInspection() {
     updateInspectionView();
 }
 function userExists(user_id) {
-    return userList.records.some((user) => user.user_id === user_id);
+    return usersList.records.some((user) => user.user_id === user_id);
 }
 function apiaryExists(apiary_id) {
-    return apiaryList.records.some((apiary) => apiary.apiary_id === apiary_id);
+    return apiariesList.records.some((apiary) => apiary.apiary_id === apiary_id);
 }
 function hiveExists(hive_id) {
     return hivesList.records.some((hive) => hive.hive_id === hive_id);
@@ -671,7 +674,7 @@ function updateUserView() {
         table.innerHTML = '';
         table.appendChild(headerRow);
     }
-    userList.records.forEach((entry) => {
+    usersList.records.forEach((entry) => {
         const row = document.createElement('tr');
         const obj = entry.toObject();
         row.innerHTML = `
@@ -691,7 +694,7 @@ function updateApiaryView() {
         table.innerHTML = '';
         table.appendChild(headerRow);
     }
-    apiaryList.records.forEach((entry) => {
+    apiariesList.records.forEach((entry) => {
         const row = document.createElement('tr');
         const obj = entry.toObject();
         row.innerHTML = `
