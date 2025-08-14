@@ -394,6 +394,14 @@ class Users implements UsersList {
 
     return user;
   }
+
+  getById(user_id: number): User | undefined {
+    return this.records.find((user) => user.user_id === user_id);
+  }
+
+  getByEmail(email: string): User | undefined {
+    return this.records.find((user) => user.email === email);
+  }
 }
 
 class Apiaries implements ApiariesList {
@@ -414,6 +422,14 @@ class Apiaries implements ApiariesList {
 
     return apiary;
   }
+
+  getById(apiary_id: number): Apiary | undefined {
+    return this.records.find((apiary) => apiary.apiary_id === apiary_id);
+  }
+
+  getByUserId(user_id: number): Apiary[] | [] {
+    return this.records.filter((user) => user.user_id === user_id);
+  }
 }
 
 class Hives implements HivesList {
@@ -432,6 +448,14 @@ class Hives implements HivesList {
 
     return hive;
   }
+
+  getById(hive_id: number): Hive | undefined {
+    return this.records.find((hive) => hive.hive_id === hive_id);
+  }
+
+  getByApiaryId(apiary_id: number): Hive[] | [] {
+    return this.records.filter((apiary) => apiary.apiary_id === apiary_id);
+  }
 }
 
 class Colonies implements ColoniesList {
@@ -449,6 +473,14 @@ class Colonies implements ColoniesList {
     saveColonies();
 
     return colony;
+  }
+
+  getById(colony_id: number): Colony | undefined {
+    return this.records.find((colony) => colony.colony_id === colony_id);
+  }
+
+  getByHiveId(hive_id: number): Colony[] | [] {
+    return this.records.filter((hive) => hive.hive_id === hive_id);
   }
 }
 
@@ -470,6 +502,14 @@ class Queens implements QueensList {
     saveQueens();
 
     return queen;
+  }
+
+  getById(queen_id: number): Queen | undefined {
+    return this.records.find((queen) => queen.queen_id === queen_id);
+  }
+
+  getByColonyId(colony_id: number): Queen[] | [] {
+    return this.records.filter((colony) => colony.colony_id === colony_id);
   }
 }
 
@@ -500,6 +540,16 @@ class Inspections implements InspectionsList {
     saveInspections();
 
     return inspection;
+  }
+
+  getById(inspection_id: number): Inspection | undefined {
+    return this.records.find(
+      (inspection) => inspection.inspection_id === inspection_id,
+    );
+  }
+
+  getByColonyId(colony_id: number): Inspection[] | [] {
+    return this.records.filter((colony) => colony.colony_id === colony_id);
   }
 }
 
