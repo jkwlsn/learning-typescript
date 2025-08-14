@@ -40,357 +40,360 @@
       <h1>Apiary Manager</h1>
     </header>
     <main>
-      <section id="controller">
-        <form method="post" id="user_add_form">
-          <h2>Add</h2>
-          <label for="email_input">Email</label>
-          <input type="email" required id="email_input" name="email_input" />
-          <label for="password_input">Password</label>
-          <input
-            type="password"
-            required
-            id="password_input"
-            name="password_input"
-          />
-          <input type="submit" value="Add user" id="add_user" />
-        </form>
+      <section id="inputs">
+        <section id="users">
+          <form method="post" id="user_add_form">
+            <h2>Add</h2>
+            <label for="email_input">Email</label>
+            <input type="email" required id="email_input" name="email_input" />
+            <label for="password_input">Password</label>
+            <input
+              type="password"
+              required
+              id="password_input"
+              name="password_input"
+            />
+            <input type="submit" value="Add user" id="add_user" />
+          </form>
+        </section>
+
+        <section id="apiaries">
+          <h2>Apiaries</h2>
+          <form method="post" id="apiary_add_form">
+            <h2>Add</h2>
+            <label for="apiary_name_input">Apiary Name</label>
+            <input
+              type="text"
+              required
+              id="apiary_name_input"
+              name="apiary_name_input"
+            />
+            <label for="user_id_input">user_id</label>
+            <input
+              type="number"
+              required
+              id="user_id_input"
+              name="user_id_input"
+            />
+            <input type="submit" value="Add apiary" id="add_apiary" />
+          </form>
+        </section>
+
+        <section id="hives">
+          <h2>hives</h2>
+          <form method="post" id="hive_add_form">
+            <h2>Add</h2>
+            <label for="hive_name_input">hive Name</label>
+            <input
+              type="text"
+              required
+              id="hive_name_input"
+              name="hive_name_input"
+            />
+            <label for="apiary_id_input">apiary_id</label>
+            <input
+              type="number"
+              required
+              id="apiary_id_input"
+              name="apiary_id_input"
+            />
+            <input type="submit" value="Add hive" id="add_hive" />
+          </form>
+        </section>
+
+        <section id="colonies">
+          <h2>Colonies</h2>
+          <form method="post" id="colony_add_form">
+            <h2>Add</h2>
+            <label for="colony_name_input">Colony Name</label>
+            <input
+              type="text"
+              required
+              id="colony_name_input"
+              name="colony_name_input"
+            />
+            <label for="hive_id_input">hive_id</label>
+            <input
+              type="number"
+              required
+              id="hive_id_input"
+              name="hive_id_input"
+            />
+            <input type="submit" value="Add colony" id="add_colony" />
+          </form>
+        </section>
+
+        <section id="queens">
+          <h2>Queens</h2>
+          <form method="post" id="queen_add_form">
+            <h2>Add</h2>
+            <label for="queen_name_input">Queen Name</label>
+            <input
+              type="text"
+              required
+              id="queen_name_input"
+              name="queen_name_input"
+            />
+
+            <label for="queenright_input">queenright</label>
+            <input
+              type="checkbox"
+              id="queenright_input"
+              name="queenright_input"
+            />
+
+            <label for="queen_marked_input">queen_marked</label>
+            <select name="queen_marked_input" id="queen_marked_input">
+              <option value="white">White</option>
+              <option value="yellow">Yellow</option>
+              <option value="red">Red</option>
+              <option value="green">Green</option>
+              <option value="blue">Blue</option>
+            </select>
+
+            <label for="queen_clipped_input">queen_clipped</label>
+            <input
+              type="checkbox"
+              id="queen_clipped_input"
+              name="queen_clipped_input"
+            />
+
+            <label for="colony_id_input">colony_id</label>
+            <input
+              type="number"
+              required
+              id="colony_id_input"
+              name="colony_id_input"
+            />
+            <input type="submit" value="Add queen" id="add_queen" />
+          </form>
+        </section>
+
+        <section id="records">
+          <h2>Records</h2>
+          <form method="post" id="record_add_form">
+            <h2>Add</h2>
+            <label for="timestamp_input">Timestamp</label>
+            <input
+              type="datetime-local"
+              id="timestamp_input"
+              name="timestamp_input"
+              required
+            />
+
+            <label for="apiary_id_input">apiary_id</label>
+            <input
+              type="number"
+              required
+              min="0"
+              id="apiary_id_input"
+              name="apiary_id_input"
+              value="0"
+            />
+
+            <label for="colony_id_input">colony_id</label>
+            <input
+              type="number"
+              required
+              min="0"
+              id="colony_id_input"
+              name="colony_id_input"
+              value="0"
+            />
+            <label for="queen_cups_input">queen_cups</label>
+            <input
+              type="range"
+              min="0"
+              max="10"
+              id="queen_cups_input"
+              name="queen_cups_input"
+              value="0"
+            />
+
+            <label for="brood_frames_input">brood_frames</label>
+            <input
+              type="range"
+              min="0"
+              max="10"
+              id="brood_frames_input"
+              name="brood_frames_input"
+              value="0"
+            />
+
+            <label for="store_frames_input">store_frames</label>
+            <input
+              type="range"
+              min="0"
+              max="10"
+              id="store_frames_input"
+              name="store_frames_input"
+              value="0"
+            />
+
+            <label for="room_frames_input">room_frames</label>
+            <input
+              type="range"
+              min="0"
+              max="10"
+              id="room_frames_input"
+              name="room_frames_input"
+              value="0"
+            />
+
+            <label for="supers_input">supers</label>
+            <input
+              type="range"
+              min="0"
+              max="10"
+              id="supers_input"
+              name="supers_input"
+              value="0"
+            />
+
+            <label for="health_input">health</label>
+            <input type="text" id="health_input" name="health_input" />
+
+            <label for="varroa_input">varroa</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              id="varroa_input"
+              name="varroa_input"
+              value="0"
+            />
+
+            <label for="temper_input">temper</label>
+            <input
+              type="range"
+              min="0"
+              max="10"
+              id="temper_input"
+              name="temper_input"
+              value="0"
+            />
+
+            <label for="feed_input">feed</label>
+            <input
+              type="range"
+              min="0"
+              max="10"
+              id="feed_input"
+              name="feed_input"
+              value="0"
+            />
+
+            <label for="weather_input">weather</label>
+            <input type="text" id="weather_input" name="weather_input" />
+
+            <label for="user_id_input">user_id</label>
+            <input
+              type="number"
+              required
+              min="0"
+              id="user_id_input"
+              name="user_id_input"
+              value="0"
+            />
+
+            <input type="submit" value="Add record" id="add_record" />
+            <input type="reset" value="Reset" id="reset_record" />
+          </form>
+        </section>
       </section>
+      <section id="outputs">
+        <section id="users-view">
+          <h1>Users</h1>
+          <div class="responsive-table">
+            <table id="users-table">
+              <tr id="users-header-row">
+                <th>User ID</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Created</th>
+              </tr>
+            </table>
+          </div>
+        </section>
 
-      <section id="apiaries">
-        <h2>Apiaries</h2>
-        <form method="post" id="apiary_add_form">
-          <h2>Add</h2>
-          <label for="apiary_name_input">Apiary Name</label>
-          <input
-            type="text"
-            required
-            id="apiary_name_input"
-            name="apiary_name_input"
-          />
-          <label for="user_id_input">user_id</label>
-          <input
-            type="number"
-            required
-            id="user_id_input"
-            name="user_id_input"
-          />
-          <input type="submit" value="Add apiary" id="add_apiary" />
-        </form>
-      </section>
+        <section id="apiaries-view">
+          <h1>Apiaries</h1>
+          <div class="responsive-table">
+            <table id="apiaries-table">
+              <tr id="apiaries-header-row">
+                <th>Apiary ID</th>
+                <th>Name</th>
+                <th>User ID</th>
+              </tr>
+            </table>
+          </div>
+        </section>
 
-      <section id="hives">
-        <h2>hives</h2>
-        <form method="post" id="hive_add_form">
-          <h2>Add</h2>
-          <label for="hive_name_input">hive Name</label>
-          <input
-            type="text"
-            required
-            id="hive_name_input"
-            name="hive_name_input"
-          />
-          <label for="apiary_id_input">apiary_id</label>
-          <input
-            type="number"
-            required
-            id="apiary_id_input"
-            name="apiary_id_input"
-          />
-          <input type="submit" value="Add hive" id="add_hive" />
-        </form>
-      </section>
+        <section id="hives-view">
+          <h1>hives</h1>
+          <div class="responsive-table">
+            <table id="hives-table">
+              <tr id="hives-header-row">
+                <th>hive ID</th>
+                <th>Name</th>
+                <th>Apiary ID</th>
+              </tr>
+            </table>
+          </div>
+        </section>
 
-      <section id="colonies">
-        <h2>Colonies</h2>
-        <form method="post" id="colony_add_form">
-          <h2>Add</h2>
-          <label for="colony_name_input">Colony Name</label>
-          <input
-            type="text"
-            required
-            id="colony_name_input"
-            name="colony_name_input"
-          />
-          <label for="hive_id_input">hive_id</label>
-          <input
-            type="number"
-            required
-            id="hive_id_input"
-            name="hive_id_input"
-          />
-          <input type="submit" value="Add colony" id="add_colony" />
-        </form>
-      </section>
+        <section id="colonies-view">
+          <h1>Colonies</h1>
+          <div class="responsive-table">
+            <table id="colonies-table">
+              <tr id="colonies-header-row">
+                <th>Colony ID</th>
+                <th>Name</th>
+                <th>Apiary ID</th>
+              </tr>
+            </table>
+          </div>
+        </section>
 
-      <section id="queens">
-        <h2>Queens</h2>
-        <form method="post" id="queen_add_form">
-          <h2>Add</h2>
-          <label for="queen_name_input">Queen Name</label>
-          <input
-            type="text"
-            required
-            id="queen_name_input"
-            name="queen_name_input"
-          />
+        <section id="queens-view">
+          <h1>queens</h1>
+          <div class="responsive-table">
+            <table id="queens-table">
+              <tr id="queens-header-row">
+                <th>Queen ID</th>
+                <th>Name</th>
+                <th>Queenright</th>
+                <th>Marked</th>
+                <th>Clipped</th>
+                <th>Colony ID</th>
+              </tr>
+            </table>
+          </div>
+        </section>
 
-          <label for="queenright_input">queenright</label>
-          <input
-            type="checkbox"
-            id="queenright_input"
-            name="queenright_input"
-          />
-
-          <label for="queen_marked_input">queen_marked</label>
-          <select name="queen_marked_input" id="queen_marked_input">
-            <option value="white">White</option>
-            <option value="yellow">Yellow</option>
-            <option value="red">Red</option>
-            <option value="green">Green</option>
-            <option value="blue">Blue</option>
-          </select>
-
-          <label for="queen_clipped_input">queen_clipped</label>
-          <input
-            type="checkbox"
-            id="queen_clipped_input"
-            name="queen_clipped_input"
-          />
-
-          <label for="colony_id_input">colony_id</label>
-          <input
-            type="number"
-            required
-            id="colony_id_input"
-            name="colony_id_input"
-          />
-          <input type="submit" value="Add queen" id="add_queen" />
-        </form>
-      </section>
-
-      <section id="records">
-        <h2>Records</h2>
-        <form method="post" id="record_add_form">
-          <h2>Add</h2>
-          <label for="timestamp_input">Timestamp</label>
-          <input
-            type="datetime-local"
-            id="timestamp_input"
-            name="timestamp_input"
-            required
-          />
-
-          <label for="apiary_id_input">apiary_id</label>
-          <input
-            type="number"
-            required
-            min="0"
-            id="apiary_id_input"
-            name="apiary_id_input"
-            value="0"
-          />
-
-          <label for="colony_id_input">colony_id</label>
-          <input
-            type="number"
-            required
-            min="0"
-            id="colony_id_input"
-            name="colony_id_input"
-            value="0"
-          />
-          <label for="queen_cups_input">queen_cups</label>
-          <input
-            type="range"
-            min="0"
-            max="10"
-            id="queen_cups_input"
-            name="queen_cups_input"
-            value="0"
-          />
-
-          <label for="brood_frames_input">brood_frames</label>
-          <input
-            type="range"
-            min="0"
-            max="10"
-            id="brood_frames_input"
-            name="brood_frames_input"
-            value="0"
-          />
-
-          <label for="store_frames_input">store_frames</label>
-          <input
-            type="range"
-            min="0"
-            max="10"
-            id="store_frames_input"
-            name="store_frames_input"
-            value="0"
-          />
-
-          <label for="room_frames_input">room_frames</label>
-          <input
-            type="range"
-            min="0"
-            max="10"
-            id="room_frames_input"
-            name="room_frames_input"
-            value="0"
-          />
-
-          <label for="supers_input">supers</label>
-          <input
-            type="range"
-            min="0"
-            max="10"
-            id="supers_input"
-            name="supers_input"
-            value="0"
-          />
-
-          <label for="health_input">health</label>
-          <input type="text" id="health_input" name="health_input" />
-
-          <label for="varroa_input">varroa</label>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            id="varroa_input"
-            name="varroa_input"
-            value="0"
-          />
-
-          <label for="temper_input">temper</label>
-          <input
-            type="range"
-            min="0"
-            max="10"
-            id="temper_input"
-            name="temper_input"
-            value="0"
-          />
-
-          <label for="feed_input">feed</label>
-          <input
-            type="range"
-            min="0"
-            max="10"
-            id="feed_input"
-            name="feed_input"
-            value="0"
-          />
-
-          <label for="weather_input">weather</label>
-          <input type="text" id="weather_input" name="weather_input" />
-
-          <label for="user_id_input">user_id</label>
-          <input
-            type="number"
-            required
-            min="0"
-            id="user_id_input"
-            name="user_id_input"
-            value="0"
-          />
-
-          <input type="submit" value="Add record" id="add_record" />
-          <input type="reset" value="Reset" id="reset_record" />
-        </form>
-      </section>
-
-      <section id="users-view">
-        <h1>Users</h1>
-        <div class="responsive-table">
-          <table id="users-table">
-            <tr id="users-header-row">
-              <th>User ID</th>
-              <th>Email</th>
-              <th>Password</th>
-              <th>Created</th>
-            </tr>
-          </table>
-        </div>
-      </section>
-
-      <section id="apiaries-view">
-        <h1>Apiaries</h1>
-        <div class="responsive-table">
-          <table id="apiaries-table">
-            <tr id="apiaries-header-row">
-              <th>Apiary ID</th>
-              <th>Name</th>
-              <th>User ID</th>
-            </tr>
-          </table>
-        </div>
-      </section>
-
-      <section id="hives-view">
-        <h1>hives</h1>
-        <div class="responsive-table">
-          <table id="hives-table">
-            <tr id="hives-header-row">
-              <th>hive ID</th>
-              <th>Name</th>
-              <th>Apiary ID</th>
-            </tr>
-          </table>
-        </div>
-      </section>
-
-      <section id="colonies-view">
-        <h1>Colonies</h1>
-        <div class="responsive-table">
-          <table id="colonies-table">
-            <tr id="colonies-header-row">
-              <th>Colony ID</th>
-              <th>Name</th>
-              <th>Apiary ID</th>
-            </tr>
-          </table>
-        </div>
-      </section>
-
-      <section id="queens-view">
-        <h1>queens</h1>
-        <div class="responsive-table">
-          <table id="queens-table">
-            <tr id="queens-header-row">
-              <th>Queen ID</th>
-              <th>Name</th>
-              <th>Queenright</th>
-              <th>Marked</th>
-              <th>Clipped</th>
-              <th>Colony ID</th>
-            </tr>
-          </table>
-        </div>
-      </section>
-
-      <section id="records-view">
-        <h1>Records</h1>
-        <div class="responsive-table">
-          <table id="records-table">
-            <tr id="records-header-row">
-              <th>Timestamp</th>
-              <th>Apiary ID</th>
-              <th>Colony id</th>
-              <th>Queen cups</th>
-              <th>Brood frames</th>
-              <th>Store frames</th>
-              <th>Room frames</th>
-              <th>Health</th>
-              <th>Varroa</th>
-              <th>Temper</th>
-              <th>Feed</th>
-              <th>Supers</th>
-              <th>Weather</th>
-              <th>User ID</th>
-            </tr>
-          </table>
-        </div>
+        <section id="records-view">
+          <h1>Records</h1>
+          <div class="responsive-table">
+            <table id="records-table">
+              <tr id="records-header-row">
+                <th>Timestamp</th>
+                <th>Apiary ID</th>
+                <th>Colony id</th>
+                <th>Queen cups</th>
+                <th>Brood frames</th>
+                <th>Store frames</th>
+                <th>Room frames</th>
+                <th>Health</th>
+                <th>Varroa</th>
+                <th>Temper</th>
+                <th>Feed</th>
+                <th>Supers</th>
+                <th>Weather</th>
+                <th>User ID</th>
+              </tr>
+            </table>
+          </div>
+        </section>
       </section>
     </main>
     <script src="index.js"></script>
