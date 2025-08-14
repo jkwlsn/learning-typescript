@@ -390,6 +390,8 @@ class Users implements UsersList {
     });
     this.records.push(user);
 
+    saveUsers();
+
     return user;
   }
 }
@@ -407,6 +409,9 @@ class Apiaries implements ApiariesList {
       user_id: user_id,
     });
     this.records.push(apiary);
+
+    saveApiaries();
+
     return apiary;
   }
 }
@@ -422,6 +427,9 @@ class Hives implements HivesList {
       apiary_id: newHive.apiary_id,
     });
     this.records.push(hive);
+
+    saveHives();
+
     return hive;
   }
 }
@@ -437,6 +445,9 @@ class Colonies implements ColoniesList {
       hive_id: newColony.hive_id,
     });
     this.records.push(colony);
+
+    saveColonies();
+
     return colony;
   }
 }
@@ -455,6 +466,9 @@ class Queens implements QueensList {
       colony_id: newQueen.colony_id,
     });
     this.records.push(queen);
+
+    saveQueens();
+
     return queen;
   }
 }
@@ -482,6 +496,9 @@ class Inspections implements InspectionsList {
       user_id: newInspection.user_id,
     });
     this.records.push(inspection);
+
+    saveInspections();
+
     return inspection;
   }
 }
@@ -531,7 +548,6 @@ const formController = {
       return;
     }
 
-    saveApiaries();
 
     return apiaryList.addApiary({ apiary_name: apiary_name, user_id: user_id });
   },
@@ -554,7 +570,6 @@ const formController = {
       return;
     }
 
-    saveHives();
 
     return hivesList.addHive({ hive_name, apiary_id });
   },
@@ -577,7 +592,6 @@ const formController = {
       return;
     }
 
-    saveColonies();
 
     return coloniesList.addColony({ colony_name, hive_id });
   },
@@ -618,7 +632,6 @@ const formController = {
       return;
     }
 
-    saveQueens();
 
     return queensList.addQueen({
       queen_name,
@@ -712,7 +725,6 @@ const formController = {
     if (!user_idInput) throw new Error('user_id input not found');
     const user_id = parseInt(user_idInput.value);
 
-    saveInspections();
 
     return inspectionsList.addInspection({
       timestamp,
@@ -972,7 +984,6 @@ document.addEventListener('DOMContentLoaded', function () {
     userAddForm.addEventListener('submit', (event) => {
       event.preventDefault();
       addUser();
-      saveUsers();
     });
   }
 
