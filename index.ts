@@ -1,4 +1,5 @@
-// Define constants for your storage keys to avoid magic strings
+// STORAGE
+
 const STORAGE_KEYS = {
   USERS: 'users',
   APIARIES: 'apiaries',
@@ -8,14 +9,20 @@ const STORAGE_KEYS = {
   INSPECTIONS: 'inspections',
 };
 
-// A generic interface for any of your collection classes
+type Model =
+  | UserModel
+  | ApiaryModel
+  | HiveModel
+  | ColonyModel
+  | QueenModel
+  | InspectionModel;
+
 interface Storable {
-  records: any[];
+  records: Model[];
   nextId: number;
 }
 
 class StorageService {
-  // Save any of your data collections
   save(key: string, data: Storable): void {
     try {
       localStorage.setItem(key, JSON.stringify(data));
@@ -24,7 +31,6 @@ class StorageService {
     }
   }
 
-  // Load any of your data collections
   load(key: string): Storable | null {
     try {
       const data = localStorage.getItem(key);
@@ -39,7 +45,6 @@ class StorageService {
   }
 }
 
-// Create a single instance to be used throughout the app
 const storageService = new StorageService();
 
 // Interfaces
@@ -160,7 +165,7 @@ class User implements UserModel {
     this.user_id = user_id;
     this.email = email;
     this.password = password;
-    this.timestamp = new Date(timestamp); 
+    this.timestamp = new Date(timestamp);
   }
   toObject(): UserModel {
     return {
@@ -301,7 +306,7 @@ class Inspection implements InspectionModel {
     user_id,
   }: InspectionModel) {
     this.inspection_id = inspection_id;
-    this.timestamp = new Date(timestamp); 
+    this.timestamp = new Date(timestamp);
     this.apiary_id = apiary_id;
     this.colony_id = colony_id;
     this.queen_cups = queen_cups;
@@ -376,7 +381,9 @@ class Users implements UsersList {
   }
 
   updateUser(updatedUser: UserModel): boolean {
-    const index = this.records.findIndex((user) => user.user_id === updatedUser.user_id);
+    const index = this.records.findIndex(
+      (user) => user.user_id === updatedUser.user_id,
+    );
     if (index === -1) return false;
     this.records[index] = new User(updatedUser);
     return true;
@@ -416,7 +423,9 @@ class Apiaries implements ApiariesList {
   }
 
   updateApiary(updatedApiary: ApiaryModel): boolean {
-    const index = this.records.findIndex((apiary) => apiary.apiary_id === updatedApiary.apiary_id);
+    const index = this.records.findIndex(
+      (apiary) => apiary.apiary_id === updatedApiary.apiary_id,
+    );
     if (index === -1) return false;
     this.records[index] = new Apiary(updatedApiary);
     return true;
@@ -454,7 +463,9 @@ class Hives implements HivesList {
   }
 
   updateHive(updatedHive: HiveModel): boolean {
-    const index = this.records.findIndex((hive) => hive.hive_id === updatedHive.hive_id);
+    const index = this.records.findIndex(
+      (hive) => hive.hive_id === updatedHive.hive_id,
+    );
     if (index === -1) return false;
     this.records[index] = new Hive(updatedHive);
     return true;
@@ -494,7 +505,9 @@ class Colonies implements ColoniesList {
   }
 
   updateColony(updatedColony: ColonyModel): boolean {
-    const index = this.records.findIndex((colony) => colony.colony_id === updatedColony.colony_id);
+    const index = this.records.findIndex(
+      (colony) => colony.colony_id === updatedColony.colony_id,
+    );
     if (index === -1) return false;
     this.records[index] = new Colony(updatedColony);
     return true;
@@ -536,7 +549,9 @@ class Queens implements QueensList {
   }
 
   updateQueen(updatedQueen: QueenModel): boolean {
-    const index = this.records.findIndex((queen) => queen.queen_id === updatedQueen.queen_id);
+    const index = this.records.findIndex(
+      (queen) => queen.queen_id === updatedQueen.queen_id,
+    );
     if (index === -1) return false;
     this.records[index] = new Queen(updatedQueen);
     return true;
@@ -577,7 +592,10 @@ class Inspections implements InspectionsList {
   }
 
   updateInspection(updatedInspection: InspectionModel): boolean {
-    const index = this.records.findIndex((inspection) => inspection.inspection_id === updatedInspection.inspection_id);
+    const index = this.records.findIndex(
+      (inspection) =>
+        inspection.inspection_id === updatedInspection.inspection_id,
+    );
     if (index === -1) return false;
     this.records[index] = new Inspection(updatedInspection);
     return true;
@@ -971,12 +989,16 @@ class InspectionsRepository {
 
   addInspection(newInspection: NewInspectionModel): Inspection | null {
     if (!apiariesRepository.getById(newInspection.apiary_id)) {
-      console.error(`Apiary with ID ${newInspection.apiary_id} does not exist.`);
+      console.error(
+        `Apiary with ID ${newInspection.apiary_id} does not exist.`,
+      );
       alert(`Apiary ID ${newInspection.apiary_id} does not exist.`);
       return null;
     }
     if (!coloniesRepository.getById(newInspection.colony_id)) {
-      console.error(`Colony with ID ${newInspection.colony_id} does not exist.`);
+      console.error(
+        `Colony with ID ${newInspection.colony_id} does not exist.`,
+      );
       alert(`Colony ID ${newInspection.colony_id} does not exist.`);
       return null;
     }
@@ -991,7 +1013,8 @@ class InspectionsRepository {
   }
 
   updateInspection(updatedInspection: InspectionModel): boolean {
-    const result = this.inspectionsCollection.updateInspection(updatedInspection);
+    const result =
+      this.inspectionsCollection.updateInspection(updatedInspection);
     if (result) {
       this.save();
     }
@@ -1037,20 +1060,6 @@ let editingInspectionId: number | null = null;
 
 // Form controller
 
-// Utility functions
-
-function validateNumber(value: string, fieldName: string): number {
-  const num = parseInt(value);
-  if (isNaN(num)) throw new Error(`${fieldName} must be a valid number`);
-  return num;
-}
-
-function validateDate(value: string): Date {
-  const date = new Date(value);
-  if (isNaN(date.getTime())) throw new Error('Invalid date format');
-  return date;
-}
-
 // Business logic
 
 const formController = {
@@ -1086,8 +1095,6 @@ const formController = {
     }
   },
 
-  delUserData() {},
-
   addApiaryData() {
     const apiaryNameInput = document.getElementById(
       'apiary_name_input',
@@ -1113,7 +1120,9 @@ const formController = {
         apiariesRepository.updateApiary(updatedApiary);
         return updatedApiary; // Return the updated apiary
       } else {
-        console.error(`Apiary with ID ${editingApiaryId} not found for update.`);
+        console.error(
+          `Apiary with ID ${editingApiaryId} not found for update.`,
+        );
         return null;
       }
     } else {
@@ -1184,7 +1193,9 @@ const formController = {
         coloniesRepository.updateColony(updatedColony);
         return updatedColony; // Return the updated colony
       } else {
-        console.error(`Colony with ID ${editingColonyId} not found for update.`);
+        console.error(
+          `Colony with ID ${editingColonyId} not found for update.`,
+        );
         return null;
       }
     } else {
@@ -1341,7 +1352,8 @@ const formController = {
 
     if (editingInspectionId !== null) {
       // Update existing inspection
-      const existingInspection = inspectionsRepository.getById(editingInspectionId);
+      const existingInspection =
+        inspectionsRepository.getById(editingInspectionId);
       if (existingInspection) {
         const updatedInspection: InspectionModel = {
           ...existingInspection,
@@ -1365,7 +1377,9 @@ const formController = {
         inspectionsRepository.updateInspection(updatedInspection);
         return updatedInspection; // Return the updated inspection
       } else {
-        console.error(`Inspection with ID ${editingInspectionId} not found for update.`);
+        console.error(
+          `Inspection with ID ${editingInspectionId} not found for update.`,
+        );
         return null;
       }
     } else {
@@ -1534,9 +1548,16 @@ class View {
     }
   }
 
-  render(records: any[], rowTemplate: (item: any) => string, tableId: string, headerRowId: string) {
+  render(
+    records: Model[],
+    rowTemplate: (item: Model) => string,
+    tableId: string,
+    headerRowId: string,
+  ) {
     const table = document.getElementById(tableId) as HTMLTableElement;
-    const headerRow = document.getElementById(headerRowId) as HTMLTableRowElement;
+    const headerRow = document.getElementById(
+      headerRowId,
+    ) as HTMLTableRowElement;
     if (table && headerRow) {
       table.innerHTML = '';
       table.appendChild(headerRow);
@@ -1552,14 +1573,24 @@ class View {
   renderAll() {
     for (const key in viewConfig) {
       const config = viewConfig[key];
-      this.render(config.getRecords(), config.rowTemplate, config.tableId, config.headerRowId);
+      this.render(
+        config.getRecords(),
+        config.rowTemplate,
+        config.tableId,
+        config.headerRowId,
+      );
     }
   }
 
   renderView(viewName: string) {
     const config = viewConfig[viewName];
     if (config) {
-      this.render(config.getRecords(), config.rowTemplate, config.tableId, config.headerRowId);
+      this.render(
+        config.getRecords(),
+        config.rowTemplate,
+        config.tableId,
+        config.headerRowId,
+      );
     }
   }
 
@@ -1657,45 +1688,45 @@ const view = new View();
 interface ViewConfigEntry {
   tableId: string;
   headerRowId: string;
-  rowTemplate: (item: any) => string;
-  getRecords: () => any[];
+  rowTemplate: (item: Model) => string;
+  getRecords: () => Model[];
 }
 
-const viewConfig: { [key: string]: ViewConfigEntry } = {
+const viewConfig: Record<string, ViewConfigEntry> = {
   users: {
     tableId: 'users-table',
     headerRowId: 'users-header-row',
-    rowTemplate: view.userRowTemplate,
+    rowTemplate: view.userRowTemplate as (item: Model) => string,
     getRecords: () => usersRepository.allRecords,
   },
   apiaries: {
     tableId: 'apiaries-table',
     headerRowId: 'apiaries-header-row',
-    rowTemplate: view.apiaryRowTemplate,
+    rowTemplate: view.apiaryRowTemplate as (item: Model) => string,
     getRecords: () => apiariesRepository.allRecords,
   },
   hives: {
     tableId: 'hives-table',
     headerRowId: 'hives-header-row',
-    rowTemplate: view.hiveRowTemplate,
+    rowTemplate: view.hiveRowTemplate as (item: Model) => string,
     getRecords: () => hivesRepository.allRecords,
   },
   colonies: {
     tableId: 'colonies-table',
     headerRowId: 'colonies-header-row',
-    rowTemplate: view.colonyRowTemplate,
+    rowTemplate: view.colonyRowTemplate as (item: Model) => string,
     getRecords: () => coloniesRepository.allRecords,
   },
   queens: {
     tableId: 'queens-table',
     headerRowId: 'queens-header-row',
-    rowTemplate: view.queenRowTemplate,
+    rowTemplate: view.queenRowTemplate as (item: Model) => string,
     getRecords: () => queensRepository.allRecords,
   },
   inspections: {
     tableId: 'inspections-table',
     headerRowId: 'inspections-header-row',
-    rowTemplate: view.inspectionRowTemplate,
+    rowTemplate: view.inspectionRowTemplate as (item: Model) => string,
     getRecords: () => inspectionsRepository.allRecords,
   },
 };
@@ -1703,9 +1734,15 @@ const viewConfig: { [key: string]: ViewConfigEntry } = {
 function populateUserFormForEdit(userId: number) {
   const user = usersRepository.getById(userId);
   if (user) {
-    const emailInput = document.getElementById('email_input') as HTMLInputElement;
-    const passwordInput = document.getElementById('password_input') as HTMLInputElement;
-    const addUserButton = document.getElementById('add_user') as HTMLInputElement;
+    const emailInput = document.getElementById(
+      'email_input',
+    ) as HTMLInputElement;
+    const passwordInput = document.getElementById(
+      'password_input',
+    ) as HTMLInputElement;
+    const addUserButton = document.getElementById(
+      'add_user',
+    ) as HTMLInputElement;
 
     if (emailInput && passwordInput && addUserButton) {
       emailInput.value = user.email;
@@ -1717,7 +1754,9 @@ function populateUserFormForEdit(userId: number) {
 }
 
 function clearUserForm() {
-  const userAddForm = document.getElementById('user_add_form') as HTMLFormElement;
+  const userAddForm = document.getElementById(
+    'user_add_form',
+  ) as HTMLFormElement;
   const addUserButton = document.getElementById('add_user') as HTMLInputElement;
   if (userAddForm && addUserButton) {
     userAddForm.reset();
@@ -1729,9 +1768,15 @@ function clearUserForm() {
 function populateApiaryFormForEdit(apiaryId: number) {
   const apiary = apiariesRepository.getById(apiaryId);
   if (apiary) {
-    const apiaryNameInput = document.getElementById('apiary_name_input') as HTMLInputElement;
-    const apiaryUserIdInput = document.getElementById('apiary_user_id_input') as HTMLInputElement;
-    const addApiaryButton = document.getElementById('add_apiary') as HTMLInputElement;
+    const apiaryNameInput = document.getElementById(
+      'apiary_name_input',
+    ) as HTMLInputElement;
+    const apiaryUserIdInput = document.getElementById(
+      'apiary_user_id_input',
+    ) as HTMLInputElement;
+    const addApiaryButton = document.getElementById(
+      'add_apiary',
+    ) as HTMLInputElement;
 
     if (apiaryNameInput && apiaryUserIdInput && addApiaryButton) {
       apiaryNameInput.value = apiary.apiary_name;
@@ -1743,8 +1788,12 @@ function populateApiaryFormForEdit(apiaryId: number) {
 }
 
 function clearApiaryForm() {
-  const apiaryAddForm = document.getElementById('apiary_add_form') as HTMLFormElement;
-  const addApiaryButton = document.getElementById('add_apiary') as HTMLInputElement;
+  const apiaryAddForm = document.getElementById(
+    'apiary_add_form',
+  ) as HTMLFormElement;
+  const addApiaryButton = document.getElementById(
+    'add_apiary',
+  ) as HTMLInputElement;
   if (apiaryAddForm && addApiaryButton) {
     apiaryAddForm.reset();
     addApiaryButton.value = 'Add apiary';
@@ -1755,9 +1804,15 @@ function clearApiaryForm() {
 function populateHiveFormForEdit(hiveId: number) {
   const hive = hivesRepository.getById(hiveId);
   if (hive) {
-    const hiveNameInput = document.getElementById('hive_name_input') as HTMLInputElement;
-    const hiveApiaryIdInput = document.getElementById('hive_apiary_id_input') as HTMLInputElement;
-    const addHiveButton = document.getElementById('add_hive') as HTMLInputElement;
+    const hiveNameInput = document.getElementById(
+      'hive_name_input',
+    ) as HTMLInputElement;
+    const hiveApiaryIdInput = document.getElementById(
+      'hive_apiary_id_input',
+    ) as HTMLInputElement;
+    const addHiveButton = document.getElementById(
+      'add_hive',
+    ) as HTMLInputElement;
 
     if (hiveNameInput && hiveApiaryIdInput && addHiveButton) {
       hiveNameInput.value = hive.hive_name;
@@ -1769,7 +1824,9 @@ function populateHiveFormForEdit(hiveId: number) {
 }
 
 function clearHiveForm() {
-  const hiveAddForm = document.getElementById('hive_add_form') as HTMLFormElement;
+  const hiveAddForm = document.getElementById(
+    'hive_add_form',
+  ) as HTMLFormElement;
   const addHiveButton = document.getElementById('add_hive') as HTMLInputElement;
   if (hiveAddForm && addHiveButton) {
     hiveAddForm.reset();
@@ -1781,9 +1838,15 @@ function clearHiveForm() {
 function populateColonyFormForEdit(colonyId: number) {
   const colony = coloniesRepository.getById(colonyId);
   if (colony) {
-    const colonyNameInput = document.getElementById('colony_name_input') as HTMLInputElement;
-    const colonyHiveIdInput = document.getElementById('colony_hive_id_input') as HTMLInputElement;
-    const addColonyButton = document.getElementById('add_colony') as HTMLInputElement;
+    const colonyNameInput = document.getElementById(
+      'colony_name_input',
+    ) as HTMLInputElement;
+    const colonyHiveIdInput = document.getElementById(
+      'colony_hive_id_input',
+    ) as HTMLInputElement;
+    const addColonyButton = document.getElementById(
+      'add_colony',
+    ) as HTMLInputElement;
 
     if (colonyNameInput && colonyHiveIdInput && addColonyButton) {
       colonyNameInput.value = colony.colony_name;
@@ -1795,8 +1858,12 @@ function populateColonyFormForEdit(colonyId: number) {
 }
 
 function clearColonyForm() {
-  const colonyAddForm = document.getElementById('colony_add_form') as HTMLFormElement;
-  const addColonyButton = document.getElementById('add_colony') as HTMLInputElement;
+  const colonyAddForm = document.getElementById(
+    'colony_add_form',
+  ) as HTMLFormElement;
+  const addColonyButton = document.getElementById(
+    'add_colony',
+  ) as HTMLInputElement;
   if (colonyAddForm && addColonyButton) {
     colonyAddForm.reset();
     addColonyButton.value = 'Add colony';
@@ -1807,13 +1874,29 @@ function clearColonyForm() {
 function populateQueenFormForEdit(queenId: number) {
   const queen = queensRepository.getById(queenId);
   if (queen) {
-    const queenNameInput = document.getElementById('queen_name_input') as HTMLInputElement;
-    const queenMarkedInput = document.getElementById('queen_marked_input') as HTMLSelectElement;
-    const queenClippedInput = document.getElementById('queen_clipped_input') as HTMLInputElement;
-    const queenColonyIdInput = document.getElementById('queen_colony_id_input') as HTMLInputElement;
-    const addQueenButton = document.getElementById('add_queen') as HTMLInputElement;
+    const queenNameInput = document.getElementById(
+      'queen_name_input',
+    ) as HTMLInputElement;
+    const queenMarkedInput = document.getElementById(
+      'queen_marked_input',
+    ) as HTMLSelectElement;
+    const queenClippedInput = document.getElementById(
+      'queen_clipped_input',
+    ) as HTMLInputElement;
+    const queenColonyIdInput = document.getElementById(
+      'queen_colony_id_input',
+    ) as HTMLInputElement;
+    const addQueenButton = document.getElementById(
+      'add_queen',
+    ) as HTMLInputElement;
 
-    if (queenNameInput && queenMarkedInput && queenClippedInput && queenColonyIdInput && addQueenButton) {
+    if (
+      queenNameInput &&
+      queenMarkedInput &&
+      queenClippedInput &&
+      queenColonyIdInput &&
+      addQueenButton
+    ) {
       queenNameInput.value = queen.queen_name;
       queenMarkedInput.value = queen.marked;
       queenClippedInput.checked = queen.clipped;
@@ -1825,8 +1908,12 @@ function populateQueenFormForEdit(queenId: number) {
 }
 
 function clearQueenForm() {
-  const queenAddForm = document.getElementById('queen_add_form') as HTMLFormElement;
-  const addQueenButton = document.getElementById('add_queen') as HTMLInputElement;
+  const queenAddForm = document.getElementById(
+    'queen_add_form',
+  ) as HTMLFormElement;
+  const addQueenButton = document.getElementById(
+    'add_queen',
+  ) as HTMLInputElement;
   if (queenAddForm && addQueenButton) {
     queenAddForm.reset();
     addQueenButton.value = 'Add queen';
@@ -1837,25 +1924,73 @@ function clearQueenForm() {
 function populateInspectionFormForEdit(inspectionId: number) {
   const inspection = inspectionsRepository.getById(inspectionId);
   if (inspection) {
-    const timestampInput = document.getElementById('timestamp_input') as HTMLInputElement;
-    const apiaryIdInput = document.getElementById('inspection_apiary_id_input') as HTMLInputElement;
-    const colonyIdInput = document.getElementById('inspection_colony_id_input') as HTMLInputElement;
-    const queenrightInput = document.getElementById('queenright_input') as HTMLInputElement;
+    const timestampInput = document.getElementById(
+      'timestamp_input',
+    ) as HTMLInputElement;
+    const apiaryIdInput = document.getElementById(
+      'inspection_apiary_id_input',
+    ) as HTMLInputElement;
+    const colonyIdInput = document.getElementById(
+      'inspection_colony_id_input',
+    ) as HTMLInputElement;
+    const queenrightInput = document.getElementById(
+      'queenright_input',
+    ) as HTMLInputElement;
     const biasInput = document.getElementById('bias_input') as HTMLInputElement;
-    const queenCupsInput = document.getElementById('queen_cups_input') as HTMLInputElement;
-    const broodFramesInput = document.getElementById('brood_frames_input') as HTMLInputElement;
-    const storeFramesInput = document.getElementById('store_frames_input') as HTMLInputElement;
-    const roomFramesInput = document.getElementById('room_frames_input') as HTMLInputElement;
-    const healthInput = document.getElementById('health_input') as HTMLInputElement;
-    const varroaInput = document.getElementById('varroa_input') as HTMLInputElement;
-    const temperInput = document.getElementById('temper_input') as HTMLInputElement;
+    const queenCupsInput = document.getElementById(
+      'queen_cups_input',
+    ) as HTMLInputElement;
+    const broodFramesInput = document.getElementById(
+      'brood_frames_input',
+    ) as HTMLInputElement;
+    const storeFramesInput = document.getElementById(
+      'store_frames_input',
+    ) as HTMLInputElement;
+    const roomFramesInput = document.getElementById(
+      'room_frames_input',
+    ) as HTMLInputElement;
+    const healthInput = document.getElementById(
+      'health_input',
+    ) as HTMLInputElement;
+    const varroaInput = document.getElementById(
+      'varroa_input',
+    ) as HTMLInputElement;
+    const temperInput = document.getElementById(
+      'temper_input',
+    ) as HTMLInputElement;
     const feedInput = document.getElementById('feed_input') as HTMLInputElement;
-    const supersInput = document.getElementById('supers_input') as HTMLInputElement;
-    const weatherInput = document.getElementById('weather_input') as HTMLInputElement;
-    const userIdInput = document.getElementById('inspection_user_id_input') as HTMLInputElement;
-    const addInspectionButton = document.getElementById('add_inspection') as HTMLInputElement;
+    const supersInput = document.getElementById(
+      'supers_input',
+    ) as HTMLInputElement;
+    const weatherInput = document.getElementById(
+      'weather_input',
+    ) as HTMLInputElement;
+    const userIdInput = document.getElementById(
+      'inspection_user_id_input',
+    ) as HTMLInputElement;
+    const addInspectionButton = document.getElementById(
+      'add_inspection',
+    ) as HTMLInputElement;
 
-    if (timestampInput && apiaryIdInput && colonyIdInput && queenrightInput && biasInput && queenCupsInput && broodFramesInput && storeFramesInput && roomFramesInput && healthInput && varroaInput && temperInput && feedInput && supersInput && weatherInput && userIdInput && addInspectionButton) {
+    if (
+      timestampInput &&
+      apiaryIdInput &&
+      colonyIdInput &&
+      queenrightInput &&
+      biasInput &&
+      queenCupsInput &&
+      broodFramesInput &&
+      storeFramesInput &&
+      roomFramesInput &&
+      healthInput &&
+      varroaInput &&
+      temperInput &&
+      feedInput &&
+      supersInput &&
+      weatherInput &&
+      userIdInput &&
+      addInspectionButton
+    ) {
       timestampInput.value = inspection.timestamp.toISOString().slice(0, 16);
       apiaryIdInput.value = inspection.apiary_id.toString();
       colonyIdInput.value = inspection.colony_id.toString();
@@ -1879,8 +2014,12 @@ function populateInspectionFormForEdit(inspectionId: number) {
 }
 
 function clearInspectionForm() {
-  const inspectionAddForm = document.getElementById('inspection_add_form') as HTMLFormElement;
-  const addInspectionButton = document.getElementById('add_inspection') as HTMLInputElement;
+  const inspectionAddForm = document.getElementById(
+    'inspection_add_form',
+  ) as HTMLFormElement;
+  const addInspectionButton = document.getElementById(
+    'add_inspection',
+  ) as HTMLInputElement;
   if (inspectionAddForm && addInspectionButton) {
     inspectionAddForm.reset();
     addInspectionButton.value = 'Add inspection';
@@ -1899,12 +2038,6 @@ function deleteUser(userId: number) {
     usersRepository.deleteById(userId);
     view.renderView('users');
   }
-}
-
-function delUser() {
-  // This function is currently not used, as delete is handled by the button click
-  // formController.delUserData();
-  // view.renderView('users');
 }
 
 function addApiary() {
@@ -1976,30 +2109,14 @@ function addInspection() {
 }
 
 function deleteInspection(inspectionId: number) {
-  if (confirm(`Are you sure you want to delete inspection with ID ${inspectionId}?`)) {
+  if (
+    confirm(
+      `Are you sure you want to delete inspection with ID ${inspectionId}?`,
+    )
+  ) {
     inspectionsRepository.removeById(inspectionId);
     view.renderView('inspections');
   }
-}
-
-function userExists(user_id: number): boolean {
-  return usersRepository.allRecords.some((user) => user.user_id === user_id);
-}
-
-function apiaryExists(apiary_id: number): boolean {
-  return apiariesRepository.allRecords.some(
-    (apiary) => apiary.apiary_id === apiary_id,
-  );
-}
-
-function hiveExists(hive_id: number): boolean {
-  return hivesRepository.allRecords.some((hive) => hive.hive_id === hive_id);
-}
-
-function colonyExists(colony_id: number): boolean {
-  return coloniesRepository.allRecords.some(
-    (colony) => colony.colony_id === colony_id,
-  );
 }
 
 function init() {
